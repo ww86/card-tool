@@ -54,17 +54,13 @@ textarea {
   resize: vertical;
 }
 
-/* Inline selector for font controls */
+/* Inline selector for font controls: all four items on the same line */
 .inline-selector {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   font-size: 12px;
   margin-top: 5px;
-}
-
-.inline-selector label {
-  margin: 0;
 }
 
 /* Toggle grid sections */

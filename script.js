@@ -1,7 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
-  // -----------------------------------------------------
-  // 1. Define full discipline data for VTES (30 items)
-  // -----------------------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  // -------------------------------
+  // Global variable for main art image
+  // -------------------------------
+  const mainArtImage = new Image();
+  mainArtImage.crossOrigin = "anonymous";
+
+  // -------------------------------
+  // 1. Define full discipline data (30 items)
+  // -------------------------------
   const disciplineData = [
     { id: "disciplineAbombwe",      label: "Abombwe",       imgSrc: "https://via.placeholder.com/50?text=Abombwe",      image: new Image() },
     { id: "disciplineAuspex",        label: "Auspex",        imgSrc: "https://via.placeholder.com/50?text=Auspex",       image: new Image() },
@@ -35,24 +41,23 @@ document.addEventListener("DOMContentLoaded", function() {
     { id: "disciplineVisceratika",   label: "Visceratika",   imgSrc: "https://via.placeholder.com/50?text=Visceratika",  image: new Image() }
   ];
   
-  // Load each discipline image
   disciplineData.forEach(symbol => {
     symbol.image.src = symbol.imgSrc;
     symbol.image.onload = updateCard;
   });
   
-  // -----------------------------------------------------
-  // 2. Dynamically generate discipline toggle checkboxes
-  // -----------------------------------------------------
-  const disciplinesGrid = document.getElementById('disciplinesGrid');
+  // -------------------------------
+  // 2. Dynamically generate discipline toggles
+  // -------------------------------
+  const disciplinesGrid = document.getElementById("disciplinesGrid");
   disciplineData.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'toggle-item';
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
+    const div = document.createElement("div");
+    div.className = "toggle-item";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
     checkbox.id = item.id;
     checkbox.checked = true;
-    const label = document.createElement('label');
+    const label = document.createElement("label");
     label.htmlFor = item.id;
     label.innerText = item.label;
     div.appendChild(checkbox);
@@ -60,9 +65,9 @@ document.addEventListener("DOMContentLoaded", function() {
     disciplinesGrid.appendChild(div);
   });
   
-  // -----------------------------------------------------
-  // Clan data (statically defined, matching toggles in HTML)
-  // -----------------------------------------------------
+  // -------------------------------
+  // 3. Define clan data (statically defined, matching HTML toggles)
+  // -------------------------------
   const clanData = [
     { id: "clanAssamite",           label: "Assamite",           imgSrc: "https://via.placeholder.com/50?text=A",    image: new Image() },
     { id: "clanBrujah",             label: "Brujah",             imgSrc: "https://via.placeholder.com/50?text=B",    image: new Image() },
@@ -90,23 +95,24 @@ document.addEventListener("DOMContentLoaded", function() {
     { id: "clanVentrueAntitribu",   label: "Ventrue Antitribu",   imgSrc: "https://via.placeholder.com/50?text=VA",   image: new Image() },
     { id: "clanHarbringersOfSkulls",label: "Harbringers of Skulls", imgSrc: "https://via.placeholder.com/50?text=HS", image: new Image() }
   ];
+  
   clanData.forEach(symbol => {
     symbol.image.src = symbol.imgSrc;
     symbol.image.onload = updateCard;
   });
   
-  // -----------------------------------------------------
-  // Helper function: Wrap text within a given width.
-  // -----------------------------------------------------
+  // -------------------------------
+  // Helper for text wrapping.
+  // -------------------------------
   function wrapText(context, text, x, y, maxWidth, lineHeight) {
-    let words = text.split(' ');
-    let line = '';
+    let words = text.split(" ");
+    let line = "";
     for (let n = 0; n < words.length; n++) {
-      let testLine = line + words[n] + ' ';
+      let testLine = line + words[n] + " ";
       let metrics = context.measureText(testLine);
       if (metrics.width > maxWidth && n > 0) {
         context.fillText(line, x, y);
-        line = words[n] + ' ';
+        line = words[n] + " ";
         y += lineHeight;
       } else {
         line = testLine;
@@ -115,48 +121,62 @@ document.addEventListener("DOMContentLoaded", function() {
     context.fillText(line, x, y);
   }
   
-  // -----------------------------------------------------
-  // updateCard(): Redraws the canvas using all inputs.
-  // -----------------------------------------------------
+  // -------------------------------
+  // Main update function: draws the composite card.
+  // -------------------------------
   function updateCard() {
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw background white
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#000";
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
     
-    // Retrieve text input values.
-    const name = document.getElementById("cardName").value;
-    const type = document.getElementById("cardType").value;
-    const subtype = document.getElementById("cardSubtype").value;
-    const cardText = document.getElementById("cardText").value;
-    const flavourText = document.getElementById("flavourText").value;
-    const artist = document.getElementById("artist").value;
+    // --- Draw Main Art Image (if loaded) ---
+    if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
+      const offsetX = parseFloat(document.getElementById("offsetX").value) || 0;
+      const offsetY = parseFloat(document.getElementById("offsetY").value) || 0;
+      const cropTop = parseFloat(document.getElementById("cropTop").value) || 0;
+      const cropRight = parseFloat(document.getElementById("cropRight").value) || 0;
+      const cropBottom = parseFloat(document.getElementById("cropBottom").value) || 0;
+      const cropLeft = parseFloat(document.getElementById("cropLeft").value) || 0;
+      const scalePercent = parseFloat(document.getElementById("scalePercent").value) || 100;
+      
+      // Calculate the source rectangle
+      const srcX = cropLeft;
+      const srcY = cropTop;
+      const srcWidth = mainArtImage.naturalWidth - cropLeft - cropRight;
+      const srcHeight = mainArtImage.naturalHeight - cropTop - cropBottom;
+      
+      // Calculate destination dimensions
+      const destWidth = srcWidth * (scalePercent / 100);
+      const destHeight = srcHeight * (scalePercent / 100);
+      
+      ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight, offsetX, offsetY, destWidth, destHeight);
+    }
     
-    // Draw header information.
+    // --- Draw Header Text ---
     ctx.fillStyle = "#000";
-    ctx.font = "bold 20px Arial";
+    // Card Name
+    ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
-    ctx.fillText(name, canvas.width / 2, 30);
+    ctx.fillText(document.getElementById("cardName").value, canvas.width / 2, 30);
+    // Type and Subtype
     ctx.font = "italic 16px Arial";
-    ctx.fillText(type, canvas.width / 2, 50);
-    ctx.fillText(subtype, canvas.width / 2, 70);
+    ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
+    ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
     
-    // ---------------------------
-    // Render Discipline Icons (wrap into rows)
-    // ---------------------------
+    // --- Render Discipline Icons (arrange in wrapped rows) ---
     const activeDisciplines = disciplineData.filter(symbol => {
       const checkbox = document.getElementById(symbol.id);
       return checkbox && checkbox.checked && symbol.image.complete;
     });
-    
     const leftMargin = 20;
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - leftMargin * 2) / (iconSize + spacing));
-    const disciplineStartY = 80;  // Start just below subtype header.
+    const disciplineStartY = 80; // just below subtype header
     let currentRow = 0;
     let countInRow = 0;
     activeDisciplines.forEach(symbol => {
@@ -169,28 +189,25 @@ document.addEventListener("DOMContentLoaded", function() {
       ctx.drawImage(symbol.image, x, y, iconSize, iconSize);
       countInRow++;
     });
-    const disciplineBlockHeight = activeDisciplines.length > 0 
-      ? (currentRow + 1) * (iconSize + spacing) 
-      : 0;
+    const disciplineBlockHeight =
+      activeDisciplines.length > 0 ? (currentRow + 1) * (iconSize + spacing) : 0;
     const cardTextStartY = disciplineStartY + disciplineBlockHeight + spacing;
     
-    // Draw Card Text.
-    ctx.font = "14px Arial";
+    // --- Draw Card Text ---
+    ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, cardText, 20, cardTextStartY, canvas.width - 40, 18);
+    wrapText(ctx, document.getElementById("cardText").value, 20, cardTextStartY, canvas.width - 40, 18);
     
-    // Draw Flavour Text.
-    ctx.font = "italic 12px Arial";
-    wrapText(ctx, flavourText, 20, cardTextStartY + 80, canvas.width - 40, 16);
+    // --- Draw Flavour Text ---
+    ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
+    wrapText(ctx, document.getElementById("flavourText").value, 20, cardTextStartY + 80, canvas.width - 40, 16);
     
-    // Draw the Artist at the bottom right.
-    ctx.font = "12px Arial";
+    // --- Draw Artist ---
+    ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
-    ctx.fillText(artist, canvas.width - 10, canvas.height - 10);
+    ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
     
-    // ---------------------------
-    // Render Clan Symbols in a grid along the bottom.
-    // ---------------------------
+    // --- Draw Clan Symbols in a grid at bottom ---
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRow = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
@@ -209,18 +226,69 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     });
+    
+    // --- Draw Frame Overlay ---
+    const frameType = document.getElementById("frameType").value;
+    if (frameType !== "none") {
+      ctx.save();
+      // For demonstration, draw different styled borders
+      if (frameType === "simple") {
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      } else if (frameType === "classic") {
+        // Double border with gold color
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "gold";
+        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      } else if (frameType === "modern") {
+        // Modern frame: a colored inner rectangle
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#444";
+        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      }
+      ctx.restore();
+    }
   }
   
-  // -----------------------------------------------------
-  // Add event listeners for inputs and toggles.
-  // -----------------------------------------------------
+  // -------------------------------
+  // Event Listeners for all inputs (including art controls)
+  // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);
     el.addEventListener("change", updateCard);
   });
   
-  // Export button: Download the canvas as a JPEG.
-  document.getElementById("exportButton").addEventListener("click", function() {
+  // -------------------------------
+  // Art Panel: File Upload & URL Load
+  // -------------------------------
+  document.getElementById("artFile").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        mainArtImage.src = event.target.result;
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+  
+  document.getElementById("loadArtUrl").addEventListener("click", function () {
+    const url = document.getElementById("artUrl").value;
+    if (url) {
+      mainArtImage.src = url;
+    }
+  });
+  
+  // When the main art image loads, update the card.
+  mainArtImage.onload = updateCard;
+  
+  // -------------------------------
+  // Export button: Download card as JPEG.
+  // -------------------------------
+  document.getElementById("exportButton").addEventListener("click", function () {
     const canvas = document.getElementById("cardCanvas");
     const dataURL = canvas.toDataURL("image/jpeg");
     const link = document.createElement("a");

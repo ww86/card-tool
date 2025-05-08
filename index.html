@@ -7,13 +7,30 @@
 </head>
 <body>
   <div class="container">
-    
-    <!-- Left Column: Card details & texts -->
+    <!-- Left Panel: Card details & text styling -->
     <div class="left-panel">
-      <h2>Card Details</h2>
+      <h2>Card Details & Text Styling</h2>
       <div class="input-group">
         <label for="cardName">Name:</label>
         <input type="text" id="cardName" placeholder="Card Name">
+      </div>
+      <div class="input-group">
+        <label for="nameFont">Name Font:</label>
+        <select id="nameFont">
+          <option value="Arial" selected>Arial</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="nameFontSize">Name Font Size (px):</label>
+        <select id="nameFontSize">
+          <option value="20" selected>20</option>
+          <option value="24">24</option>
+          <option value="28">28</option>
+          <option value="32">32</option>
+        </select>
       </div>
       <div class="input-group">
         <label for="cardType">Type:</label>
@@ -42,25 +59,75 @@
         <textarea id="cardText" rows="4" placeholder="Enter card text here"></textarea>
       </div>
       <div class="input-group">
+        <label for="textFont">Card Text Font:</label>
+        <select id="textFont">
+          <option value="Arial" selected>Arial</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="textFontSize">Card Text Font Size (px):</label>
+        <select id="textFontSize">
+          <option value="14" selected>14</option>
+          <option value="16">16</option>
+          <option value="18">18</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="input-group">
         <label for="flavourText">Flavour Text:</label>
         <textarea id="flavourText" rows="2" placeholder="Enter flavour text"></textarea>
+      </div>
+      <div class="input-group">
+        <label for="flavourFont">Flavour Font:</label>
+        <select id="flavourFont">
+          <option value="Arial" selected>Arial</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="flavourFontSize">Flavour Font Size (px):</label>
+        <select id="flavourFontSize">
+          <option value="12" selected>12</option>
+          <option value="14">14</option>
+          <option value="16">16</option>
+        </select>
       </div>
       <div class="input-group">
         <label for="artist">Artist:</label>
         <input type="text" id="artist" placeholder="Artist Name">
       </div>
+      <div class="input-group">
+        <label for="artistFont">Artist Font:</label>
+        <select id="artistFont">
+          <option value="Arial" selected>Arial</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="artistFontSize">Artist Font Size (px):</label>
+        <select id="artistFontSize">
+          <option value="12" selected>12</option>
+          <option value="14">14</option>
+          <option value="16">16</option>
+        </select>
+      </div>
     </div>
     
-    <!-- Middle Column: Toggle selectors -->
+    <!-- Middle Panel: Toggle selectors -->
     <div class="middle-panel">
-      <!-- Disciplines Section (dynamically generated) -->
       <div class="section">
         <h2>Disciplines</h2>
         <div class="toggle-grid" id="disciplinesGrid">
-          <!-- Discipline toggles will be injected here via JS -->
+          <!-- Dynamically injected discipline toggles -->
         </div>
       </div>
-      <!-- Clan Symbols Section (statically defined) -->
       <div class="section">
         <h2>Clan Symbols</h2>
         <div class="toggle-grid" id="clansGrid">
@@ -168,14 +235,65 @@
       </div>
     </div>
     
-    <!-- Right Column: Card preview & export -->
+    <!-- Art Panel: Image import & adjustment controls -->
+    <div class="art-panel">
+      <h2>Main Art Image</h2>
+      <div class="input-group">
+        <label for="artFile">Upload Image:</label>
+        <input type="file" id="artFile" accept="image/*">
+      </div>
+      <div class="input-group">
+        <label for="artUrl">Image URL:</label>
+        <input type="text" id="artUrl" placeholder="Enter image URL">
+        <button id="loadArtUrl">Load Image</button>
+      </div>
+      <div class="input-group">
+        <label for="offsetX">Offset X (px):</label>
+        <input type="number" id="offsetX" value="0">
+      </div>
+      <div class="input-group">
+        <label for="offsetY">Offset Y (px):</label>
+        <input type="number" id="offsetY" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropTop">Crop Top (px):</label>
+        <input type="number" id="cropTop" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropRight">Crop Right (px):</label>
+        <input type="number" id="cropRight" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropBottom">Crop Bottom (px):</label>
+        <input type="number" id="cropBottom" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropLeft">Crop Left (px):</label>
+        <input type="number" id="cropLeft" value="0">
+      </div>
+      <div class="input-group">
+        <label for="scalePercent">Scale (%):</label>
+        <input type="number" id="scalePercent" value="100">
+      </div>
+      <div class="input-group">
+        <label for="frameType">Frame Type:</label>
+        <select id="frameType">
+          <option value="none" selected>None</option>
+          <option value="simple">Simple Border</option>
+          <option value="classic">Classic Frame</option>
+          <option value="modern">Modern Frame</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Right Panel: Card preview & export -->
     <div class="right-panel">
       <h2>Card Preview</h2>
       <canvas id="cardCanvas" width="358" height="500"></canvas>
       <button id="exportButton">Export as JPEG</button>
     </div>
   </div>
-
+  
   <script src="script.js"></script>
 </body>
 </html>

@@ -10,28 +10,28 @@
     <!-- Left Panel: Card details & text styling -->
     <div class="left-panel">
       <h2>Card Details & Text Styling</h2>
+      
       <div class="input-group">
         <label for="cardName">Name:</label>
         <input type="text" id="cardName" placeholder="Card Name">
+        <div class="inline-selector">
+          <label for="nameFont">Font:</label>
+          <select id="nameFont">
+            <option value="Arial" selected>Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <label for="nameFontSize">Size:</label>
+          <select id="nameFontSize">
+            <option value="20" selected>20</option>
+            <option value="24">24</option>
+            <option value="28">28</option>
+            <option value="32">32</option>
+          </select>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="nameFont">Name Font:</label>
-        <select id="nameFont">
-          <option value="Arial" selected>Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Georgia">Georgia</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="nameFontSize">Name Font Size (px):</label>
-        <select id="nameFontSize">
-          <option value="20" selected>20</option>
-          <option value="24">24</option>
-          <option value="28">28</option>
-          <option value="32">32</option>
-        </select>
-      </div>
+      
       <div class="input-group">
         <label for="cardType">Type:</label>
         <select id="cardType">
@@ -39,6 +39,7 @@
           <option value="Library">Library</option>
         </select>
       </div>
+      
       <div class="input-group">
         <label for="cardSubtype">Subtype:</label>
         <select id="cardSubtype">
@@ -54,69 +55,66 @@
           <option value="Master">Master</option>
         </select>
       </div>
+      
       <div class="input-group">
         <label for="cardText">Card Text:</label>
         <textarea id="cardText" rows="4" placeholder="Enter card text here"></textarea>
+        <div class="inline-selector">
+          <label for="textFont">Font:</label>
+          <select id="textFont">
+            <option value="Arial" selected>Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <label for="textFontSize">Size:</label>
+          <select id="textFontSize">
+            <option value="14" selected>14</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+          </select>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="textFont">Card Text Font:</label>
-        <select id="textFont">
-          <option value="Arial" selected>Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Georgia">Georgia</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="textFontSize">Card Text Font Size (px):</label>
-        <select id="textFontSize">
-          <option value="14" selected>14</option>
-          <option value="16">16</option>
-          <option value="18">18</option>
-          <option value="20">20</option>
-        </select>
-      </div>
+      
       <div class="input-group">
         <label for="flavourText">Flavour Text:</label>
         <textarea id="flavourText" rows="2" placeholder="Enter flavour text"></textarea>
+        <div class="inline-selector">
+          <label for="flavourFont">Font:</label>
+          <select id="flavourFont">
+            <option value="Arial" selected>Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <label for="flavourFontSize">Size:</label>
+          <select id="flavourFontSize">
+            <option value="12" selected>12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+          </select>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="flavourFont">Flavour Font:</label>
-        <select id="flavourFont">
-          <option value="Arial" selected>Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Georgia">Georgia</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="flavourFontSize">Flavour Font Size (px):</label>
-        <select id="flavourFontSize">
-          <option value="12" selected>12</option>
-          <option value="14">14</option>
-          <option value="16">16</option>
-        </select>
-      </div>
+      
       <div class="input-group">
         <label for="artist">Artist:</label>
         <input type="text" id="artist" placeholder="Artist Name">
-      </div>
-      <div class="input-group">
-        <label for="artistFont">Artist Font:</label>
-        <select id="artistFont">
-          <option value="Arial" selected>Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Georgia">Georgia</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="artistFontSize">Artist Font Size (px):</label>
-        <select id="artistFontSize">
-          <option value="12" selected>12</option>
-          <option value="14">14</option>
-          <option value="16">16</option>
-        </select>
+        <div class="inline-selector">
+          <label for="artistFont">Font:</label>
+          <select id="artistFont">
+            <option value="Arial" selected>Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <label for="artistFontSize">Size:</label>
+          <select id="artistFontSize">
+            <option value="12" selected>12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+          </select>
+        </div>
       </div>
     </div>
     

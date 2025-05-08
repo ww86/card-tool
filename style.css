@@ -54,13 +54,25 @@ textarea {
   resize: vertical;
 }
 
-/* Inline selector for font controls: all four items on the same line */
+/* Inline selector for font and text box controls */
 .inline-selector {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-size: 12px;
   margin-top: 5px;
+}
+
+/* Button container centered below the canvas */
+.button-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.button-container button {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
 /* Toggle grid sections */
@@ -96,13 +108,9 @@ canvas {
   border: 1px solid #000;
   background: #fff;
   display: block;
-  margin-bottom: 10px;
+  margin: 0 auto 10px auto;
 }
 
-#exportButton {
-  padding: 10px 20px;
-  font-size: 16px;
+#exportButton, #saveJsonButton, #importJsonButton {
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
 }

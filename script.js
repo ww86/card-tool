@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // -------------------------------
   // Global variable for main art image
-  // -------------------------------
   const mainArtImage = new Image();
   mainArtImage.crossOrigin = "anonymous";
 
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 3. Define clan data (statically defined, matching HTML toggles)
+  // 3. Define clan data (statically defined; matching HTML)
   // -------------------------------
   const clanData = [
     { id: "clanAssamite",           label: "Assamite",           imgSrc: "https://via.placeholder.com/50?text=A",    image: new Image() },
@@ -102,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // Helper for text wrapping.
+  // Helper: Text wrapping within a given width.
   // -------------------------------
   function wrapText(context, text, x, y, maxWidth, lineHeight) {
     let words = text.split(" ");
@@ -122,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Main update function: draws the composite card.
+  // updateCard(): Composite drawing function.
   // -------------------------------
   function updateCard() {
     const canvas = document.getElementById("cardCanvas");
@@ -143,17 +141,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const cropLeft = parseFloat(document.getElementById("cropLeft").value) || 0;
       const scalePercent = parseFloat(document.getElementById("scalePercent").value) || 100;
       
-      // Calculate the source rectangle
+      // Compute source rectangle from the image
       const srcX = cropLeft;
       const srcY = cropTop;
       const srcWidth = mainArtImage.naturalWidth - cropLeft - cropRight;
       const srcHeight = mainArtImage.naturalHeight - cropTop - cropBottom;
       
-      // Calculate destination dimensions
+      // Destination width/height after applying scale
       const destWidth = srcWidth * (scalePercent / 100);
       const destHeight = srcHeight * (scalePercent / 100);
       
-      ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight, offsetX, offsetY, destWidth, destHeight);
+      // Clip to the canvas size (if the resulting image is larger than 358x500)
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, canvas.width, canvas.height);
+      ctx.clip();
+      
+      ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
+                      offsetX, offsetY, destWidth, destHeight);
+      ctx.restore();
     }
     
     // --- Draw Header Text ---
@@ -162,12 +168,12 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
     ctx.fillText(document.getElementById("cardName").value, canvas.width / 2, 30);
-    // Type and Subtype
+    // Type and Subtype (using fixed font for simplicity)
     ctx.font = "italic 16px Arial";
     ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
     ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
     
-    // --- Render Discipline Icons (arrange in wrapped rows) ---
+    // --- Render Discipline Icons (wrapped rows) ---
     const activeDisciplines = disciplineData.filter(symbol => {
       const checkbox = document.getElementById(symbol.id);
       return checkbox && checkbox.checked && symbol.image.complete;
@@ -176,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - leftMargin * 2) / (iconSize + spacing));
-    const disciplineStartY = 80; // just below subtype header
+    const disciplineStartY = 80; // just below header
     let currentRow = 0;
     let countInRow = 0;
     activeDisciplines.forEach(symbol => {
@@ -189,8 +195,9 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.drawImage(symbol.image, x, y, iconSize, iconSize);
       countInRow++;
     });
-    const disciplineBlockHeight =
-      activeDisciplines.length > 0 ? (currentRow + 1) * (iconSize + spacing) : 0;
+    const disciplineBlockHeight = activeDisciplines.length > 0 
+      ? (currentRow + 1) * (iconSize + spacing) 
+      : 0;
     const cardTextStartY = disciplineStartY + disciplineBlockHeight + spacing;
     
     // --- Draw Card Text ---
@@ -227,17 +234,15 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
     
-    // --- Draw Frame Overlay ---
+    // --- Draw Frame Overlay if selected ---
     const frameType = document.getElementById("frameType").value;
     if (frameType !== "none") {
       ctx.save();
-      // For demonstration, draw different styled borders
       if (frameType === "simple") {
         ctx.lineWidth = 5;
         ctx.strokeStyle = "black";
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
       } else if (frameType === "classic") {
-        // Double border with gold color
         ctx.lineWidth = 5;
         ctx.strokeStyle = "gold";
         ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
@@ -245,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.strokeStyle = "black";
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
       } else if (frameType === "modern") {
-        // Modern frame: a colored inner rectangle
         ctx.lineWidth = 10;
         ctx.strokeStyle = "#444";
         ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
@@ -255,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Event Listeners for all inputs (including art controls)
+  // Event Listeners for all inputs and toggles.
   // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);
@@ -263,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // Art Panel: File Upload & URL Load
+  // Art Panel: File upload & URL load
   // -------------------------------
   document.getElementById("artFile").addEventListener("change", function (e) {
     if (e.target.files && e.target.files[0]) {
@@ -282,11 +286,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   
-  // When the main art image loads, update the card.
   mainArtImage.onload = updateCard;
   
   // -------------------------------
-  // Export button: Download card as JPEG.
+  // Export: Download canvas as JPEG.
   // -------------------------------
   document.getElementById("exportButton").addEventListener("click", function () {
     const canvas = document.getElementById("cardCanvas");

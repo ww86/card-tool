@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Card Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 200px;
+      background: #fff;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+    }
+    .sidebar h2 {
+      margin-top: 0;
+    }
+    .sidebar div {
+      margin-bottom: 15px;
+    }
+    .main {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #cardCanvas {
+      border: 1px solid #000;
+      background: #fff;
+      margin-bottom: 20px;
+    }
+    #exportButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar with toggles for discipline symbols -->
+    <div class="sidebar">
+      <h2>Symbols</h2>
+      <form id="symbolsForm">
+        <div>
+          <input type="checkbox" id="symbol1" checked>
+          <label for="symbol1">Discipline 1</label>
+        </div>
+        <div>
+          <input type="checkbox" id="symbol2" checked>
+          <label for="symbol2">Discipline 2</label>
+        </div>
+        <div>
+          <input type="checkbox" id="symbol3" checked>
+          <label for="symbol3">Discipline 3</label>
+        </div>
+      </form>
+    </div>
+
+    <!-- Main area with card preview and export button -->
+    <div class="main">
+      <canvas id="cardCanvas" width="358" height="500"></canvas>
+      <button id="exportButton">Export as JPEG</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+      // Define our discipline symbols with placeholder images and positions.
+      // Using via.placeholder.com for demonstration.
+      const disciplineSymbols = [
+        {
+          id: "symbol1",
+          label: "Discipline 1",
+          imgSrc: "https://via.placeholder.com/50?text=1",
+          x: 10,
+          y: 10,
+          image: new Image()
+        },
+        {
+          id: "symbol2",
+          label: "Discipline 2",
+          imgSrc: "https://via.placeholder.com/50?text=2",
+          x: 298, // 358 - 50 - 10 gives a 10px margin on right
+          y: 10,
+          image: new Image()
+        },
+        {
+          id: "symbol3",
+          label: "Discipline 3",
+          imgSrc: "https://via.placeholder.com/50?text=3",
+          x: 10,
+          y: 440, // 500 - 50 - 10 gives a 10px margin at the bottom
+          image: new Image()
+        }
+      ];
+
+      // Preload symbol images and update card once loaded.
+      disciplineSymbols.forEach(function(symbol) {
+        symbol.image.src = symbol.imgSrc;
+        symbol.image.onload = function() {
+          updateCard();
+        };
+      });
+
+      // Add event listeners to checkboxes in order to update the canvas on change.
+      document.querySelectorAll("#symbolsForm input[type='checkbox']").forEach(function(input) {
+        input.addEventListener("change", updateCard);
+      });
+
+      // Primary function to render the card.
+      function updateCard() {
+        const canvas = document.getElementById("cardCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Clear the canvas.
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw a white background.
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Optionally add a border (already visible via CSS).
+        ctx.strokeStyle = "#000";
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+        // Draw each discipline symbol if its corresponding checkbox is checked.
+        disciplineSymbols.forEach(function(symbol) {
+          const checkbox = document.getElementById(symbol.id);
+          if (checkbox && checkbox.checked && symbol.image.complete) {
+            // Draw the image at its specified coordinates with a size of 50x50px.
+            ctx.drawImage(symbol.image, symbol.x, symbol.y, 50, 50);
+          }
+        });
+      }
+
+      // Export the canvas as a JPEG file.
+      document.getElementById("exportButton").addEventListener("click", function() {
+        const canvas = document.getElementById("cardCanvas");
+        const imageData = canvas.toDataURL("image/jpeg");
+
+        // Create a temporary link and trigger a download.
+        const tmpLink = document.createElement("a");
+        tmpLink.download = "custom_card.jpeg";
+        tmpLink.href = imageData;
+        document.body.appendChild(tmpLink);
+        tmpLink.click();
+        document.body.removeChild(tmpLink);
+      });
+
+      // Initial render of the card.
+      updateCard();
+    });
+  </script>
+</body>
+</html>

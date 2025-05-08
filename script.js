@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { id: "disciplineVisceratika",   label: "Visceratika",   imgSrc: "https://via.placeholder.com/50?text=Visceratika",  image: new Image() }
   ];
   
+  // Load each discipline image
   disciplineData.forEach(symbol => {
     symbol.image.src = symbol.imgSrc;
     symbol.image.onload = updateCard;
@@ -100,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // Helper: Text wrapping within a given width.
+  // Helper: Wrap text within a given width.
   // -------------------------------
   function wrapText(context, text, x, y, maxWidth, lineHeight) {
     let words = text.split(" ");
@@ -141,22 +142,21 @@ document.addEventListener("DOMContentLoaded", function () {
       const cropLeft = parseFloat(document.getElementById("cropLeft").value) || 0;
       const scalePercent = parseFloat(document.getElementById("scalePercent").value) || 100;
       
-      // Compute source rectangle from the image
+      // Source rectangle from the image
       const srcX = cropLeft;
       const srcY = cropTop;
       const srcWidth = mainArtImage.naturalWidth - cropLeft - cropRight;
       const srcHeight = mainArtImage.naturalHeight - cropTop - cropBottom;
       
-      // Destination width/height after applying scale
+      // Destination size after scaling
       const destWidth = srcWidth * (scalePercent / 100);
       const destHeight = srcHeight * (scalePercent / 100);
       
-      // Clip to the canvas size (if the resulting image is larger than 358x500)
+      // Clip to canvas size (so if larger than 358x500, only show the visible portion)
       ctx.save();
       ctx.beginPath();
       ctx.rect(0, 0, canvas.width, canvas.height);
       ctx.clip();
-      
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
                       offsetX, offsetY, destWidth, destHeight);
       ctx.restore();
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
     ctx.fillText(document.getElementById("cardName").value, canvas.width / 2, 30);
-    // Type and Subtype (using fixed font for simplicity)
+    // Type and Subtype (using simple styling for now)
     ctx.font = "italic 16px Arial";
     ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
     ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - leftMargin * 2) / (iconSize + spacing));
-    const disciplineStartY = 80; // just below header
+    const disciplineStartY = 80; // starting just below header
     let currentRow = 0;
     let countInRow = 0;
     activeDisciplines.forEach(symbol => {
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.textAlign = "right";
     ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
     
-    // --- Draw Clan Symbols in a grid at bottom ---
+    // --- Draw Clan Symbols ---
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRow = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Event Listeners for all inputs and toggles.
+  // Event listeners for all inputs/toggles.
   // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);

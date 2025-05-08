@@ -10,33 +10,91 @@
       padding: 0;
       background: #f2f2f2;
     }
+    /* Main container: two panels side-by-side */
     .container {
       display: flex;
-      min-height: 100vh;
+      padding: 15px;
+      box-sizing: border-box;
+      background: #ddd;
     }
-    .sidebar {
-      width: 200px;
+    /* Left panel holds text inputs */
+    .left-panel {
+      width: 300px;
       background: #fff;
-      padding: 20px;
-      border-right: 1px solid #ddd;
+      padding: 15px;
+      box-sizing: border-box;
+      margin-right: 15px;
+      border: 1px solid #ccc;
     }
-    .sidebar h2 {
+    .left-panel h2 {
       margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 18px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 3px;
     }
-    .sidebar div {
+    .input-group {
       margin-bottom: 15px;
     }
-    .main {
+    .input-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      width: 100%;
+      padding: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    /* Right panel holds toggles */
+    .right-panel {
       flex: 1;
-      padding: 20px;
+      background: #fff;
+      padding: 15px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 3px;
+    }
+    /* Inline grid for toggles with two columns */
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .toggle-item {
       display: flex;
-      flex-direction: column;
       align-items: center;
+      font-size: 14px;
+    }
+    .toggle-item input[type="checkbox"] {
+      margin-right: 5px;
+    }
+    /* Preview container for canvas and export button */
+    .preview-container {
+      text-align: center;
+      margin: 20px 15px;
     }
     #cardCanvas {
       border: 1px solid #000;
       background: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     #exportButton {
       padding: 10px 20px;
@@ -47,118 +105,476 @@
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar with toggles for discipline symbols -->
-    <div class="sidebar">
-      <h2>Symbols</h2>
-      <form id="symbolsForm">
-        <div>
-          <input type="checkbox" id="symbol1" checked>
-          <label for="symbol1">Discipline 1</label>
-        </div>
-        <div>
-          <input type="checkbox" id="symbol2" checked>
-          <label for="symbol2">Discipline 2</label>
-        </div>
-        <div>
-          <input type="checkbox" id="symbol3" checked>
-          <label for="symbol3">Discipline 3</label>
-        </div>
-      </form>
+    <!-- Left Panel: Card details and text input fields -->
+    <div class="left-panel">
+      <h2>Card Details</h2>
+      <div class="input-group">
+        <label for="cardName">Name:</label>
+        <input type="text" id="cardName" placeholder="Card Name">
+      </div>
+      <div class="input-group">
+        <label for="cardType">Type:</label>
+        <select id="cardType">
+          <option value="Crypt">Crypt</option>
+          <option value="Library">Library</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="cardText">Card Text:</label>
+        <textarea id="cardText" rows="4" placeholder="Enter card text here"></textarea>
+      </div>
+      <div class="input-group">
+        <label for="flavourText">Flavour Text:</label>
+        <textarea id="flavourText" rows="2" placeholder="Enter flavour text"></textarea>
+      </div>
+      <div class="input-group">
+        <label for="artist">Artist:</label>
+        <input type="text" id="artist" placeholder="Artist Name">
+      </div>
     </div>
 
-    <!-- Main area with card preview and export button -->
-    <div class="main">
-      <canvas id="cardCanvas" width="358" height="500"></canvas>
-      <button id="exportButton">Export as JPEG</button>
+    <!-- Right Panel: Toggle selectors split into two grid sections -->
+    <div class="right-panel">
+      <!-- Disciplines Section -->
+      <div class="section">
+        <h2>Disciplines</h2>
+        <div class="toggle-grid" id="disciplinesGrid">
+          <div class="toggle-item">
+            <input type="checkbox" id="discipline1" checked>
+            <label for="discipline1">Discipline 1</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="discipline2" checked>
+            <label for="discipline2">Discipline 2</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="discipline3" checked>
+            <label for="discipline3">Discipline 3</label>
+          </div>
+        </div>
+      </div>
+      <!-- Clan Symbols Section -->
+      <div class="section">
+        <h2>Clan Symbols</h2>
+        <div class="toggle-grid" id="clansGrid">
+          <div class="toggle-item">
+            <input type="checkbox" id="clanAssamite" checked>
+            <label for="clanAssamite">Assamite</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanBrujah" checked>
+            <label for="clanBrujah">Brujah</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanBrujahAntitribu" checked>
+            <label for="clanBrujahAntitribu">Brujah Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanGangrel" checked>
+            <label for="clanGangrel">Gangrel</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanGangrelAntitribu" checked>
+            <label for="clanGangrelAntitribu">Gangrel Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanLasombra" checked>
+            <label for="clanLasombra">Lasombra</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanGiovanni" checked>
+            <label for="clanGiovanni">Giovanni</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanCappadocian" checked>
+            <label for="clanCappadocian">Cappadocian</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanAhrimane" checked>
+            <label for="clanAhrimane">Ahrimane</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanMalkavian" checked>
+            <label for="clanMalkavian">Malkavian</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanMalkavianAntitribu" checked>
+            <label for="clanMalkavianAntitribu">Malkavian Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanFollowersOfSet" checked>
+            <label for="clanFollowersOfSet">Followers of Set</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanNosferatu" checked>
+            <label for="clanNosferatu">Nosferatu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanNosferatuAntitribu" checked>
+            <label for="clanNosferatuAntitribu">Nosferatu Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanRavnos" checked>
+            <label for="clanRavnos">Ravnos</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanSalubri" checked>
+            <label for="clanSalubri">Salubri</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanSalubriAntitribu" checked>
+            <label for="clanSalubriAntitribu">Salubri Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanToreador" checked>
+            <label for="clanToreador">Toreador</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanToreadorAntitribu" checked>
+            <label for="clanToreadorAntitribu">Toreador Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanTremere" checked>
+            <label for="clanTremere">Tremere</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanTremereAntitribu" checked>
+            <label for="clanTremereAntitribu">Tremere Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanTzimisce" checked>
+            <label for="clanTzimisce">Tzimisce</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanVentrue" checked>
+            <label for="clanVentrue">Ventrue</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanVentrueAntitribu" checked>
+            <label for="clanVentrueAntitribu">Ventrue Antitribu</label>
+          </div>
+          <div class="toggle-item">
+            <input type="checkbox" id="clanHarbringersOfSkulls" checked>
+            <label for="clanHarbringersOfSkulls">Harbringers of Skulls</label>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Card preview and export button -->
+  <div class="preview-container">
+    <canvas id="cardCanvas" width="358" height="500"></canvas>
+    <br>
+    <button id="exportButton">Export as JPEG</button>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-
-      // Define our discipline symbols with placeholder images and positions.
-      // Using via.placeholder.com for demonstration.
-      const disciplineSymbols = [
+      // -----------------------------------------------------
+      // Define symbols for disciplines and clans (using placeholder images)
+      // -----------------------------------------------------
+      const disciplineData = [
         {
-          id: "symbol1",
+          id: "discipline1",
           label: "Discipline 1",
           imgSrc: "https://via.placeholder.com/50?text=1",
+          // positions for demonstration – you may adjust these as needed:
           x: 10,
           y: 10,
           image: new Image()
         },
         {
-          id: "symbol2",
+          id: "discipline2",
           label: "Discipline 2",
           imgSrc: "https://via.placeholder.com/50?text=2",
-          x: 298, // 358 - 50 - 10 gives a 10px margin on right
+          x: 298,
           y: 10,
           image: new Image()
         },
         {
-          id: "symbol3",
+          id: "discipline3",
           label: "Discipline 3",
           imgSrc: "https://via.placeholder.com/50?text=3",
           x: 10,
-          y: 440, // 500 - 50 - 10 gives a 10px margin at the bottom
+          y: 380,
           image: new Image()
         }
       ];
-
-      // Preload symbol images and update card once loaded.
-      disciplineSymbols.forEach(function(symbol) {
+      disciplineData.forEach(symbol => {
         symbol.image.src = symbol.imgSrc;
-        symbol.image.onload = function() {
-          updateCard();
-        };
+        symbol.image.onload = updateCard;
+      });
+      
+      const clanData = [
+        {
+          id: "clanAssamite",
+          label: "Assamite",
+          imgSrc: "https://via.placeholder.com/50?text=A",
+          image: new Image()
+        },
+        {
+          id: "clanBrujah",
+          label: "Brujah",
+          imgSrc: "https://via.placeholder.com/50?text=B",
+          image: new Image()
+        },
+        {
+          id: "clanBrujahAntitribu",
+          label: "Brujah Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=BA",
+          image: new Image()
+        },
+        {
+          id: "clanGangrel",
+          label: "Gangrel",
+          imgSrc: "https://via.placeholder.com/50?text=G",
+          image: new Image()
+        },
+        {
+          id: "clanGangrelAntitribu",
+          label: "Gangrel Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=GA",
+          image: new Image()
+        },
+        {
+          id: "clanLasombra",
+          label: "Lasombra",
+          imgSrc: "https://via.placeholder.com/50?text=L",
+          image: new Image()
+        },
+        {
+          id: "clanGiovanni",
+          label: "Giovanni",
+          imgSrc: "https://via.placeholder.com/50?text=Gio",
+          image: new Image()
+        },
+        {
+          id: "clanCappadocian",
+          label: "Cappadocian",
+          imgSrc: "https://via.placeholder.com/50?text=C",
+          image: new Image()
+        },
+        {
+          id: "clanAhrimane",
+          label: "Ahrimane",
+          imgSrc: "https://via.placeholder.com/50?text=AH",
+          image: new Image()
+        },
+        {
+          id: "clanMalkavian",
+          label: "Malkavian",
+          imgSrc: "https://via.placeholder.com/50?text=M",
+          image: new Image()
+        },
+        {
+          id: "clanMalkavianAntitribu",
+          label: "Malkavian Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=MA",
+          image: new Image()
+        },
+        {
+          id: "clanFollowersOfSet",
+          label: "Followers of Set",
+          imgSrc: "https://via.placeholder.com/50?text=FoS",
+          image: new Image()
+        },
+        {
+          id: "clanNosferatu",
+          label: "Nosferatu",
+          imgSrc: "https://via.placeholder.com/50?text=N",
+          image: new Image()
+        },
+        {
+          id: "clanNosferatuAntitribu",
+          label: "Nosferatu Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=NA",
+          image: new Image()
+        },
+        {
+          id: "clanRavnos",
+          label: "Ravnos",
+          imgSrc: "https://via.placeholder.com/50?text=R",
+          image: new Image()
+        },
+        {
+          id: "clanSalubri",
+          label: "Salubri",
+          imgSrc: "https://via.placeholder.com/50?text=S",
+          image: new Image()
+        },
+        {
+          id: "clanSalubriAntitribu",
+          label: "Salubri Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=SA",
+          image: new Image()
+        },
+        {
+          id: "clanToreador",
+          label: "Toreador",
+          imgSrc: "https://via.placeholder.com/50?text=T",
+          image: new Image()
+        },
+        {
+          id: "clanToreadorAntitribu",
+          label: "Toreador Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=TA",
+          image: new Image()
+        },
+        {
+          id: "clanTremere",
+          label: "Tremere",
+          imgSrc: "https://via.placeholder.com/50?text=Tr",
+          image: new Image()
+        },
+        {
+          id: "clanTremereAntitribu",
+          label: "Tremere Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=TrA",
+          image: new Image()
+        },
+        {
+          id: "clanTzimisce",
+          label: "Tzimisce",
+          imgSrc: "https://via.placeholder.com/50?text=TZ",
+          image: new Image()
+        },
+        {
+          id: "clanVentrue",
+          label: "Ventrue",
+          imgSrc: "https://via.placeholder.com/50?text=V",
+          image: new Image()
+        },
+        {
+          id: "clanVentrueAntitribu",
+          label: "Ventrue Antitribu",
+          imgSrc: "https://via.placeholder.com/50?text=VA",
+          image: new Image()
+        },
+        {
+          id: "clanHarbringersOfSkulls",
+          label: "Harbringers of Skulls",
+          imgSrc: "https://via.placeholder.com/50?text=HS",
+          image: new Image()
+        }
+      ];
+      clanData.forEach(symbol => {
+        symbol.image.src = symbol.imgSrc;
+        symbol.image.onload = updateCard;
       });
 
-      // Add event listeners to checkboxes in order to update the canvas on change.
-      document.querySelectorAll("#symbolsForm input[type='checkbox']").forEach(function(input) {
-        input.addEventListener("change", updateCard);
-      });
+      // -----------------------------------------------------
+      // Helper function: wrap text in a defined width.
+      // -----------------------------------------------------
+      function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        let words = text.split(' ');
+        let line = '';
+        for (let n = 0; n < words.length; n++) {
+          let testLine = line + words[n] + ' ';
+          let metrics = context.measureText(testLine);
+          let testWidth = metrics.width;
+          if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        context.fillText(line, x, y);
+      }
 
-      // Primary function to render the card.
+      // -----------------------------------------------------
+      // updateCard(): Redraws the canvas using all the inputs and toggles.
+      // -----------------------------------------------------
       function updateCard() {
         const canvas = document.getElementById("cardCanvas");
         const ctx = canvas.getContext("2d");
-
+        
         // Clear the canvas.
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw a white background.
+        
+        // Draw card background and border.
         ctx.fillStyle = "#fff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Optionally add a border (already visible via CSS).
         ctx.strokeStyle = "#000";
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-        // Draw each discipline symbol if its corresponding checkbox is checked.
-        disciplineSymbols.forEach(function(symbol) {
-          const checkbox = document.getElementById(symbol.id);
+        
+        // Retrieve text input values.
+        const name = document.getElementById("cardName").value;
+        const type = document.getElementById("cardType").value;
+        const cardText = document.getElementById("cardText").value;
+        const flavourText = document.getElementById("flavourText").value;
+        const artist = document.getElementById("artist").value;
+        
+        // Draw Title (Name & Type) at the top.
+        ctx.fillStyle = "#000";
+        ctx.font = "bold 20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(name, canvas.width / 2, 30);
+        ctx.font = "italic 16px Arial";
+        ctx.fillText(type, canvas.width / 2, 50);
+        
+        // Draw Card Text (wrapped) in a text area.
+        ctx.font = "14px Arial";
+        ctx.textAlign = "left";
+        wrapText(ctx, cardText, 20, 70, canvas.width - 40, 18);
+        
+        // Draw Flavour Text in an italic style.
+        ctx.font = "italic 12px Arial";
+        wrapText(ctx, flavourText, 20, 150, canvas.width - 40, 16);
+        
+        // Draw the Artist at the bottom right.
+        ctx.font = "12px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText(artist, canvas.width - 10, canvas.height - 10);
+        
+        // Render Discipline Symbols (positions as set above).
+        disciplineData.forEach(symbol => {
+          let checkbox = document.getElementById(symbol.id);
           if (checkbox && checkbox.checked && symbol.image.complete) {
-            // Draw the image at its specified coordinates with a size of 50x50px.
             ctx.drawImage(symbol.image, symbol.x, symbol.y, 50, 50);
           }
         });
+        
+        // Render Clan Symbols in a grid along the bottom.
+        const clanMargin = 10;
+        const clanSize = 50;
+        const maxPerRow = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
+        let currentRow = 0;
+        let countInRow = 0;
+        clanData.forEach(symbol => {
+          let checkbox = document.getElementById(symbol.id);
+          if (checkbox && checkbox.checked && symbol.image.complete) {
+            const x = clanMargin + countInRow * (clanSize + clanMargin);
+            const y = canvas.height - clanMargin - clanSize - (currentRow * (clanSize + clanMargin));
+            ctx.drawImage(symbol.image, x, y, clanSize, clanSize);
+            countInRow++;
+            if (countInRow >= maxPerRow) {
+              countInRow = 0;
+              currentRow++;
+            }
+          }
+        });
       }
-
-      // Export the canvas as a JPEG file.
+      
+      // Set listeners for changes in all inputs.
+      document.querySelectorAll("input, textarea, select").forEach(el => {
+        el.addEventListener("input", updateCard);
+        el.addEventListener("change", updateCard);
+      });
+      
+      // Export button functionality.
       document.getElementById("exportButton").addEventListener("click", function() {
         const canvas = document.getElementById("cardCanvas");
-        const imageData = canvas.toDataURL("image/jpeg");
-
-        // Create a temporary link and trigger a download.
-        const tmpLink = document.createElement("a");
-        tmpLink.download = "custom_card.jpeg";
-        tmpLink.href = imageData;
-        document.body.appendChild(tmpLink);
-        tmpLink.click();
-        document.body.removeChild(tmpLink);
+        const dataURL = canvas.toDataURL("image/jpeg");
+        const link = document.createElement("a");
+        link.download = "custom_card.jpeg";
+        link.href = dataURL;
+        link.click();
       });
-
-      // Initial render of the card.
+      
+      // Initial render.
       updateCard();
     });
   </script>

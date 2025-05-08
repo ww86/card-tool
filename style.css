@@ -29,7 +29,7 @@ body {
   flex: 1;
 }
 
-/* Input groups */
+/* Input Groups */
 .input-group {
   margin-bottom: 15px;
 }
@@ -52,6 +52,19 @@ textarea {
 
 textarea {
   resize: vertical;
+}
+
+/* Inline selector for font controls */
+.inline-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.inline-selector label {
+  margin: 0;
 }
 
 /* Toggle grid sections */
@@ -82,7 +95,7 @@ textarea {
   margin-right: 5px;
 }
 
-/* Canvas and export button */
+/* Canvas preview and Export Button */
 canvas {
   border: 1px solid #000;
   background: #fff;

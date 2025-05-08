@@ -1,4 +1,4 @@
-// Utility: Convert a hex color (e.g. "#ffffff") and opacity (0-1) into an rgba() string.
+// Utility: Convert hex color to rgba string.
 function hexToRgba(hex, opacity) {
   hex = hex.replace("#", "");
   const r = parseInt(hex.substring(0, 2), 16);
@@ -8,12 +8,13 @@ function hexToRgba(hex, opacity) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Global variable for main art image
+  // Global variable for main art image and store original src.
   const mainArtImage = new Image();
   mainArtImage.crossOrigin = "anonymous";
-
+  let originalArtSrc = "";
+  
   // -------------------------------
-  // 1. Define full discipline data (30 items) with checkboxes unchecked by default
+  // 1. Define discipline data (30 items) – checkboxes start unchecked.
   // -------------------------------
   const disciplineData = [
     { id: "disciplineAbombwe",      label: "Abombwe",       imgSrc: "https://via.placeholder.com/50?text=Abombwe",      image: new Image() },
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 2. Dynamically generate discipline toggle checkboxes (none are checked by default)
+  // 2. Generate discipline toggles (none checked by default)
   // -------------------------------
   const disciplinesGrid = document.getElementById("disciplinesGrid");
   disciplineData.forEach(item => {
@@ -63,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = item.id;
-    // Set to false so none are selected by default
     checkbox.checked = false;
     const label = document.createElement("label");
     label.htmlFor = item.id;
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 3. Define clan data (statically defined; remove default checked attributes)
+  // 3. Define clan data (none checked by default)
   // -------------------------------
   const clanData = [
     { id: "clanAssamite",           label: "Assamite",           imgSrc: "https://via.placeholder.com/50?text=A",    image: new Image() },
@@ -130,14 +130,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // updateCard(): Composite drawing function.
+  // updateCard(): Draws the complete card including background, art, text boxes, and overlays.
   // -------------------------------
   function updateCard() {
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Draw a white background.
+    // Draw white canvas background.
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
@@ -158,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const destWidth = srcWidth * (scalePercent / 100);
       const destHeight = srcHeight * (scalePercent / 100);
   
-      // Clip the drawing to the canvas bounds.
       ctx.save();
       ctx.beginPath();
       ctx.rect(0, 0, canvas.width, canvas.height);
@@ -177,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
     ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
     
-    // --- Render discipline icons (wrapped) ---
+    // --- Render discipline icons (wrapped rows) ---
     const activeDisciplines = disciplineData.filter(symbol => {
       const checkbox = document.getElementById(symbol.id);
       return checkbox && checkbox.checked && symbol.image.complete;
@@ -186,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - leftMargin * 2) / (iconSize + spacing));
-    const disciplineStartY = 80; // start just below header
+    const disciplineStartY = 80;
     let currentRow = 0;
     let countInRow = 0;
     activeDisciplines.forEach(symbol => {
@@ -199,36 +198,35 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.drawImage(symbol.image, x, y, iconSize, iconSize);
       countInRow++;
     });
-  
-    // --- Draw Card Text Box Background & Card Text ---
+    const disciplineBlockHeight = activeDisciplines.length > 0 ? (currentRow + 1) * (iconSize + spacing) : 0;
+    
+    // --- Draw Card Text Box Background & Text ---
     const boxX = parseFloat(document.getElementById("textBoxX").value) || 20;
-    const boxY = parseFloat(document.getElementById("textBoxY").value) || 150;
+    const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
     const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || (canvas.width - 40);
-    const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 80;
+    const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
     const textBgColor = document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
     const bgRgba = hexToRgba(textBgColor, textBgOpacity);
   
-    // Draw the background rectangle for card text.
     ctx.fillStyle = bgRgba;
     ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
   
-    // Draw the card text on top (with a bit of padding)
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.fillStyle = "#000";
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
     
-    // --- Draw Flavour Text (default position) ---
+    // --- Draw Flavour Text ---
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     wrapText(ctx, document.getElementById("flavourText").value, 20, boxY + boxHeight + 20, canvas.width - 40, 16);
     
-    // --- Draw Artist (default position) ---
+    // --- Draw Artist ---
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
     
-    // --- Draw Clan Symbols ---
+    // --- Draw Clan Symbols (wrapped grid at bottom) ---
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRowClan = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
@@ -273,7 +271,129 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Listen for changes on all inputs.
+  // Save template as JSON.
+  // -------------------------------
+  function saveAsJSON() {
+    const template = {
+      cardName: document.getElementById("cardName").value,
+      nameFont: document.getElementById("nameFont").value,
+      nameFontSize: document.getElementById("nameFontSize").value,
+      cardType: document.getElementById("cardType").value,
+      cardSubtype: document.getElementById("cardSubtype").value,
+      cardText: document.getElementById("cardText").value,
+      textFont: document.getElementById("textFont").value,
+      textFontSize: document.getElementById("textFontSize").value,
+      // Card text box positioning and styling.
+      textBoxX: document.getElementById("textBoxX").value,
+      textBoxY: document.getElementById("textBoxY").value,
+      textBoxWidth: document.getElementById("textBoxWidth").value,
+      textBoxHeight: document.getElementById("textBoxHeight").value,
+      textBgColor: document.getElementById("textBgColor").value,
+      textBgOpacity: document.getElementById("textBgOpacity").value,
+      flavourText: document.getElementById("flavourText").value,
+      flavourFont: document.getElementById("flavourFont").value,
+      flavourFontSize: document.getElementById("flavourFontSize").value,
+      artist: document.getElementById("artist").value,
+      artistFont: document.getElementById("artistFont").value,
+      artistFontSize: document.getElementById("artistFontSize").value,
+      // Art image adjustments.
+      offsetX: document.getElementById("offsetX").value,
+      offsetY: document.getElementById("offsetY").value,
+      cropTop: document.getElementById("cropTop").value,
+      cropRight: document.getElementById("cropRight").value,
+      cropBottom: document.getElementById("cropBottom").value,
+      cropLeft: document.getElementById("cropLeft").value,
+      scalePercent: document.getElementById("scalePercent").value,
+      frameType: document.getElementById("frameType").value,
+      // Disciplines state.
+      disciplines: disciplineData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      // Clan state.
+      clans: clanData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      // Save the original art image (if any)
+      originalArtSrc: originalArtSrc
+    };
+    const jsonStr = JSON.stringify(template, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = "card_template.json";
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  
+  // -------------------------------
+  // Import template from JSON.
+  // -------------------------------
+  function importJSONFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const template = JSON.parse(e.target.result);
+        // Update all form fields:
+        document.getElementById("cardName").value = template.cardName || "";
+        document.getElementById("nameFont").value = template.nameFont || "Arial";
+        document.getElementById("nameFontSize").value = template.nameFontSize || "20";
+        document.getElementById("cardType").value = template.cardType || "Crypt";
+        document.getElementById("cardSubtype").value = template.cardSubtype || "Action";
+        document.getElementById("cardText").value = template.cardText || "";
+        document.getElementById("textFont").value = template.textFont || "Arial";
+        document.getElementById("textFontSize").value = template.textFontSize || "14";
+        document.getElementById("textBoxX").value = template.textBoxX || "20";
+        document.getElementById("textBoxY").value = template.textBoxY || "300";
+        document.getElementById("textBoxWidth").value = template.textBoxWidth || "318";
+        document.getElementById("textBoxHeight").value = template.textBoxHeight || "100";
+        document.getElementById("textBgColor").value = template.textBgColor || "#ffffff";
+        document.getElementById("textBgOpacity").value = template.textBgOpacity || "50";
+        document.getElementById("flavourText").value = template.flavourText || "";
+        document.getElementById("flavourFont").value = template.flavourFont || "Arial";
+        document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
+        document.getElementById("artist").value = template.artist || "";
+        document.getElementById("artistFont").value = template.artistFont || "Arial";
+        document.getElementById("artistFontSize").value = template.artistFontSize || "12";
+        document.getElementById("offsetX").value = template.offsetX || "0";
+        document.getElementById("offsetY").value = template.offsetY || "0";
+        document.getElementById("cropTop").value = template.cropTop || "0";
+        document.getElementById("cropRight").value = template.cropRight || "0";
+        document.getElementById("cropBottom").value = template.cropBottom || "0";
+        document.getElementById("cropLeft").value = template.cropLeft || "0";
+        document.getElementById("scalePercent").value = template.scalePercent || "100";
+        document.getElementById("frameType").value = template.frameType || "none";
+  
+        // Set disciplines checkboxes.
+        for (let key in template.disciplines) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.disciplines[key]; }
+        }
+  
+        // Set clans checkboxes.
+        for (let key in template.clans) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.clans[key]; }
+        }
+  
+        // Set the original art image if provided.
+        if (template.originalArtSrc) {
+          originalArtSrc = template.originalArtSrc;
+          mainArtImage.src = originalArtSrc;
+        }
+  
+        updateCard();
+      } catch (err) {
+        alert("Failed to parse JSON: " + err);
+      }
+    };
+    reader.readAsText(file);
+  }
+  
+  // -------------------------------
+  // Event listeners for all inputs.
   // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);
@@ -281,21 +401,24 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // Art Panel: File upload & URL load
+  // Art Panel: File upload & URL load.
   // -------------------------------
   document.getElementById("artFile").addEventListener("change", function (e) {
     if (e.target.files && e.target.files[0]) {
+      let file = e.target.files[0];
       let reader = new FileReader();
       reader.onload = function (event) {
-        mainArtImage.src = event.target.result;
+        originalArtSrc = event.target.result;
+        mainArtImage.src = originalArtSrc;
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   });
   
   document.getElementById("loadArtUrl").addEventListener("click", function () {
     const url = document.getElementById("artUrl").value;
     if (url) {
+      originalArtSrc = url;
       mainArtImage.src = url;
     }
   });
@@ -303,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
   mainArtImage.onload = updateCard;
   
   // -------------------------------
-  // Export: Download the canvas as a JPEG.
+  // Export as JPEG.
   // -------------------------------
   document.getElementById("exportButton").addEventListener("click", function () {
     const canvas = document.getElementById("cardCanvas");
@@ -312,6 +435,24 @@ document.addEventListener("DOMContentLoaded", function () {
     link.download = "custom_card.jpeg";
     link.href = dataURL;
     link.click();
+  });
+  
+  // -------------------------------
+  // Save as JSON.
+  // -------------------------------
+  document.getElementById("saveJsonButton").addEventListener("click", saveAsJSON);
+  
+  // -------------------------------
+  // Import JSON.
+  // -------------------------------
+  document.getElementById("importJsonButton").addEventListener("click", function () {
+    document.getElementById("jsonImport").click();
+  });
+  
+  document.getElementById("jsonImport").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      importJSONFile(e.target.files[0]);
+    }
   });
   
   // Initial render.

@@ -11,6 +11,7 @@
     <div class="left-panel">
       <h2>Card Details & Text Styling</h2>
       
+      <!-- Card Name with inline font controls -->
       <div class="input-group">
         <label for="cardName">Name:</label>
         <input type="text" id="cardName" placeholder="Card Name">
@@ -32,6 +33,7 @@
         </div>
       </div>
       
+      <!-- Type and Subtype -->
       <div class="input-group">
         <label for="cardType">Type:</label>
         <select id="cardType">
@@ -39,7 +41,6 @@
           <option value="Library">Library</option>
         </select>
       </div>
-      
       <div class="input-group">
         <label for="cardSubtype">Subtype:</label>
         <select id="cardSubtype">
@@ -56,6 +57,7 @@
         </select>
       </div>
       
+      <!-- Card Text with inline font controls -->
       <div class="input-group">
         <label for="cardText">Card Text:</label>
         <textarea id="cardText" rows="4" placeholder="Enter card text here"></textarea>
@@ -77,6 +79,28 @@
         </div>
       </div>
       
+      <!-- New controls for Card Text Box positioning and background -->
+      <div class="input-group">
+        <label>Card Text Box Position & Style:</label>
+        <div class="inline-selector">
+          <label for="textBoxX">X:</label>
+          <input type="number" id="textBoxX" value="20">
+          <label for="textBoxY">Y:</label>
+          <input type="number" id="textBoxY" value="150">
+          <label for="textBoxWidth">W:</label>
+          <input type="number" id="textBoxWidth" value="318">
+          <label for="textBoxHeight">H:</label>
+          <input type="number" id="textBoxHeight" value="80">
+        </div>
+        <div class="inline-selector">
+          <label for="textBgColor">Bg Color:</label>
+          <input type="color" id="textBgColor" value="#ffffff">
+          <label for="textBgOpacity">Opacity:</label>
+          <input type="number" id="textBgOpacity" value="50" min="0" max="100">
+        </div>
+      </div>
+      
+      <!-- Flavour Text with inline font controls -->
       <div class="input-group">
         <label for="flavourText">Flavour Text:</label>
         <textarea id="flavourText" rows="2" placeholder="Enter flavour text"></textarea>
@@ -97,6 +121,7 @@
         </div>
       </div>
       
+      <!-- Artist with inline font controls -->
       <div class="input-group">
         <label for="artist">Artist:</label>
         <input type="text" id="artist" placeholder="Artist Name">
@@ -123,110 +148,111 @@
       <div class="section">
         <h2>Disciplines</h2>
         <div class="toggle-grid" id="disciplinesGrid">
-          <!-- Dynamically injected discipline toggles -->
+          <!-- Discipline toggles will be injected via JavaScript -->
         </div>
       </div>
       <div class="section">
         <h2>Clan Symbols</h2>
         <div class="toggle-grid" id="clansGrid">
+          <!-- Note: Removed the default "checked" so none are selected -->
           <div class="toggle-item">
-            <input type="checkbox" id="clanAssamite" checked>
+            <input type="checkbox" id="clanAssamite">
             <label for="clanAssamite">Assamite</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanBrujah" checked>
+            <input type="checkbox" id="clanBrujah">
             <label for="clanBrujah">Brujah</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanBrujahAntitribu" checked>
+            <input type="checkbox" id="clanBrujahAntitribu">
             <label for="clanBrujahAntitribu">Brujah Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanGangrel" checked>
+            <input type="checkbox" id="clanGangrel">
             <label for="clanGangrel">Gangrel</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanGangrelAntitribu" checked>
+            <input type="checkbox" id="clanGangrelAntitribu">
             <label for="clanGangrelAntitribu">Gangrel Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanLasombra" checked>
+            <input type="checkbox" id="clanLasombra">
             <label for="clanLasombra">Lasombra</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanGiovanni" checked>
+            <input type="checkbox" id="clanGiovanni">
             <label for="clanGiovanni">Giovanni</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanCappadocian" checked>
+            <input type="checkbox" id="clanCappadocian">
             <label for="clanCappadocian">Cappadocian</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanAhrimane" checked>
+            <input type="checkbox" id="clanAhrimane">
             <label for="clanAhrimane">Ahrimane</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanMalkavian" checked>
+            <input type="checkbox" id="clanMalkavian">
             <label for="clanMalkavian">Malkavian</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanMalkavianAntitribu" checked>
+            <input type="checkbox" id="clanMalkavianAntitribu">
             <label for="clanMalkavianAntitribu">Malkavian Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanFollowersOfSet" checked>
+            <input type="checkbox" id="clanFollowersOfSet">
             <label for="clanFollowersOfSet">Followers of Set</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanNosferatu" checked>
+            <input type="checkbox" id="clanNosferatu">
             <label for="clanNosferatu">Nosferatu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanNosferatuAntitribu" checked>
+            <input type="checkbox" id="clanNosferatuAntitribu">
             <label for="clanNosferatuAntitribu">Nosferatu Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanRavnos" checked>
+            <input type="checkbox" id="clanRavnos">
             <label for="clanRavnos">Ravnos</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanSalubri" checked>
+            <input type="checkbox" id="clanSalubri">
             <label for="clanSalubri">Salubri</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanSalubriAntitribu" checked>
+            <input type="checkbox" id="clanSalubriAntitribu">
             <label for="clanSalubriAntitribu">Salubri Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanToreador" checked>
+            <input type="checkbox" id="clanToreador">
             <label for="clanToreador">Toreador</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanToreadorAntitribu" checked>
+            <input type="checkbox" id="clanToreadorAntitribu">
             <label for="clanToreadorAntitribu">Toreador Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanTremere" checked>
+            <input type="checkbox" id="clanTremere">
             <label for="clanTremere">Tremere</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanTremereAntitribu" checked>
+            <input type="checkbox" id="clanTremereAntitribu">
             <label for="clanTremereAntitribu">Tremere Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanTzimisce" checked>
+            <input type="checkbox" id="clanTzimisce">
             <label for="clanTzimisce">Tzimisce</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanVentrue" checked>
+            <input type="checkbox" id="clanVentrue">
             <label for="clanVentrue">Ventrue</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanVentrueAntitribu" checked>
+            <input type="checkbox" id="clanVentrueAntitribu">
             <label for="clanVentrueAntitribu">Ventrue Antitribu</label>
           </div>
           <div class="toggle-item">
-            <input type="checkbox" id="clanHarbringersOfSkulls" checked>
+            <input type="checkbox" id="clanHarbringersOfSkulls">
             <label for="clanHarbringersOfSkulls">Harbringers of Skulls</label>
           </div>
         </div>

@@ -13,18 +13,15 @@ body {
   box-sizing: border-box;
 }
 
-.left-panel, .middle-panel, .right-panel {
+/* Four panels */
+.left-panel, .middle-panel, .art-panel, .right-panel {
   background: #fff;
   padding: 15px;
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
 
-.left-panel {
-  width: 300px;
-}
-
-.middle-panel {
+.left-panel, .middle-panel, .art-panel {
   width: 300px;
 }
 
@@ -32,7 +29,7 @@ body {
   flex: 1;
 }
 
-/* Card detail inputs */
+/* Input groups */
 .input-group {
   margin-bottom: 15px;
 }
@@ -44,6 +41,7 @@ body {
 }
 
 input[type="text"],
+input[type="number"],
 select,
 textarea {
   width: 100%;
@@ -56,7 +54,7 @@ textarea {
   resize: vertical;
 }
 
-/* Toggle grids for disciplines and clans */
+/* Toggle grid sections */
 .section {
   margin-bottom: 20px;
 }
@@ -84,7 +82,7 @@ textarea {
   margin-right: 5px;
 }
 
-/* Canvas preview styling */
+/* Canvas and export button */
 canvas {
   border: 1px solid #000;
   background: #fff;

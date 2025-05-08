@@ -10,29 +10,29 @@
       padding: 0;
       background: #f2f2f2;
     }
-    /* Main container: two panels side-by-side */
     .container {
       display: flex;
+      gap: 15px;
       padding: 15px;
-      box-sizing: border-box;
       background: #ddd;
+      box-sizing: border-box;
     }
-    /* Left panel holds text inputs */
-    .left-panel {
-      width: 300px;
+    .left-panel, .middle-panel, .right-panel {
       background: #fff;
       padding: 15px;
-      box-sizing: border-box;
-      margin-right: 15px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
     }
-    .left-panel h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 18px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 3px;
+    .left-panel {
+      width: 300px;
     }
+    .middle-panel {
+      width: 300px;
+    }
+    .right-panel {
+      flex: 1;
+    }
+    /* Card Inputs */
     .input-group {
       margin-bottom: 15px;
     }
@@ -42,41 +42,30 @@
       margin-bottom: 5px;
     }
     input[type="text"],
-    select {
+    select,
+    textarea {
       width: 100%;
       padding: 5px;
       font-size: 14px;
       box-sizing: border-box;
     }
     textarea {
-      width: 100%;
-      padding: 5px;
-      font-size: 14px;
-      box-sizing: border-box;
       resize: vertical;
     }
-    /* Right panel holds toggles */
-    .right-panel {
-      flex: 1;
-      background: #fff;
-      padding: 15px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-    }
+    /* Toggle selectors for Disciplines and Clans */
     .section {
       margin-bottom: 20px;
     }
     .section h2 {
-      margin: 0 0 10px 0;
       font-size: 16px;
+      margin: 0 0 10px 0;
       border-bottom: 1px solid #ccc;
       padding-bottom: 3px;
     }
-    /* Inline grid for toggles with two columns */
     .toggle-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     .toggle-item {
       display: flex;
@@ -86,26 +75,26 @@
     .toggle-item input[type="checkbox"] {
       margin-right: 5px;
     }
-    /* Preview container for canvas and export button */
-    .preview-container {
-      text-align: center;
-      margin: 20px 15px;
-    }
-    #cardCanvas {
+    /* Card preview canvas */
+    canvas {
       border: 1px solid #000;
       background: #fff;
+      display: block;
       margin-bottom: 10px;
     }
     #exportButton {
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      display: block;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Left Panel: Card details and text input fields -->
+    
+    <!-- Left Column: Card details & texts -->
     <div class="left-panel">
       <h2>Card Details</h2>
       <div class="input-group">
@@ -117,6 +106,21 @@
         <select id="cardType">
           <option value="Crypt">Crypt</option>
           <option value="Library">Library</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="cardSubtype">Subtype:</label>
+        <select id="cardSubtype">
+          <option value="Action">Action</option>
+          <option value="Political Action">Political Action</option>
+          <option value="Employ Retainer">Employ Retainer</option>
+          <option value="Emply minion">Emply minion</option>
+          <option value="Equip action">Equip action</option>
+          <option value="Modifier">Modifier</option>
+          <option value="Reaction">Reaction</option>
+          <option value="Combat">Combat</option>
+          <option value="Event">Event</option>
+          <option value="Master">Master</option>
         </select>
       </div>
       <div class="input-group">
@@ -132,9 +136,9 @@
         <input type="text" id="artist" placeholder="Artist Name">
       </div>
     </div>
-
-    <!-- Right Panel: Toggle selectors split into two grid sections -->
-    <div class="right-panel">
+    
+    <!-- Middle Column: Toggle selectors -->
+    <div class="middle-panel">
       <!-- Disciplines Section -->
       <div class="section">
         <h2>Disciplines</h2>
@@ -260,26 +264,25 @@
         </div>
       </div>
     </div>
+    
+    <!-- Right Column: Card preview & export -->
+    <div class="right-panel">
+      <h2>Card Preview</h2>
+      <canvas id="cardCanvas" width="358" height="500"></canvas>
+      <button id="exportButton">Export as JPEG</button>
+    </div>
   </div>
-
-  <!-- Card preview and export button -->
-  <div class="preview-container">
-    <canvas id="cardCanvas" width="358" height="500"></canvas>
-    <br>
-    <button id="exportButton">Export as JPEG</button>
-  </div>
-
+  
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // -----------------------------------------------------
-      // Define symbols for disciplines and clans (using placeholder images)
+      // Define symbol data for Disciplines and Clans (using placeholder images)
       // -----------------------------------------------------
       const disciplineData = [
         {
           id: "discipline1",
           label: "Discipline 1",
           imgSrc: "https://via.placeholder.com/50?text=1",
-          // positions for demonstration – you may adjust these as needed:
           x: 10,
           y: 10,
           image: new Image()
@@ -301,6 +304,7 @@
           image: new Image()
         }
       ];
+      
       disciplineData.forEach(symbol => {
         symbol.image.src = symbol.imgSrc;
         symbol.image.onload = updateCard;
@@ -458,13 +462,14 @@
           image: new Image()
         }
       ];
+      
       clanData.forEach(symbol => {
         symbol.image.src = symbol.imgSrc;
         symbol.image.onload = updateCard;
       });
-
+      
       // -----------------------------------------------------
-      // Helper function: wrap text in a defined width.
+      // Helper function to wrap text within a specified width.
       // -----------------------------------------------------
       function wrapText(context, text, x, y, maxWidth, lineHeight) {
         let words = text.split(' ');
@@ -472,8 +477,7 @@
         for (let n = 0; n < words.length; n++) {
           let testLine = line + words[n] + ' ';
           let metrics = context.measureText(testLine);
-          let testWidth = metrics.width;
-          if (testWidth > maxWidth && n > 0) {
+          if (metrics.width > maxWidth && n > 0) {
             context.fillText(line, x, y);
             line = words[n] + ' ';
             y += lineHeight;
@@ -483,18 +487,16 @@
         }
         context.fillText(line, x, y);
       }
-
+      
       // -----------------------------------------------------
-      // updateCard(): Redraws the canvas using all the inputs and toggles.
+      // updateCard(): Redraws the card canvas based on all inputs.
       // -----------------------------------------------------
       function updateCard() {
         const canvas = document.getElementById("cardCanvas");
         const ctx = canvas.getContext("2d");
         
-        // Clear the canvas.
+        // Clear canvas and draw background plus border.
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw card background and border.
         ctx.fillStyle = "#fff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = "#000";
@@ -503,33 +505,33 @@
         // Retrieve text input values.
         const name = document.getElementById("cardName").value;
         const type = document.getElementById("cardType").value;
+        const subtype = document.getElementById("cardSubtype").value;
         const cardText = document.getElementById("cardText").value;
         const flavourText = document.getElementById("flavourText").value;
         const artist = document.getElementById("artist").value;
         
-        // Draw Title (Name & Type) at the top.
+        // Draw text information.
         ctx.fillStyle = "#000";
         ctx.font = "bold 20px Arial";
         ctx.textAlign = "center";
         ctx.fillText(name, canvas.width / 2, 30);
+        
         ctx.font = "italic 16px Arial";
         ctx.fillText(type, canvas.width / 2, 50);
+        ctx.fillText(subtype, canvas.width / 2, 70);
         
-        // Draw Card Text (wrapped) in a text area.
         ctx.font = "14px Arial";
         ctx.textAlign = "left";
-        wrapText(ctx, cardText, 20, 70, canvas.width - 40, 18);
+        wrapText(ctx, cardText, 20, 90, canvas.width - 40, 18);
         
-        // Draw Flavour Text in an italic style.
         ctx.font = "italic 12px Arial";
         wrapText(ctx, flavourText, 20, 150, canvas.width - 40, 16);
         
-        // Draw the Artist at the bottom right.
         ctx.font = "12px Arial";
         ctx.textAlign = "right";
         ctx.fillText(artist, canvas.width - 10, canvas.height - 10);
         
-        // Render Discipline Symbols (positions as set above).
+        // Render Discipline Symbols.
         disciplineData.forEach(symbol => {
           let checkbox = document.getElementById(symbol.id);
           if (checkbox && checkbox.checked && symbol.image.complete) {
@@ -537,7 +539,7 @@
           }
         });
         
-        // Render Clan Symbols in a grid along the bottom.
+        // Render Clan Symbols arranged in a grid along the bottom.
         const clanMargin = 10;
         const clanSize = 50;
         const maxPerRow = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
@@ -558,13 +560,15 @@
         });
       }
       
-      // Set listeners for changes in all inputs.
+      // -----------------------------------------------------
+      // Add event listeners to all input fields and toggles.
+      // -----------------------------------------------------
       document.querySelectorAll("input, textarea, select").forEach(el => {
         el.addEventListener("input", updateCard);
         el.addEventListener("change", updateCard);
       });
       
-      // Export button functionality.
+      // Export button: generate JPEG download.
       document.getElementById("exportButton").addEventListener("click", function() {
         const canvas = document.getElementById("cardCanvas");
         const dataURL = canvas.toDataURL("image/jpeg");

@@ -226,8 +226,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
     const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || (canvas.width - 40);
     const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
-    const textBgColor = document.getElementById("textBgColor").value;
+    // Use the hex input's value if provided; otherwise fallback to the color picker's value.
+    let textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
+    const bgRgba = hexToRgba(textBgColor, textBgOpacity);
+
     const bgRgba = hexToRgba(textBgColor, textBgOpacity);
   
     ctx.fillStyle = bgRgba;

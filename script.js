@@ -207,20 +207,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       // --- Draw Frame Overlay if selected.
-  const frameType = document.getElementById("frameType").value;
-  if (frameType !== "none") {
-    ctx.save();
+    const frameType = document.getElementById("frameType").value;
+    if (frameType !== "none") {
+      ctx.save();
+    }  
     
     if (frameType === "simple") {
-      // Create the image object for the overlay
-      const overlayImage = new Image();
-      overlayImage.src = "marble001_test.png";
-  
-      // Draw the image when it has fully loaded.
-      overlayImage.onload = function () {
-        // Draw image using the same dimensions used for the inner rectangle
-        ctx.drawImage(overlayImage, innerX, innerY, innerWidth, innerHeight);
-      };
+        // Create the image object for the overlay
+        const overlayImage = new Image();
+        overlayImage.src = "marble001_test.png";
+    
+        // Draw the image when it has fully loaded.
+        const overlayImage = new Image();
+        overlayImage.onload = function () {
+          ctx.drawImage(overlayImage, innerX, innerY, innerWidth, innerHeight);
+        };
+        overlayImage.src = "marble001_test.png";
+
     } else {
       ctx.lineWidth = 6;
       // Determine stroke color for "classic" and "modern"

@@ -23,13 +23,13 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Global variable for main art image and store original art src.
+  // Global variable for main art image (and store original art src before modifications)
   const mainArtImage = new Image();
   mainArtImage.crossOrigin = "anonymous";
   let originalArtSrc = "";
-  
+
   // -------------------------------
-  // 1. Define discipline data (30 items) – none selected initially.
+  // 1. Define discipline data (30 items) – none selected by default.
   // -------------------------------
   const disciplineData = [
     { id: "disciplineAbombwe",      label: "Abombwe",       imgSrc: "https://via.placeholder.com/50?text=Abombwe",      image: new Image() },
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 2. Generate discipline toggles (none checked by default)
+  // 2. Dynamically generate discipline toggles (unchecked by default)
   // -------------------------------
   const disciplinesGrid = document.getElementById("disciplinesGrid");
   disciplineData.forEach(item => {
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 3. Define clan data (none checked by default)
+  // 3. Define clan data (unchecked by default)
   // -------------------------------
   const clanData = [
     { id: "clanAssamite",           label: "Assamite",           imgSrc: "https://via.placeholder.com/50?text=A",    image: new Image() },
@@ -127,21 +127,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // -------------------------------
   // Helper: Wrap text within a given width.
   // -------------------------------
-  function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     const words = text.split(" ");
     let line = "";
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + " ";
-      const metrics = context.measureText(testLine);
-      if (metrics.width > maxWidth && n > 0) {
-        context.fillText(line, x, y);
-        line = words[n] + " ";
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + " ";
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && i > 0) {
+        ctx.fillText(line, x, y);
+        line = words[i] + " ";
         y += lineHeight;
       } else {
         line = testLine;
       }
     }
-    context.fillText(line, x, y);
+    ctx.fillText(line, x, y);
   }
   
   // -------------------------------
@@ -152,15 +152,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    // Define our margins and inner area.
+    // Reserve a 4px margin on all sides. Inner active area is 350x492.
     const margin = 4;
     const innerX = margin;
     const innerY = margin;
-    const innerWidth = canvas.width - margin * 2;  // 350
+    const innerWidth = canvas.width - margin * 2; // 350
     const innerHeight = canvas.height - margin * 2; // 492
     const cornerRadius = 8;
   
-    // --- Draw imported art image inside the inner, rounded-rectangle region.
+    // --- Draw the main art image into the inner region with rounded clipping.
     if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
       const offsetX = parseFloat(document.getElementById("offsetX").value) || 0;
       const offsetY = parseFloat(document.getElementById("offsetY").value) || 0;
@@ -178,28 +178,27 @@ document.addEventListener("DOMContentLoaded", function () {
       const destHeight = srcHeight * (scalePercent / 100);
   
       ctx.save();
-      // Set clipping region to the inner area with rounded corners.
+      // Clip to the inner rounded rectangle.
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.clip();
-      // Draw the art image into the inner area, offset by user values.
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
                     innerX + offsetX, innerY + offsetY, destWidth, destHeight);
       ctx.restore();
     }
   
-    // --- Draw a rounded 4-px black border around the inner area ---
+    // --- Draw a 6px black rounded border around the inner area.
     ctx.save();
-    ctx.lineWidth = margin;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = "black";
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();
     ctx.restore();
   
-    // --- Draw a frame overlay if selected (drawn along the inner area) ---
+    // --- Draw Frame Overlay, if selected (drawn along the inner area) ---
     const frameType = document.getElementById("frameType").value;
     if (frameType !== "none") {
       ctx.save();
-      ctx.lineWidth = margin;
+      ctx.lineWidth = 6;
       if (frameType === "simple") {
         ctx.strokeStyle = "black";
       } else if (frameType === "classic") {
@@ -211,9 +210,10 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.stroke();
       ctx.restore();
     }
-    
-    // --- Draw Header Text (card name, type, subtype) on full canvas ---
-    ctx.fillStyle = "#000";
+  
+    // --- Draw Header Text (card name, type, subtype) ---
+    // For header text we draw on the full canvas.
+    ctx.fillStyle = document.getElementById("nameTextHex").value || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
     ctx.fillText(document.getElementById("cardName").value, canvas.width / 2, 30);
@@ -221,49 +221,48 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
     ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
   
-    // --- Draw Card Text Box Background & Text ---
+    // --- Draw Card Text Box Background & Card Text ---
     const boxX = parseFloat(document.getElementById("textBoxX").value) || 20;
     const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
-    const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || (canvas.width - 40);
+    const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
     const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
-    // Use the hex input's value if provided; otherwise fallback to the color picker's value.
     let textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
-    const bgRgba = hexToRgba(textBgColor, textBgOpacity);
-
     const bgRgba = hexToRgba(textBgColor, textBgOpacity);
   
     ctx.fillStyle = bgRgba;
     ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
   
+    ctx.fillStyle = document.getElementById("textHex").value || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
-    ctx.fillStyle = "#000";
     ctx.textAlign = "left";
+    // Apply some padding when wrapping text
     wrapText(ctx, document.getElementById("cardText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
   
     // --- Draw Flavour Text ---
+    ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     wrapText(ctx, document.getElementById("flavourText").value, 20, boxY + boxHeight + 20, canvas.width - 40, 16);
   
     // --- Draw Artist ---
+    ctx.fillStyle = document.getElementById("artistTextHex").value || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
   
-    // --- Draw Discipline & Clan Icons (as before) ---
+    // --- Draw Discipline Icons ---
     const activeDisciplines = disciplineData.filter(symbol => {
-      const checkbox = document.getElementById(symbol.id);
-      return checkbox && checkbox.checked && symbol.image.complete;
+      const cb = document.getElementById(symbol.id);
+      return cb && cb.checked && symbol.image.complete;
     });
-  
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - 20) / (iconSize + spacing));
     let currentRow = 0, countInRow = 0;
-  
     activeDisciplines.forEach(symbol => {
       if (countInRow >= maxIconsPerRow) {
-        countInRow = 0; currentRow++;
+        countInRow = 0;
+        currentRow++;
       }
       const x = 20 + countInRow * (iconSize + spacing);
       const y = 80 + currentRow * (iconSize + spacing);
@@ -271,14 +270,14 @@ document.addEventListener("DOMContentLoaded", function () {
       countInRow++;
     });
   
-    // Clan symbols at bottom.
+    // --- Draw Clan Icons (wrapped grid at bottom) ---
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRowClan = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
     let clanRow = 0, countInClanRow = 0;
     clanData.forEach(symbol => {
-      const checkbox = document.getElementById(symbol.id);
-      if (checkbox && checkbox.checked && symbol.image.complete) {
+      const cb = document.getElementById(symbol.id);
+      if (cb && cb.checked && symbol.image.complete) {
         const x = clanMargin + countInClanRow * (clanSize + clanMargin);
         const y = canvas.height - clanMargin - clanSize - (clanRow * (clanSize + clanMargin));
         ctx.drawImage(symbol.image, x, y, clanSize, clanSize);
@@ -308,14 +307,17 @@ document.addEventListener("DOMContentLoaded", function () {
       textBoxY: document.getElementById("textBoxY").value,
       textBoxWidth: document.getElementById("textBoxWidth").value,
       textBoxHeight: document.getElementById("textBoxHeight").value,
-      textBgColor: document.getElementById("textBgColor").value,
+      textBgColor: document.getElementById("textBgHex").value || document.getElementById("textBgColor").value,
       textBgOpacity: document.getElementById("textBgOpacity").value,
+      textColor: document.getElementById("textHex").value,
       flavourText: document.getElementById("flavourText").value,
       flavourFont: document.getElementById("flavourFont").value,
       flavourFontSize: document.getElementById("flavourFontSize").value,
+      flavourTextColor: document.getElementById("flavourTextHex").value,
       artist: document.getElementById("artist").value,
       artistFont: document.getElementById("artistFont").value,
       artistFontSize: document.getElementById("artistFontSize").value,
+      artistTextColor: document.getElementById("artistTextHex").value,
       offsetX: document.getElementById("offsetX").value,
       offsetY: document.getElementById("offsetY").value,
       cropTop: document.getElementById("cropTop").value,
@@ -324,7 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
       cropLeft: document.getElementById("cropLeft").value,
       scalePercent: document.getElementById("scalePercent").value,
       frameType: document.getElementById("frameType").value,
-      canvasBgHex: document.getElementById("canvasBgHex").value,  // New background hexcode field.
+      // Save additional canvas background hex if used.
+      canvasBgHex: document.getElementById("canvasBgHex") ? document.getElementById("canvasBgHex").value : "",
       disciplines: disciplineData.reduce((acc, item) => {
         acc[item.id] = document.getElementById(item.id).checked;
         return acc;
@@ -333,7 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
         acc[item.id] = document.getElementById(item.id).checked;
         return acc;
       }, {}),
-      // Save the original art image (if any) before applying crop/scale.
       originalArtSrc: originalArtSrc
     };
     const jsonStr = JSON.stringify(template, null, 2);
@@ -346,15 +348,11 @@ document.addEventListener("DOMContentLoaded", function () {
     URL.revokeObjectURL(url);
   }
   
-  // -------------------------------
-  // Import template from JSON.
-  // -------------------------------
   function importJSONFile(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
         const template = JSON.parse(e.target.result);
-        // Update all form fields:
         document.getElementById("cardName").value = template.cardName || "";
         document.getElementById("nameFont").value = template.nameFont || "Arial";
         document.getElementById("nameFontSize").value = template.nameFontSize || "20";
@@ -368,14 +366,20 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("textBoxWidth").value = template.textBoxWidth || "318";
         document.getElementById("textBoxHeight").value = template.textBoxHeight || "100";
         document.getElementById("textBgColor").value = template.textBgColor || "#ffffff";
+        document.getElementById("textBgHex").value = template.textBgColor || "#ffffff";
         document.getElementById("textBgOpacity").value = template.textBgOpacity || "50";
-        document.getElementById("canvasBgHex").value = template.canvasBgHex || "#000000";
+        if(template.canvasBgHex && document.getElementById("canvasBgHex")){
+          document.getElementById("canvasBgHex").value = template.canvasBgHex;
+        }
+        document.getElementById("textHex").value = template.textColor || "#000000";
         document.getElementById("flavourText").value = template.flavourText || "";
         document.getElementById("flavourFont").value = template.flavourFont || "Arial";
         document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
+        document.getElementById("flavourTextHex").value = template.flavourTextColor || "#000000";
         document.getElementById("artist").value = template.artist || "";
         document.getElementById("artistFont").value = template.artistFont || "Arial";
         document.getElementById("artistFontSize").value = template.artistFontSize || "12";
+        document.getElementById("artistTextHex").value = template.artistTextColor || "#000000";
         document.getElementById("offsetX").value = template.offsetX || "0";
         document.getElementById("offsetY").value = template.offsetY || "0";
         document.getElementById("cropTop").value = template.cropTop || "0";
@@ -385,24 +389,20 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("scalePercent").value = template.scalePercent || "100";
         document.getElementById("frameType").value = template.frameType || "none";
   
-        // Set disciplines checkboxes.
         for (let key in template.disciplines) {
           const cb = document.getElementById(key);
-          if (cb) { cb.checked = template.disciplines[key]; }
+          if (cb) {
+            cb.checked = template.disciplines[key];
+          }
         }
   
-        // Set clans checkboxes.
         for (let key in template.clans) {
           const cb = document.getElementById(key);
-          if (cb) { cb.checked = template.clans[key]; }
+          if (cb) {
+            cb.checked = template.clans[key];
+          }
         }
   
-        // Restore the canvas background hex (if provided)
-        if (template.canvasBgHex) {
-          document.getElementById("canvasBgHex").value = template.canvasBgHex;
-        }
-  
-        // Set the original art image if provided.
         if (template.originalArtSrc) {
           originalArtSrc = template.originalArtSrc;
           mainArtImage.src = originalArtSrc;
@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Event listeners for inputs.
+  // Event listeners for all form inputs.
   // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);
@@ -450,11 +450,11 @@ document.addEventListener("DOMContentLoaded", function () {
   mainArtImage.onload = updateCard;
   
   // -------------------------------
-  // Export as PNG (with transparency and rounded corners).
+  // Export as PNG.
   // -------------------------------
   document.getElementById("exportButton").addEventListener("click", function () {
     const canvas = document.getElementById("cardCanvas");
-    const dataURL = canvas.toDataURL("image/png"); // Use PNG for transparency.
+    const dataURL = canvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.download = "custom_card.png";
     link.href = dataURL;
@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // JSON Save/Import button events.
+  // JSON Save/Import events.
   // -------------------------------
   document.getElementById("saveJsonButton").addEventListener("click", saveAsJSON);
   

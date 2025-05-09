@@ -523,6 +523,49 @@ document.addEventListener("DOMContentLoaded", function () {
       importJSONFile(e.target.files[0]);
     }
   });
+
+  // -------------------------------
+  // Event listeners for colorpickers
+  // -------------------------------
+    const pickerDefName = document.getElementById("nameColor");
+    const pickerHexName = document.getElementById("nameHex");
+    const pickerDefBgName = document.getElementById("nameBgColor");
+    const pickerHexBgName = document.getElementById("nameBgHex");
+  
+    const pickerDefCard = document.getElementById("cardColor");
+    const pickerHexCard = document.getElementById("cardHex");
+    const pickerDefBgCard = document.getElementById("cardBgColor");
+    const pickerHexBgCard = document.getElementById("cardBgHex");  
+  
+    const pickerDefFlavour = document.getElementById("flavourColor");
+    const pickerHexFlavour = document.getElementById("flavourHex"); 
+    const pickerDefBgFlavour = document.getElementById("flavourBgColor");
+    const pickerHexBgFlavour = document.getElementById("flavourBgHex");  
+  
+    const pickerDefArtist = document.getElementById("artistColor");
+    const pickerHexArtist = document.getElementById("artistHex");  
+    const pickerDefBgArtist = document.getElementById("artistBgColor");
+    const pickerHexBgArtist = document.getElementById("artistBgHex");    
+
+    // Function to update hex input when color picker changes
+    function listenerPair(pick1,pick2) {
+      pick1.addEventListener("input", () => { pick2.value = pick1.value; });
+      pick2.addEventListener("input", () => {      
+        let hex = pick2.value.trim();
+        if (/^#([0-9A-Fa-f]{6})$/.test(hex)) { 
+          pick1.value = hex; 
+        }
+    });
+
+    listenerPair(pickerDefName, pickerHexName);
+    listenerPair(pickerDefBgName, pickerHexBgName);
+    listenerPair(pickerDefCard, pickerHexCard);
+    listenerPair(pickerDefBgCard, pickerHexBgCard);
+    listenerPair(pickerDefFlavour, pickerHexFlavour);
+    listenerPair(pickerDefBgFlavour, pickerHexBgFlavour);
+    listenerPair(pickerDefArtist, pickerHexArist);
+    listenerPair(pickerDefBgArtist, pickerHexBgArtist);      
+
   
   // Initial render.
   updateCard();

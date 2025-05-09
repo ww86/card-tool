@@ -18,114 +18,121 @@
           <input type="text" id="cardName" placeholder="Card Name">
         </div>
 
-        <!-- Text -->        
-        <div class="inline-selector">
-          <label for="nameFont">Font:</label>
-          <select id="nameFont">
-            <option value="Arial" selected>Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Georgia">Georgia</option>
-          </select>
-          <label for="nameFontSize">Size:</label>
-          <select id="nameFontSize">
-            <option value="20" selected>20</option>
-            <option value="24">24</option>
-            <option value="28">28</option>
-            <option value="32">32</option>
-          </select>
+        <div class="settings-group">
+          <!-- Text -->        
+          <div class="inline-selector">
+            <label for="nameFont">Font:</label>
+            <select id="nameFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+            <label for="nameFontSize">Size:</label>
+            <select id="nameFontSize">
+              <option value="20" selected>20</option>
+              <option value="24">24</option>
+              <option value="28">28</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="nameTextColor">Color:</label>
+            <input type="color" id="nameTextColor" value="#000000">
+            <label for="nameTextHex">#:</label>
+            <input type="text" id="nameTextHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="nameTextOpacity">α:</label>
+            <input type="number" id="nameTextOpacity" value="50" min="0" max="100">               
+          </div>
         </div>
-        <div class="inline-selector">
-          <label for="nameTextColor">Color:</label>
-          <input type="color" id="nameTextColor" value="#000000">
-          <label for="nameTextHex">#:</label>
-          <input type="text" id="nameTextHex" value="#000000" maxlength="7" placeholder="#000000">
-          <label for="nameTextOpacity">α:</label>
-          <input type="number" id="nameTextOpacity" value="50" min="0" max="100">               
-        </div>
+        
+        <!-- Background -->
+        <div class="input-group">
+          <label>Name Background:</label>        
+          <div class="inline-selector">
+            <label for="nameBoxX">X:</label>
+            <input type="number" id="textBoxX" value="20">
+            <label for="nameBoxY">Y:</label>
+            <input type="number" id="textBoxY" value="300">
+          </div>
+          <div class="inline-selector">
+            <label for="nameBoxWidth">W:</label>
+            <input type="number" id="textBoxWidth" value="318">
+            <label for="nameBoxHeight">H:</label>
+            <input type="number" id="textBoxHeight" value="100">
+          </div>
+          <div class="inline-selector">
+            <label for="nameBgColor">Color:</label>
+            <input type="color" id="textBgColor" value="#ffffff">
+            <label for="nameBgHex">#:</label>
+            <input type="text" id="nameBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+            <label for="nameBgOpacity">α:</label>
+            <input type="number" id="nameBgOpacity" value="50" min="0" max="100">          
+          </div>
+        </div>  
       </div>
-      
-      <!-- Background -->
-      <div class="input-group">
-        <label>Name Text Box:</label>        
-        <div class="inline-selector">
-          <label for="nameBoxX">X:</label>
-          <input type="number" id="textBoxX" value="20">
-          <label for="nameBoxY">Y:</label>
-          <input type="number" id="textBoxY" value="300">
-        </div>
-        <div class="inline-selector">
-          <label for="nameBoxWidth">W:</label>
-          <input type="number" id="textBoxWidth" value="318">
-          <label for="nameBoxHeight">H:</label>
-          <input type="number" id="textBoxHeight" value="100">
-        </div>
-        <div class="inline-selector">
-          <label for="nameBgColor">Color:</label>
-          <input type="color" id="textBgColor" value="#ffffff">
-          <label for="nameBgHex">#:</label>
-          <input type="text" id="nameBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-          <label for="nameBgOpacity">α:</label>
-          <input type="number" id="nameBgOpacity" value="50" min="0" max="100">          
-        </div>
-      </div>      
       
 
       
       <!-- Card Text with font controls -->
       <div class="input-group">
-        <label for="cardText">Card Text:</label>
-        <textarea id="cardText" rows="4" placeholder="Enter card text here"></textarea>
-        <div class="inline-selector">
-          <label for="textFont">Font:</label>
-          <select id="textFont">
-            <option value="Arial" selected>Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Georgia">Georgia</option>
-          </select>
-          <label for="textFontSize">Size:</label>
-          <select id="textFontSize">
-            <option value="14" selected>14</option>
-            <option value="16">16</option>
-            <option value="18">18</option>
-            <option value="20">20</option>
-          </select>
+        <div class="h-selector">
+          <label for="cardName">Card Text:</label>
+          <input type="text" id="cardText" placeholder="Card Text">
         </div>
-        <div class="inline-selector">
-          <label for="textColor">Text Color:</label>
-          <input type="color" id="textColor" value="#000000">
-          <label for="textHex">Hex:</label>
-          <input type="text" id="textHex" value="#000000" maxlength="7" placeholder="#000000">
-        </div>        
-      </div>
-      
-      <!-- Card Text Box Controls -->
-      <div class="input-group">
-        <label>Card Text Box Position:</label>
-        <div class="inline-selector">
-          <label for="textBoxX">X:</label>
-          <input type="number" id="textBoxX" value="20">
-          <label for="textBoxY">Y:</label>
-          <input type="number" id="textBoxY" value="300">
+
+        <div class="settings-group">
+          <!-- Text -->        
+          <div class="inline-selector">
+            <label for="textFont">Font:</label>
+            <select id="textFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+            <label for="textFontSize">Size:</label>
+            <select id="textFontSize">
+              <option value="20" selected>20</option>
+              <option value="24">24</option>
+              <option value="28">28</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="textTextColor">Color:</label>
+            <input type="color" id="textTextColor" value="#000000">
+            <label for="textTextHex">#:</label>
+            <input type="text" id="textTextHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="nameTextOpacity">α:</label>
+            <input type="number" id="textTextOpacity" value="50" min="0" max="100">               
+          </div>
         </div>
-        <label>Card Text Box Size:</label>
-        <div class="inline-selector">
-          <label for="textBoxWidth">W:</label>
-          <input type="number" id="textBoxWidth" value="318">
-          <label for="textBoxHeight">H:</label>
-          <input type="number" id="textBoxHeight" value="100">
-        </div>
-        <div class="inline-selector">
-          <label for="textBgColor">Bg Color:</label>
-          <input type="color" id="textBgColor" value="#ffffff">
-          <label for="textBgHex">Hex:</label>
-          <input type="text" id="textBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-        </div>
+        
+        <!-- Background -->
         <div class="input-group">
-          <label for="textBgOpacity">Opacity:</label>
-          <input type="number" id="textBgOpacity" value="50" min="0" max="100">
-        </div>
+          <label>Text Background:</label>        
+          <div class="inline-selector">
+            <label for="textBoxX">X:</label>
+            <input type="number" id="textBoxX" value="20">
+            <label for="textBoxY">Y:</label>
+            <input type="number" id="textBoxY" value="300">
+          </div>
+          <div class="inline-selector">
+            <label for="textBoxWidth">W:</label>
+            <input type="number" id="textBoxWidth" value="318">
+            <label for="textBoxHeight">H:</label>
+            <input type="number" id="textBoxHeight" value="100">
+          </div>
+          <div class="inline-selector">
+            <label for="nameBgColor">Color:</label>
+            <input type="color" id="textBgColor" value="#ffffff">
+            <label for="textBgHex">#:</label>
+            <input type="text" id="textBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+            <label for="textBgOpacity">α:</label>
+            <input type="number" id="textBgOpacity" value="50" min="0" max="100">          
+          </div>
+        </div>  
       </div>
       
       <!-- Flavour Text with font controls -->

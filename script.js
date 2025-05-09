@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("flavourText").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
+    wrapText(ctx, document.getElementById("cardFlavour").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
     ctx.restore();
     
     

@@ -198,37 +198,64 @@
       
       <!-- Artist with font controls -->
       <div class="input-group">
-        <label for="artist">Artist:</label>
-        <input type="text" id="artist" placeholder="Artist Name">
-        <div class="inline-selector">
-          <label for="artistFont">Font:</label>
-          <select id="artistFont">
-            <option value="Arial" selected>Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Georgia">Georgia</option>
-          </select>
-          <label for="artistFontSize">Size:</label>
-          <select id="artistFontSize">
-            <option value="12" selected>12</option>
-            <option value="14">14</option>
-            <option value="16">16</option>
-          </select>
+        <div class="h-selector">
+          <label for="artistFlavour">Name:</label>
+          <input type="text" id="artistFlavour" placeholder="Card artist">
         </div>
-        <div class="inline-selector">
-          <label for="artistTextColor">Text Color:</label>
-          <input type="color" id="artistTextColor" value="#000000">
-          <label for="artistTextHex">Hex:</label>
-          <input type="text" id="artistTextHex" value="#000000" maxlength="7" placeholder="#000000">
+
+        <div class="settings-group">
+          <!-- Text -->        
+          <div class="inline-selector">
+            <label for="artistFont">Font:</label>
+            <select id="artistFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+            <label for="artistFontSize">Size:</label>
+            <select id="artistFontSize">
+              <option value="20" selected>20</option>
+              <option value="24">24</option>
+              <option value="28">28</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="artistTextColor">Color:</label>
+            <input type="color" id="artistTextColor" value="#000000">
+            <label for="artistTextHex">#:</label>
+            <input type="text" id="artistTextHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="artistTextOpacity">α:</label>
+            <input type="number" id="artistTextOpacity" value="50" min="0" max="100">               
+          </div>
         </div>
+        
+        <!-- Background -->
+        <div class="input-group">
+          <label>Artist Background:</label>        
+          <div class="inline-selector">
+            <label for="artistBoxX">X:</label>
+            <input type="number" id="artistBoxX" value="20">
+            <label for="artistBoxY">Y:</label>
+            <input type="number" id="artistBoxY" value="300">
+          </div>
+          <div class="inline-selector">
+            <label for="artistBoxWidth">W:</label>
+            <input type="number" id="artistBoxWidth" value="318">
+            <label for="artistBoxHeight">H:</label>
+            <input type="number" id="artistBoxHeight" value="100">
+          </div>
+          <div class="inline-selector">
+            <label for="artistBgColor">Color:</label>
+            <input type="color" id="artistBgColor" value="#ffffff">
+            <label for="artistBgHex">#:</label>
+            <input type="text" id="artistBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+            <label for="artistBgOpacity">α:</label>
+            <input type="number" id="artistBgOpacity" value="50" min="0" max="100">          
+          </div>
+        </div>  
       </div>
-      
-      <!-- Optional: Add an antialiasing checkbox for text rendering -->
-      <div class="input-group">
-        <label for="textAntialias">Antialias Text:</label>
-        <input type="checkbox" id="textAntialias" checked>
-      </div>
-    </div>
     
     <!-- Middle Panel: Toggle selectors -->
     <div class="middle-panel">

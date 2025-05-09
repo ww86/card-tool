@@ -7,14 +7,29 @@ function hexToRgba(hex, opacity) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
+// Utility: Draw a rounded rectangle path.
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-  // Global variable for main art image and store original src.
+  // Global variable for main art image and store original art src.
   const mainArtImage = new Image();
   mainArtImage.crossOrigin = "anonymous";
   let originalArtSrc = "";
   
   // -------------------------------
-  // 1. Define discipline data (30 items) – checkboxes start unchecked.
+  // 1. Define discipline data (30 items) – none selected initially.
   // -------------------------------
   const disciplineData = [
     { id: "disciplineAbombwe",      label: "Abombwe",       imgSrc: "https://via.placeholder.com/50?text=Abombwe",      image: new Image() },
@@ -130,18 +145,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // updateCard(): Draws the complete card including background, art, text boxes, and overlays.
+  // updateCard(): Renders the complete card.
   // -------------------------------
   function updateCard() {
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw white canvas background.
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // --- Draw main art image (if loaded) ---
+  
+    // Define our margins and inner area.
+    const margin = 4;
+    const innerX = margin;
+    const innerY = margin;
+    const innerWidth = canvas.width - margin * 2;  // 350
+    const innerHeight = canvas.height - margin * 2; // 492
+    const cornerRadius = 8;
+  
+    // --- Draw imported art image inside the inner, rounded-rectangle region.
     if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
       const offsetX = parseFloat(document.getElementById("offsetX").value) || 0;
       const offsetY = parseFloat(document.getElementById("offsetY").value) || 0;
@@ -159,15 +178,41 @@ document.addEventListener("DOMContentLoaded", function () {
       const destHeight = srcHeight * (scalePercent / 100);
   
       ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, 0, canvas.width, canvas.height);
+      // Set clipping region to the inner area with rounded corners.
+      roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.clip();
+      // Draw the art image into the inner area, offset by user values.
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
-                      offsetX, offsetY, destWidth, destHeight);
+                    innerX + offsetX, innerY + offsetY, destWidth, destHeight);
+      ctx.restore();
+    }
+  
+    // --- Draw a rounded 4-px black border around the inner area ---
+    ctx.save();
+    ctx.lineWidth = margin;
+    ctx.strokeStyle = "black";
+    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+    ctx.stroke();
+    ctx.restore();
+  
+    // --- Draw a frame overlay if selected (drawn along the inner area) ---
+    const frameType = document.getElementById("frameType").value;
+    if (frameType !== "none") {
+      ctx.save();
+      ctx.lineWidth = margin;
+      if (frameType === "simple") {
+        ctx.strokeStyle = "black";
+      } else if (frameType === "classic") {
+        ctx.strokeStyle = "gold";
+      } else if (frameType === "modern") {
+        ctx.strokeStyle = "#444";
+      }
+      roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+      ctx.stroke();
       ctx.restore();
     }
     
-    // --- Draw header text (card name, type, subtype) ---
+    // --- Draw Header Text (card name, type, subtype) on full canvas ---
     ctx.fillStyle = "#000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
@@ -175,31 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = "italic 16px Arial";
     ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
     ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
-    
-    // --- Render discipline icons (wrapped rows) ---
-    const activeDisciplines = disciplineData.filter(symbol => {
-      const checkbox = document.getElementById(symbol.id);
-      return checkbox && checkbox.checked && symbol.image.complete;
-    });
-    const leftMargin = 20;
-    const iconSize = 50;
-    const spacing = 10;
-    const maxIconsPerRow = Math.floor((canvas.width - leftMargin * 2) / (iconSize + spacing));
-    const disciplineStartY = 80;
-    let currentRow = 0;
-    let countInRow = 0;
-    activeDisciplines.forEach(symbol => {
-      if (countInRow >= maxIconsPerRow) {
-        countInRow = 0;
-        currentRow++;
-      }
-      const x = leftMargin + countInRow * (iconSize + spacing);
-      const y = disciplineStartY + currentRow * (iconSize + spacing);
-      ctx.drawImage(symbol.image, x, y, iconSize, iconSize);
-      countInRow++;
-    });
-    const disciplineBlockHeight = activeDisciplines.length > 0 ? (currentRow + 1) * (iconSize + spacing) : 0;
-    
+  
     // --- Draw Card Text Box Background & Text ---
     const boxX = parseFloat(document.getElementById("textBoxX").value) || 20;
     const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
@@ -216,22 +237,42 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = "#000";
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
-    
+  
     // --- Draw Flavour Text ---
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     wrapText(ctx, document.getElementById("flavourText").value, 20, boxY + boxHeight + 20, canvas.width - 40, 16);
-    
+  
     // --- Draw Artist ---
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
-    
-    // --- Draw Clan Symbols (wrapped grid at bottom) ---
+  
+    // --- Draw Discipline & Clan Icons (as before) ---
+    const activeDisciplines = disciplineData.filter(symbol => {
+      const checkbox = document.getElementById(symbol.id);
+      return checkbox && checkbox.checked && symbol.image.complete;
+    });
+  
+    const iconSize = 50;
+    const spacing = 10;
+    const maxIconsPerRow = Math.floor((canvas.width - 20) / (iconSize + spacing));
+    let currentRow = 0, countInRow = 0;
+  
+    activeDisciplines.forEach(symbol => {
+      if (countInRow >= maxIconsPerRow) {
+        countInRow = 0; currentRow++;
+      }
+      const x = 20 + countInRow * (iconSize + spacing);
+      const y = 80 + currentRow * (iconSize + spacing);
+      ctx.drawImage(symbol.image, x, y, iconSize, iconSize);
+      countInRow++;
+    });
+  
+    // Clan symbols at bottom.
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRowClan = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
-    let clanRow = 0;
-    let countInClanRow = 0;
+    let clanRow = 0, countInClanRow = 0;
     clanData.forEach(symbol => {
       const checkbox = document.getElementById(symbol.id);
       if (checkbox && checkbox.checked && symbol.image.complete) {
@@ -245,33 +286,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
-    
-    // --- Draw Frame Overlay if selected ---
-    const frameType = document.getElementById("frameType").value;
-    if (frameType !== "none") {
-      ctx.save();
-      if (frameType === "simple") {
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
-      } else if (frameType === "classic") {
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = "gold";
-        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
-      } else if (frameType === "modern") {
-        ctx.lineWidth = 10;
-        ctx.strokeStyle = "#444";
-        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-      }
-      ctx.restore();
-    }
   }
   
   // -------------------------------
-  // Save template as JSON.
+  // JSON Export/Import functions.
   // -------------------------------
   function saveAsJSON() {
     const template = {
@@ -283,7 +301,6 @@ document.addEventListener("DOMContentLoaded", function () {
       cardText: document.getElementById("cardText").value,
       textFont: document.getElementById("textFont").value,
       textFontSize: document.getElementById("textFontSize").value,
-      // Card text box positioning and styling.
       textBoxX: document.getElementById("textBoxX").value,
       textBoxY: document.getElementById("textBoxY").value,
       textBoxWidth: document.getElementById("textBoxWidth").value,
@@ -293,168 +310,4 @@ document.addEventListener("DOMContentLoaded", function () {
       flavourText: document.getElementById("flavourText").value,
       flavourFont: document.getElementById("flavourFont").value,
       flavourFontSize: document.getElementById("flavourFontSize").value,
-      artist: document.getElementById("artist").value,
-      artistFont: document.getElementById("artistFont").value,
-      artistFontSize: document.getElementById("artistFontSize").value,
-      // Art image adjustments.
-      offsetX: document.getElementById("offsetX").value,
-      offsetY: document.getElementById("offsetY").value,
-      cropTop: document.getElementById("cropTop").value,
-      cropRight: document.getElementById("cropRight").value,
-      cropBottom: document.getElementById("cropBottom").value,
-      cropLeft: document.getElementById("cropLeft").value,
-      scalePercent: document.getElementById("scalePercent").value,
-      frameType: document.getElementById("frameType").value,
-      // Disciplines state.
-      disciplines: disciplineData.reduce((acc, item) => {
-        acc[item.id] = document.getElementById(item.id).checked;
-        return acc;
-      }, {}),
-      // Clan state.
-      clans: clanData.reduce((acc, item) => {
-        acc[item.id] = document.getElementById(item.id).checked;
-        return acc;
-      }, {}),
-      // Save the original art image (if any)
-      originalArtSrc: originalArtSrc
-    };
-    const jsonStr = JSON.stringify(template, null, 2);
-    const blob = new Blob([jsonStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = "card_template.json";
-    link.href = url;
-    link.click();
-    URL.revokeObjectURL(url);
-  }
-  
-  // -------------------------------
-  // Import template from JSON.
-  // -------------------------------
-  function importJSONFile(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const template = JSON.parse(e.target.result);
-        // Update all form fields:
-        document.getElementById("cardName").value = template.cardName || "";
-        document.getElementById("nameFont").value = template.nameFont || "Arial";
-        document.getElementById("nameFontSize").value = template.nameFontSize || "20";
-        document.getElementById("cardType").value = template.cardType || "Crypt";
-        document.getElementById("cardSubtype").value = template.cardSubtype || "Action";
-        document.getElementById("cardText").value = template.cardText || "";
-        document.getElementById("textFont").value = template.textFont || "Arial";
-        document.getElementById("textFontSize").value = template.textFontSize || "14";
-        document.getElementById("textBoxX").value = template.textBoxX || "20";
-        document.getElementById("textBoxY").value = template.textBoxY || "300";
-        document.getElementById("textBoxWidth").value = template.textBoxWidth || "318";
-        document.getElementById("textBoxHeight").value = template.textBoxHeight || "100";
-        document.getElementById("textBgColor").value = template.textBgColor || "#ffffff";
-        document.getElementById("textBgOpacity").value = template.textBgOpacity || "50";
-        document.getElementById("flavourText").value = template.flavourText || "";
-        document.getElementById("flavourFont").value = template.flavourFont || "Arial";
-        document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
-        document.getElementById("artist").value = template.artist || "";
-        document.getElementById("artistFont").value = template.artistFont || "Arial";
-        document.getElementById("artistFontSize").value = template.artistFontSize || "12";
-        document.getElementById("offsetX").value = template.offsetX || "0";
-        document.getElementById("offsetY").value = template.offsetY || "0";
-        document.getElementById("cropTop").value = template.cropTop || "0";
-        document.getElementById("cropRight").value = template.cropRight || "0";
-        document.getElementById("cropBottom").value = template.cropBottom || "0";
-        document.getElementById("cropLeft").value = template.cropLeft || "0";
-        document.getElementById("scalePercent").value = template.scalePercent || "100";
-        document.getElementById("frameType").value = template.frameType || "none";
-  
-        // Set disciplines checkboxes.
-        for (let key in template.disciplines) {
-          const cb = document.getElementById(key);
-          if (cb) { cb.checked = template.disciplines[key]; }
-        }
-  
-        // Set clans checkboxes.
-        for (let key in template.clans) {
-          const cb = document.getElementById(key);
-          if (cb) { cb.checked = template.clans[key]; }
-        }
-  
-        // Set the original art image if provided.
-        if (template.originalArtSrc) {
-          originalArtSrc = template.originalArtSrc;
-          mainArtImage.src = originalArtSrc;
-        }
-  
-        updateCard();
-      } catch (err) {
-        alert("Failed to parse JSON: " + err);
-      }
-    };
-    reader.readAsText(file);
-  }
-  
-  // -------------------------------
-  // Event listeners for all inputs.
-  // -------------------------------
-  document.querySelectorAll("input, textarea, select").forEach(el => {
-    el.addEventListener("input", updateCard);
-    el.addEventListener("change", updateCard);
-  });
-  
-  // -------------------------------
-  // Art Panel: File upload & URL load.
-  // -------------------------------
-  document.getElementById("artFile").addEventListener("change", function (e) {
-    if (e.target.files && e.target.files[0]) {
-      let file = e.target.files[0];
-      let reader = new FileReader();
-      reader.onload = function (event) {
-        originalArtSrc = event.target.result;
-        mainArtImage.src = originalArtSrc;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  document.getElementById("loadArtUrl").addEventListener("click", function () {
-    const url = document.getElementById("artUrl").value;
-    if (url) {
-      originalArtSrc = url;
-      mainArtImage.src = url;
-    }
-  });
-  
-  mainArtImage.onload = updateCard;
-  
-  // -------------------------------
-  // Export as JPEG.
-  // -------------------------------
-  document.getElementById("exportButton").addEventListener("click", function () {
-    const canvas = document.getElementById("cardCanvas");
-    const dataURL = canvas.toDataURL("image/jpeg");
-    const link = document.createElement("a");
-    link.download = "custom_card.jpeg";
-    link.href = dataURL;
-    link.click();
-  });
-  
-  // -------------------------------
-  // Save as JSON.
-  // -------------------------------
-  document.getElementById("saveJsonButton").addEventListener("click", saveAsJSON);
-  
-  // -------------------------------
-  // Import JSON.
-  // -------------------------------
-  document.getElementById("importJsonButton").addEventListener("click", function () {
-    document.getElementById("jsonImport").click();
-  });
-  
-  document.getElementById("jsonImport").addEventListener("change", function (e) {
-    if (e.target.files && e.target.files[0]) {
-      importJSONFile(e.target.files[0]);
-    }
-  });
-  
-  // Initial render.
-  updateCard();
-});
+      artist: document.getElementById("artist

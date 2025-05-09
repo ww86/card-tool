@@ -228,7 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // --- Draw Header Text (card name, type, subtype) across full canvas.
     ctx.save();
-    ctx.imageSmoothingEnabled = document.getElementById("textAntialias").checked;
     ctx.fillStyle = document.getElementById("nameTextHex").value || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
@@ -251,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
   
     ctx.save();
-    ctx.imageSmoothingEnabled = document.getElementById("textAntialias").checked;
     ctx.fillStyle = document.getElementById("textHex").value || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
@@ -260,7 +258,6 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // --- Draw Flavour Text.
     ctx.save();
-    ctx.imageSmoothingEnabled = document.getElementById("textAntialias").checked;
     ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     wrapText(ctx, document.getElementById("flavourText").value, 20, boxY + boxHeight + 20, canvas.width - 40, 16);
@@ -268,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // --- Draw Artist.
     ctx.save();
-    ctx.imageSmoothingEnabled = document.getElementById("textAntialias").checked;
     ctx.fillStyle = document.getElementById("artistTextHex").value || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";

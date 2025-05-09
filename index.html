@@ -39,29 +39,7 @@
         </div>
       </div>
       
-      <!-- Type and Subtype -->
-      <div class="input-group">
-        <label for="cardType">Type:</label>
-        <select id="cardType">
-          <option value="Crypt">Crypt</option>
-          <option value="Library">Library</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="cardSubtype">Subtype:</label>
-        <select id="cardSubtype">
-          <option value="Action">Action</option>
-          <option value="Political Action">Political Action</option>
-          <option value="Employ Retainer">Employ Retainer</option>
-          <option value="Emply minion">Emply minion</option>
-          <option value="Equip action">Equip action</option>
-          <option value="Modifier">Modifier</option>
-          <option value="Reaction">Reaction</option>
-          <option value="Combat">Combat</option>
-          <option value="Event">Event</option>
-          <option value="Master">Master</option>
-        </select>
-      </div>
+
       
       <!-- Card Text with font controls -->
       <div class="input-group">
@@ -295,9 +273,43 @@
       </div>
     </div>
     
-    <!-- Art Panel: Image import & adjustments -->
+    <!-- Art Panel: Image import & adjustments -->    
     <div class="art-panel">
-      <h2>Main Art Image</h2>
+      <h2>Art and Frame</h2>      
+      <!-- Type and Subtype -->
+      <div class="input-group">
+        <label for="cardType">Type:</label>
+        <select id="cardType">
+          <option value="Crypt">Crypt</option>
+          <option value="Library">Library</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="cardSubtype">Subtype:</label>
+        <select id="cardSubtype">
+          <option value="Action">Action</option>
+          <option value="Political Action">Political Action</option>
+          <option value="Employ Retainer">Employ Retainer</option>
+          <option value="Emply minion">Emply minion</option>
+          <option value="Equip action">Equip action</option>
+          <option value="Modifier">Modifier</option>
+          <option value="Reaction">Reaction</option>
+          <option value="Combat">Combat</option>
+          <option value="Event">Event</option>
+          <option value="Master">Master</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="frameType">Frame Type:</label>
+        <select id="frameType">
+          <option value="none" selected>None</option>
+          <option value="normal">Normal</option>
+          <option value="simple">Simple Border</option>
+          <option value="classic">Classic Frame</option>
+          <option value="modern">Modern Frame</option>
+        </select>
+      </div>      
+
       <div class="input-group">
         <label for="artFile">Upload Image:</label>
         <input type="file" id="artFile" accept="image/*">
@@ -335,16 +347,7 @@
         <label for="scalePercent">Scale (%):</label>
         <input type="number" id="scalePercent" value="100">
       </div>
-      <div class="input-group">
-        <label for="frameType">Frame Type:</label>
-        <select id="frameType">
-          <option value="none" selected>None</option>
-          <option value="normal">Normal</option>
-          <option value="simple">Simple Border</option>
-          <option value="classic">Classic Frame</option>
-          <option value="modern">Modern Frame</option>
-        </select>
-      </div>
+
     </div>
     
     <!-- Right Panel: Card preview and action buttons -->

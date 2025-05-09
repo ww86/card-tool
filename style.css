@@ -21,10 +21,10 @@ body {
   box-sizing: border-box;
 }
 
-.left-panel { width: 360px; }
+.left-panel { width: 320px; }
 
 .middle-panel, .art-panel {
-  width: 300px;
+  width: 320px;
 }
 
 .right-panel {

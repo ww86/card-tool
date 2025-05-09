@@ -204,23 +204,38 @@ document.addEventListener("DOMContentLoaded", function () {
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();
     ctx.restore();
+
+
+      // --- Draw Frame Overlay if selected.
+  const frameType = document.getElementById("frameType").value;
+  if (frameType !== "none") {
+    ctx.save();
+    
+    if (frameType === "simple") {
+      // Create the image object for the overlay
+      const overlayImage = new Image();
+      overlayImage.src = "marble001_test.png";
   
-    // --- Draw Frame Overlay if selected.
-    const frameType = document.getElementById("frameType").value;
-    if (frameType !== "none") {
-      ctx.save();
+      // Draw the image when it has fully loaded.
+      overlayImage.onload = function () {
+        // Draw image using the same dimensions used for the inner rectangle
+        ctx.drawImage(overlayImage, innerX, innerY, innerWidth, innerHeight);
+      };
+    } else {
       ctx.lineWidth = 6;
-      if (frameType === "simple") {
-        ctx.strokeStyle = "black";
-      } else if (frameType === "classic") {
+      // Determine stroke color for "classic" and "modern"
+      if (frameType === "classic") {
         ctx.strokeStyle = "gold";
       } else if (frameType === "modern") {
         ctx.strokeStyle = "#444";
       }
+      // Draw the rounded rectangle frame
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.stroke();
-      ctx.restore();
     }
+    
+    ctx.restore();
+  }
   
     // --- Draw Header Text (card name, type, subtype) on full canvas.
     ctx.fillStyle = document.getElementById("nameTextHex").value || "#000000";

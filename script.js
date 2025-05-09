@@ -197,7 +197,16 @@ document.addEventListener("DOMContentLoaded", function () {
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();
     ctx.restore();
-  
+
+
+    // --- Vampire frame
+    const frameType = document.getElementById("cardType").value;    
+    if (frameType === "Crypt") {
+        frameBgImage = new Image();
+        frameBgImage.src = "ellise_frame.png";
+        frameBgImage.onload = updateCard;
+    }
+    
     // --- Frame Overlay: if frame type is "normal", draw the marble image overlay.
     const frameType = document.getElementById("frameType").value;
     if (frameType === "normal") {
@@ -209,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.save();
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.clip();
+      ctx.drawImage(frameBgImage, innerX, innerY, innerWidth, innerHeight);      
       ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
       ctx.restore();
     } else if (frameType !== "none") {

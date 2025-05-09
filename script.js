@@ -203,9 +203,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Vampire frame
     const frameBgType = document.getElementById("cardType").value;    
     if (frameBgType === "Crypt") {
+      if (!frameBgImage) {      
         frameBgImage = new Image();
         frameBgImage.src = "ellise_frame.png";
         frameBgImage.onload = updateCard;
+      }
     }
     
     // --- Frame Overlay: if frame type is "normal", draw the marble image overlay.

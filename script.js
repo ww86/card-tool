@@ -200,8 +200,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // --- Vampire frame
-    const frameType = document.getElementById("cardType").value;    
-    if (frameType === "Crypt") {
+    const frameBgType = document.getElementById("cardType").value;    
+    if (frameBgType === "Crypt") {
         frameBgImage = new Image();
         frameBgImage.src = "ellise_frame.png";
         frameBgImage.onload = updateCard;

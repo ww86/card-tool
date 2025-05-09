@@ -565,7 +565,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (/^#([0-9A-Fa-f]{6})$/.test(hex)) { 
           pick1.value = hex; 
         }
-    });
+      });
+    }
 
     listenerPair(pickerDefName, pickerHexName);
     listenerPair(pickerDefBgName, pickerHexBgName);

@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let originalArtSrc = "";
   // Global frame image for overlay when "normal" is selected.
   let frameImage = null;
+  let frameBgImage = null;
 
   // -------------------------------
   // 1. Define discipline data (30 items) – none are selected by default.

@@ -1,3 +1,5 @@
+"use strict";
+
 // Utility: Convert hex color to rgba string.
 function hexToRgba(hex, opacity) {
   hex = hex.replace("#", "");
@@ -23,13 +25,13 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Global variable for main art image (and store original art src before modifications)
+  // Global variable for the main art image and to store its original source.
   const mainArtImage = new Image();
   mainArtImage.crossOrigin = "anonymous";
   let originalArtSrc = "";
 
   // -------------------------------
-  // 1. Define discipline data (30 items) – none selected by default.
+  // 1. Define full discipline data (30 items), none selected by default.
   // -------------------------------
   const disciplineData = [
     { id: "disciplineAbombwe",      label: "Abombwe",       imgSrc: "https://via.placeholder.com/50?text=Abombwe",      image: new Image() },
@@ -61,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { id: "disciplineThaumaturgy",   label: "Thaumaturgy",   imgSrc: "https://via.placeholder.com/50?text=Thaumaturgy",  image: new Image() },
     { id: "disciplineValeren",       label: "Valeren",       imgSrc: "https://via.placeholder.com/50?text=Valeren",      image: new Image() },
     { id: "disciplineVicissitude",   label: "Vicissitude",   imgSrc: "https://via.placeholder.com/50?text=Vicissitude",  image: new Image() },
-    { id: "disciplineVisceratika",   label: "Visceratika",   imgSrc: "https://via.placeholder.com/50?text=Visceratika",  image: new Image() }
+    { id: "disciplineVisceratika",   label: "Visceratika",   imgSrc: "https://via.placeholder.com/50?text=Visceratika",  image: new Image() },
   ];
   
   disciplineData.forEach(symbol => {
@@ -70,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 2. Dynamically generate discipline toggles (unchecked by default)
+  // 2. Generate discipline toggles (none checked by default)
   // -------------------------------
   const disciplinesGrid = document.getElementById("disciplinesGrid");
   disciplineData.forEach(item => {
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // -------------------------------
-  // 3. Define clan data (unchecked by default)
+  // 3. Define clan data (none checked by default)
   // -------------------------------
   const clanData = [
     { id: "clanAssamite",           label: "Assamite",           imgSrc: "https://via.placeholder.com/50?text=A",    image: new Image() },
@@ -145,22 +147,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // updateCard(): Renders the complete card.
+  // updateCard(): Renders the entire card.
   // -------------------------------
   function updateCard() {
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    // Reserve a 4px margin on all sides. Inner active area is 350x492.
+    // Reserve a 4px margin. Inner area is 350x492.
     const margin = 4;
     const innerX = margin;
     const innerY = margin;
-    const innerWidth = canvas.width - margin * 2; // 350
-    const innerHeight = canvas.height - margin * 2; // 492
+    const innerWidth = canvas.width - margin * 2;
+    const innerHeight = canvas.height - margin * 2;
     const cornerRadius = 8;
   
-    // --- Draw the main art image into the inner region with rounded clipping.
+    // --- Draw main art image within the inner rounded rectangle region.
     if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
       const offsetX = parseFloat(document.getElementById("offsetX").value) || 0;
       const offsetY = parseFloat(document.getElementById("offsetY").value) || 0;
@@ -178,11 +180,20 @@ document.addEventListener("DOMContentLoaded", function () {
       const destHeight = srcHeight * (scalePercent / 100);
   
       ctx.save();
-      // Clip to the inner rounded rectangle.
+      // Clip to inner area with rounded corners.
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.clip();
-      ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
-                    innerX + offsetX, innerY + offsetY, destWidth, destHeight);
+      ctx.drawImage(
+        mainArtImage,
+        srcX,
+        srcY,
+        srcWidth,
+        srcHeight,
+        innerX + offsetX,
+        innerY + offsetY,
+        destWidth,
+        destHeight
+      );
       ctx.restore();
     }
   
@@ -194,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.stroke();
     ctx.restore();
   
-    // --- Draw Frame Overlay, if selected (drawn along the inner area) ---
+    // --- Draw Frame Overlay if selected.
     const frameType = document.getElementById("frameType").value;
     if (frameType !== "none") {
       ctx.save();
@@ -211,8 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.restore();
     }
   
-    // --- Draw Header Text (card name, type, subtype) ---
-    // For header text we draw on the full canvas.
+    // --- Draw Header Text (card name, type, subtype) on full canvas.
     ctx.fillStyle = document.getElementById("nameTextHex").value || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "center";
@@ -226,7 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
     const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
     const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
-    let textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
+    // Use hex from textBgHex field if available.
+    const textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
     const bgRgba = hexToRgba(textBgColor, textBgOpacity);
   
@@ -236,7 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = document.getElementById("textHex").value || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
-    // Apply some padding when wrapping text
     wrapText(ctx, document.getElementById("cardText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
   
     // --- Draw Flavour Text ---
@@ -255,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const cb = document.getElementById(symbol.id);
       return cb && cb.checked && symbol.image.complete;
     });
+  
     const iconSize = 50;
     const spacing = 10;
     const maxIconsPerRow = Math.floor((canvas.width - 20) / (iconSize + spacing));
@@ -270,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
       countInRow++;
     });
   
-    // --- Draw Clan Icons (wrapped grid at bottom) ---
+    // --- Draw Clan Icons ---
     const clanMargin = 10;
     const clanSize = 50;
     const maxPerRowClan = Math.floor((canvas.width - clanMargin * 2) / (clanSize + clanMargin));
@@ -326,7 +337,6 @@ document.addEventListener("DOMContentLoaded", function () {
       cropLeft: document.getElementById("cropLeft").value,
       scalePercent: document.getElementById("scalePercent").value,
       frameType: document.getElementById("frameType").value,
-      // Save additional canvas background hex if used.
       canvasBgHex: document.getElementById("canvasBgHex") ? document.getElementById("canvasBgHex").value : "",
       disciplines: disciplineData.reduce((acc, item) => {
         acc[item.id] = document.getElementById(item.id).checked;
@@ -391,16 +401,12 @@ document.addEventListener("DOMContentLoaded", function () {
   
         for (let key in template.disciplines) {
           const cb = document.getElementById(key);
-          if (cb) {
-            cb.checked = template.disciplines[key];
-          }
+          if (cb) { cb.checked = template.disciplines[key]; }
         }
   
         for (let key in template.clans) {
           const cb = document.getElementById(key);
-          if (cb) {
-            cb.checked = template.clans[key];
-          }
+          if (cb) { cb.checked = template.clans[key]; }
         }
   
         if (template.originalArtSrc) {
@@ -417,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   // -------------------------------
-  // Event listeners for all form inputs.
+  // Event listeners for all inputs.
   // -------------------------------
   document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updateCard);

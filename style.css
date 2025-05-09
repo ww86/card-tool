@@ -36,6 +36,10 @@ body {
   margin-bottom: 15px;
 }
 
+.settings-group {
+  background-color: #EEE;
+}
+
 .h-selector { 
   margin-bottom: 5px; 
   font-size: 14px;

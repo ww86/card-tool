@@ -242,39 +242,67 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("nameText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
     ctx.restore();
-  
+    
     // --- Draw Card Text Box Background & Card Text.
-    const boxX = parseFloat(document.getElementById("textBoxX").value) || 20;
-    const boxY = parseFloat(document.getElementById("textBoxY").value) || 300;
-    const boxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
-    const boxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
+    const textBoxX = parseFloat(document.getElementById("textBoxX").value) || 20;
+    const textBoxY = parseFloat(document.getElementById("textBoxY").value) || 300;
+    const textBoxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
+    const textBoxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
     const textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
-    const bgRgba = hexToRgba(textBgColor, textBgOpacity);
-    ctx.fillStyle = bgRgba;
-    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);  
+    const textBgRgba = hexToRgba(textBgColor, textBgOpacity);
+    
+    ctx.fillStyle = textBgRgba;
+    ctx.fillRect(textBoxX, textBoxY, textBoxWidth, textBoxHeight);
+    
     ctx.save();
     ctx.fillStyle = document.getElementById("textHex").value || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
+    wrapText(ctx, document.getElementById("cardText").value, textBoxX + 5, textBoxY + 20, textBoxWidth - 10, 18);
     ctx.restore();
-  
-    // --- Draw Flavour Text.
+    
+    
+    // --- Draw Flavour Text Background & Flavour Text.
+    const flavourBoxX = parseFloat(document.getElementById("flavourBoxX").value) || 20;
+    const flavourBoxY = parseFloat(document.getElementById("flavourBoxY").value) || (textBoxY + textBoxHeight + 20);
+    const flavourBoxWidth = parseFloat(document.getElementById("flavourBoxWidth").value) || (canvas.width - 40);
+    const flavourBoxHeight = parseFloat(document.getElementById("flavourBoxHeight").value) || 50;
+    const flavourBgColor = document.getElementById("flavourBgHex").value || document.getElementById("flavourBgColor").value;
+    const flavourBgOpacity = (parseFloat(document.getElementById("flavourBgOpacity").value) || 50) / 100;
+    const flavourBgRgba = hexToRgba(flavourBgColor, flavourBgOpacity);
+    
+    ctx.fillStyle = flavourBgRgba;
+    ctx.fillRect(flavourBoxX, flavourBoxY, flavourBoxWidth, flavourBoxHeight);
+    
     ctx.save();
     ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
-    wrapText(ctx, document.getElementById("flavourText").value, 20, boxY + boxHeight + 20, canvas.width - 40, 16);
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("flavourText").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
     ctx.restore();
-  
-    // --- Draw Artist.
+    
+    
+    // --- Draw Artist Background & Artist Text.
+    const artistBoxX = parseFloat(document.getElementById("artistBoxX").value) || (canvas.width - 110);
+    const artistBoxY = parseFloat(document.getElementById("artistBoxY").value) || (canvas.height - 30);
+    const artistBoxWidth = parseFloat(document.getElementById("artistBoxWidth").value) || 100;
+    const artistBoxHeight = parseFloat(document.getElementById("artistBoxHeight").value) || 20;
+    const artistBgColor = document.getElementById("artistBgHex").value || document.getElementById("artistBgColor").value;
+    const artistBgOpacity = (parseFloat(document.getElementById("artistBgOpacity").value) || 50) / 100;
+    const artistBgRgba = hexToRgba(artistBgColor, artistBgOpacity);
+    
+    ctx.fillStyle = artistBgRgba;
+    ctx.fillRect(artistBoxX, artistBoxY, artistBoxWidth, artistBoxHeight);
+    
     ctx.save();
     ctx.fillStyle = document.getElementById("artistTextHex").value || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
-    ctx.fillText(document.getElementById("artist").value, canvas.width - 10, canvas.height - 10);
+    // Position the artist text with a small padding within the background box.
+    ctx.fillText(document.getElementById("artist").value, artistBoxX + artistBoxWidth - 5, artistBoxY + artistBoxHeight - 5);
     ctx.restore();
-  
+
     // --- Draw Discipline Icons.
     const activeDisciplines = disciplineData.filter(symbol => {
       const cb = document.getElementById(symbol.id);

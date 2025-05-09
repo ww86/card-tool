@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // --- Flavour Text ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
+    ctx.fillStyle = document.getElementById("flavourHex").value || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardFlavour").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // --- Artist Text ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("artistTextHex").value || "#000000";
+    ctx.fillStyle = document.getElementById("artistHex").value || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     ctx.fillText(

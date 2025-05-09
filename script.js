@@ -542,10 +542,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const pickerDefBgName = document.getElementById("nameBgColor");
     const pickerHexBgName = document.getElementById("nameBgHex");
   
-    const pickerDefCard = document.getElementById("cardColor");
-    const pickerHexCard = document.getElementById("cardHex");
-    const pickerDefBgCard = document.getElementById("cardBgColor");
-    const pickerHexBgCard = document.getElementById("cardBgHex");  
+    const pickerDefCard = document.getElementById("textColor");
+    const pickerHexCard = document.getElementById("textHex");
+    const pickerDefBgCard = document.getElementById("textBgColor");
+    const pickerHexBgCard = document.getElementById("textBgHex");  
   
     const pickerDefFlavour = document.getElementById("flavourColor");
     const pickerHexFlavour = document.getElementById("flavourHex"); 

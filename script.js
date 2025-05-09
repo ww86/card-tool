@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = document.getElementById("nameHex").value || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardName").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
+    wrapText(ctx, document.getElementById("cardName").value, nameBoxX + 5, nameBoxY + 20, nameBoxWidth - 10, 18);
     ctx.restore();
     
     // --- Draw Card Text Box Background & Card Text.

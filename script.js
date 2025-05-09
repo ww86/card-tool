@@ -225,8 +225,10 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.stroke();
       ctx.restore();
     }
-  
-    // --- Draw Header Text (card name, type, subtype) across full canvas.
+
+    // === DRAW ALL BACKGROUNDS FIRST ===
+    
+    // --- Header Background ---
     const nameBoxX = parseFloat(document.getElementById("nameBoxX").value) || 20;
     const nameBoxY = parseFloat(document.getElementById("nameBoxY").value) || 300;
     const nameBoxWidth = parseFloat(document.getElementById("nameBoxWidth").value) || 318;
@@ -235,15 +237,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameBgOpacity = (parseFloat(document.getElementById("nameBgOpacity").value) || 50) / 100;
     const nameBgRgba = hexToRgba(nameBgColor, nameBgOpacity);
     ctx.fillStyle = nameBgRgba;
-    ctx.fillRect(nameBoxX, nameBoxY, nameBoxWidth, nameBoxHeight);  
-    ctx.save();
-    ctx.fillStyle = document.getElementById("nameHex").value || "#000000";
-    ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardName").value, nameBoxX + 5, nameBoxY + 20, nameBoxWidth - 10, 18);
-    ctx.restore();
+    ctx.fillRect(nameBoxX, nameBoxY, nameBoxWidth, nameBoxHeight);
     
-    // --- Draw Card Text Box Background & Card Text.
+    // --- Card Text Background ---
     const textBoxX = parseFloat(document.getElementById("textBoxX").value) || 20;
     const textBoxY = parseFloat(document.getElementById("textBoxY").value) || 300;
     const textBoxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
@@ -251,19 +247,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
     const textBgRgba = hexToRgba(textBgColor, textBgOpacity);
-    
     ctx.fillStyle = textBgRgba;
     ctx.fillRect(textBoxX, textBoxY, textBoxWidth, textBoxHeight);
     
-    ctx.save();
-    ctx.fillStyle = document.getElementById("textHex").value || "#000000";
-    ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardText").value, textBoxX + 5, textBoxY + 20, textBoxWidth - 10, 18);
-    ctx.restore();
-    
-    
-    // --- Draw Flavour Text Background & Flavour Text.
+    // --- Flavour Text Background ---
     const flavourBoxX = parseFloat(document.getElementById("flavourBoxX").value) || 20;
     const flavourBoxY = parseFloat(document.getElementById("flavourBoxY").value) || (textBoxY + textBoxHeight + 20);
     const flavourBoxWidth = parseFloat(document.getElementById("flavourBoxWidth").value) || (canvas.width - 40);
@@ -271,19 +258,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const flavourBgColor = document.getElementById("flavourBgHex").value || document.getElementById("flavourBgColor").value;
     const flavourBgOpacity = (parseFloat(document.getElementById("flavourBgOpacity").value) || 50) / 100;
     const flavourBgRgba = hexToRgba(flavourBgColor, flavourBgOpacity);
-    
     ctx.fillStyle = flavourBgRgba;
     ctx.fillRect(flavourBoxX, flavourBoxY, flavourBoxWidth, flavourBoxHeight);
     
-    ctx.save();
-    ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
-    ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardFlavour").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
-    ctx.restore();
-    
-    
-    // --- Draw Artist Background & Artist Text.
+    // --- Artist Background ---
     const artistBoxX = parseFloat(document.getElementById("artistBoxX").value) || (canvas.width - 110);
     const artistBoxY = parseFloat(document.getElementById("artistBoxY").value) || (canvas.height - 30);
     const artistBoxWidth = parseFloat(document.getElementById("artistBoxWidth").value) || 100;
@@ -291,17 +269,49 @@ document.addEventListener("DOMContentLoaded", function () {
     const artistBgColor = document.getElementById("artistBgHex").value || document.getElementById("artistBgColor").value;
     const artistBgOpacity = (parseFloat(document.getElementById("artistBgOpacity").value) || 50) / 100;
     const artistBgRgba = hexToRgba(artistBgColor, artistBgOpacity);
-    
     ctx.fillStyle = artistBgRgba;
     ctx.fillRect(artistBoxX, artistBoxY, artistBoxWidth, artistBoxHeight);
     
+    
+    
+    // === DRAW ALL TEXT ON TOP OF THE BACKGROUNDS ===
+    
+    // --- Header Text (Card Name, Type, Subtype) ---
+    ctx.save();
+    ctx.fillStyle = document.getElementById("nameHex").value || "#000000";
+    ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("cardName").value, nameBoxX + 5, nameBoxY + 20, nameBoxWidth - 10, 18);
+    ctx.restore();
+    
+    // --- Card Text ---
+    ctx.save();
+    ctx.fillStyle = document.getElementById("textHex").value || "#000000";
+    ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("cardText").value, textBoxX + 5, textBoxY + 20, textBoxWidth - 10, 18);
+    ctx.restore();
+    
+    // --- Flavour Text ---
+    ctx.save();
+    ctx.fillStyle = document.getElementById("flavourTextHex").value || "#000000";
+    ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("cardFlavour").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
+    ctx.restore();
+    
+    // --- Artist Text ---
     ctx.save();
     ctx.fillStyle = document.getElementById("artistTextHex").value || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
-    // Position the artist text with a small padding within the background box.
-    ctx.fillText(document.getElementById("cardArtist").value, artistBoxX + artistBoxWidth - 5, artistBoxY + artistBoxHeight - 5);
+    ctx.fillText(
+      document.getElementById("cardArtist").value,
+      artistBoxX + artistBoxWidth - 5,
+      artistBoxY + artistBoxHeight - 5
+    );
     ctx.restore();
+
 
     // --- Draw Discipline Icons.
     const activeDisciplines = disciplineData.filter(symbol => {

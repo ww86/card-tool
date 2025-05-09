@@ -447,11 +447,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("flavourText").value = template.flavourText || "";
         document.getElementById("flavourFont").value = template.flavourFont || "Arial";
         document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
-        document.getElementById("flavourTextHex").value = template.flavourTextColor || "#000000";
+        document.getElementById("flavourHex").value = template.flavourTextColor || "#000000";
         document.getElementById("artist").value = template.artist || "";
         document.getElementById("artistFont").value = template.artistFont || "Arial";
         document.getElementById("artistFontSize").value = template.artistFontSize || "12";
-        document.getElementById("artistTextHex").value = template.artistTextColor || "#000000";
+        document.getElementById("artistHex").value = template.artistTextColor || "#000000";
         document.getElementById("offsetX").value = template.offsetX || "0";
         document.getElementById("offsetY").value = template.offsetY || "0";
         document.getElementById("cropTop").value = template.cropTop || "0";

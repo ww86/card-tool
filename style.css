@@ -29,7 +29,7 @@ body {
   flex: 1;
 }
 
-/* Input groups */
+/* Input Groups */
 .input-group {
   margin-bottom: 15px;
 }
@@ -54,7 +54,7 @@ textarea {
   resize: vertical;
 }
 
-/* Inline selectors for font and text box controls */
+/* Inline selectors for font, color, etc. */
 .inline-selector {
   display: inline-flex;
   align-items: center;
@@ -78,7 +78,7 @@ textarea {
   cursor: pointer;
 }
 
-/* Toggle grid sections */
+/* Toggle grid */
 .section {
   margin-bottom: 20px;
 }
@@ -106,7 +106,7 @@ textarea {
   margin-right: 5px;
 }
 
-/* Canvas preview always centered */
+/* Canvas preview: transparent background, centered */
 canvas {
   border: 1px solid #000;
   background: transparent;

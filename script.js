@@ -323,4 +323,179 @@ document.addEventListener("DOMContentLoaded", function () {
       cardName: document.getElementById("cardName").value,
       nameFont: document.getElementById("nameFont").value,
       nameFontSize: document.getElementById("nameFontSize").value,
-      cardType: document.getElement
+      cardType: document.getElementById("cardType").value,
+      cardSubtype: document.getElementById("cardSubtype").value,
+      cardText: document.getElementById("cardText").value,
+      textFont: document.getElementById("textFont").value,
+      textFontSize: document.getElementById("textFontSize").value,
+      textBoxX: document.getElementById("textBoxX").value,
+      textBoxY: document.getElementById("textBoxY").value,
+      textBoxWidth: document.getElementById("textBoxWidth").value,
+      textBoxHeight: document.getElementById("textBoxHeight").value,
+      textBgColor: document.getElementById("textBgHex").value || document.getElementById("textBgColor").value,
+      textBgOpacity: document.getElementById("textBgOpacity").value,
+      textColor: document.getElementById("textHex").value,
+      flavourText: document.getElementById("flavourText").value,
+      flavourFont: document.getElementById("flavourFont").value,
+      flavourFontSize: document.getElementById("flavourFontSize").value,
+      flavourTextColor: document.getElementById("flavourTextHex").value,
+      artist: document.getElementById("artist").value,
+      artistFont: document.getElementById("artistFont").value,
+      artistFontSize: document.getElementById("artistFontSize").value,
+      artistTextColor: document.getElementById("artistTextHex").value,
+      offsetX: document.getElementById("offsetX").value,
+      offsetY: document.getElementById("offsetY").value,
+      cropTop: document.getElementById("cropTop").value,
+      cropRight: document.getElementById("cropRight").value,
+      cropBottom: document.getElementById("cropBottom").value,
+      cropLeft: document.getElementById("cropLeft").value,
+      scalePercent: document.getElementById("scalePercent").value,
+      frameType: document.getElementById("frameType").value,
+      canvasBgHex: document.getElementById("canvasBgHex") ? document.getElementById("canvasBgHex").value : "",
+      disciplines: disciplineData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      clans: clanData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      originalArtSrc: originalArtSrc
+    };
+    const jsonStr = JSON.stringify(template, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = "card_template.json";
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  
+  function importJSONFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const template = JSON.parse(e.target.result);
+        document.getElementById("cardName").value = template.cardName || "";
+        document.getElementById("nameFont").value = template.nameFont || "Arial";
+        document.getElementById("nameFontSize").value = template.nameFontSize || "20";
+        document.getElementById("cardType").value = template.cardType || "Crypt";
+        document.getElementById("cardSubtype").value = template.cardSubtype || "Action";
+        document.getElementById("cardText").value = template.cardText || "";
+        document.getElementById("textFont").value = template.textFont || "Arial";
+        document.getElementById("textFontSize").value = template.textFontSize || "14";
+        document.getElementById("textBoxX").value = template.textBoxX || "20";
+        document.getElementById("textBoxY").value = template.textBoxY || "300";
+        document.getElementById("textBoxWidth").value = template.textBoxWidth || "318";
+        document.getElementById("textBoxHeight").value = template.textBoxHeight || "100";
+        document.getElementById("textBgColor").value = template.textBgColor || "#ffffff";
+        document.getElementById("textBgHex").value = template.textBgColor || "#ffffff";
+        document.getElementById("textBgOpacity").value = template.textBgOpacity || "50";
+        if (template.canvasBgHex && document.getElementById("canvasBgHex")) {
+          document.getElementById("canvasBgHex").value = template.canvasBgHex;
+        }
+        document.getElementById("textHex").value = template.textColor || "#000000";
+        document.getElementById("flavourText").value = template.flavourText || "";
+        document.getElementById("flavourFont").value = template.flavourFont || "Arial";
+        document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
+        document.getElementById("flavourTextHex").value = template.flavourTextColor || "#000000";
+        document.getElementById("artist").value = template.artist || "";
+        document.getElementById("artistFont").value = template.artistFont || "Arial";
+        document.getElementById("artistFontSize").value = template.artistFontSize || "12";
+        document.getElementById("artistTextHex").value = template.artistTextColor || "#000000";
+        document.getElementById("offsetX").value = template.offsetX || "0";
+        document.getElementById("offsetY").value = template.offsetY || "0";
+        document.getElementById("cropTop").value = template.cropTop || "0";
+        document.getElementById("cropRight").value = template.cropRight || "0";
+        document.getElementById("cropBottom").value = template.cropBottom || "0";
+        document.getElementById("cropLeft").value = template.cropLeft || "0";
+        document.getElementById("scalePercent").value = template.scalePercent || "100";
+        document.getElementById("frameType").value = template.frameType || "none";
+  
+        for (let key in template.disciplines) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.disciplines[key]; }
+        }
+  
+        for (let key in template.clans) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.clans[key]; }
+        }
+  
+        if (template.originalArtSrc) {
+          originalArtSrc = template.originalArtSrc;
+          mainArtImage.src = originalArtSrc;
+        }
+  
+        updateCard();
+      } catch (err) {
+        alert("Failed to parse JSON: " + err);
+      }
+    };
+    reader.readAsText(file);
+  }
+  
+  // -------------------------------
+  // Listen for changes on all form elements.
+  // -------------------------------
+  document.querySelectorAll("input, textarea, select").forEach(el => {
+    el.addEventListener("input", updateCard);
+    el.addEventListener("change", updateCard);
+  });
+  
+  // -------------------------------
+  // Art Panel: File upload and URL load.
+  // -------------------------------
+  document.getElementById("artFile").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        originalArtSrc = event.target.result;
+        mainArtImage.src = originalArtSrc;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  document.getElementById("loadArtUrl").addEventListener("click", function () {
+    const url = document.getElementById("artUrl").value;
+    if (url) {
+      originalArtSrc = url;
+      mainArtImage.src = url;
+    }
+  });
+  
+  mainArtImage.onload = updateCard;
+  
+  // -------------------------------
+  // Export the canvas as a PNG (preserving transparency).
+  // -------------------------------
+  document.getElementById("exportButton").addEventListener("click", function () {
+    const canvas = document.getElementById("cardCanvas");
+    const dataURL = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = "custom_card.png";
+    link.href = dataURL;
+    link.click();
+  });
+  
+  // -------------------------------
+  // JSON Save and Import events.
+  // -------------------------------
+  document.getElementById("saveJsonButton").addEventListener("click", saveAsJSON);
+  
+  document.getElementById("importJsonButton").addEventListener("click", function () {
+    document.getElementById("jsonImport").click();
+  });
+  
+  document.getElementById("jsonImport").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      importJSONFile(e.target.files[0]);
+    }
+  });
+  
+  // Initial render.
+  updateCard();
+});

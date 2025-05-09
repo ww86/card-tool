@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     // Position the artist text with a small padding within the background box.
-    ctx.fillText(document.getElementById("artist").value, artistBoxX + artistBoxWidth - 5, artistBoxY + artistBoxHeight - 5);
+    ctx.fillText(document.getElementById("cardArtist").value, artistBoxX + artistBoxWidth - 5, artistBoxY + artistBoxHeight - 5);
     ctx.restore();
 
     // --- Draw Discipline Icons.

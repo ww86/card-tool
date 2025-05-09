@@ -29,7 +29,7 @@ body {
   flex: 1;
 }
 
-/* Input Groups */
+/* Input groups */
 .input-group {
   margin-bottom: 15px;
 }
@@ -54,7 +54,7 @@ textarea {
   resize: vertical;
 }
 
-/* Inline selector for font and text box controls */
+/* Inline selectors for font and text box controls */
 .inline-selector {
   display: inline-flex;
   align-items: center;
@@ -63,16 +63,19 @@ textarea {
   margin-top: 5px;
 }
 
-/* Button container centered below the canvas */
+/* Button container: stack buttons vertically */
 .button-container {
   text-align: center;
   margin-top: 10px;
 }
 
 .button-container button {
-  margin: 5px;
-  padding: 8px 12px;
+  display: block;
+  width: 80%;
+  margin: 5px auto;
+  padding: 8px;
   font-size: 14px;
+  cursor: pointer;
 }
 
 /* Toggle grid sections */
@@ -103,14 +106,10 @@ textarea {
   margin-right: 5px;
 }
 
-/* Canvas preview and Export Button */
+/* Canvas preview always centered */
 canvas {
   border: 1px solid #000;
-  background: #fff;
+  background: transparent;
   display: block;
   margin: 0 auto 10px auto;
-}
-
-#exportButton, #saveJsonButton, #importJsonButton {
-  cursor: pointer;
 }

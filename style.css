@@ -21,8 +21,10 @@ body {
   box-sizing: border-box;
 }
 
-.left-panel, .middle-panel, .art-panel {
-  width: 340px;
+.left-panel { width: 360px; }
+
+.middle-panel, .art-panel {
+  width: 300px;
 }
 
 .right-panel {

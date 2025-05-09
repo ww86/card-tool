@@ -227,14 +227,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // --- Draw Header Text (card name, type, subtype) across full canvas.
+    const nameBoxX = parseFloat(document.getElementById("nameBoxX").value) || 20;
+    const nameBoxY = parseFloat(document.getElementById("nameBoxY").value) || 300;
+    const nameBoxWidth = parseFloat(document.getElementById("nameBoxWidth").value) || 318;
+    const nameBoxHeight = parseFloat(document.getElementById("nameBoxHeight").value) || 100;
+    const nameBgColor = document.getElementById("nameBgHex").value || document.getElementById("nameBgColor").value;
+    const nameBgOpacity = (parseFloat(document.getElementById("nameBgOpacity").value) || 50) / 100;
+    const nameBgRgba = hexToRgba(nameBgColor, nameBgOpacity);
+    ctx.fillStyle = nameBgRgba;
+    ctx.fillRect(nameBoxX, nameBoxY, nameBoxWidth, nameBoxHeight);  
     ctx.save();
-    ctx.fillStyle = document.getElementById("nameTextHex").value || "#000000";
+    ctx.fillStyle = document.getElementById("nameHex").value || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
-    ctx.textAlign = "center";
-    ctx.fillText(document.getElementById("cardName").value, canvas.width / 2, 30);
-    ctx.font = "italic 16px Arial";
-    ctx.fillText(document.getElementById("cardType").value, canvas.width / 2, 50);
-    ctx.fillText(document.getElementById("cardSubtype").value, canvas.width / 2, 70);
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("nameText").value, boxX + 5, boxY + 20, boxWidth - 10, 18);
     ctx.restore();
   
     // --- Draw Card Text Box Background & Card Text.
@@ -245,10 +251,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
     const bgRgba = hexToRgba(textBgColor, textBgOpacity);
-  
     ctx.fillStyle = bgRgba;
-    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
-  
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);  
     ctx.save();
     ctx.fillStyle = document.getElementById("textHex").value || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;

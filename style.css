@@ -36,6 +36,11 @@ body {
   margin-bottom: 15px;
 }
 
+.h-selector { 
+  margin-bottom: 5px; 
+  font-size: 14px;
+}
+
 .input-group label {
   display: block;
   font-size: 12px;

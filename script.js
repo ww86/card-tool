@@ -310,4 +310,169 @@ document.addEventListener("DOMContentLoaded", function () {
       flavourText: document.getElementById("flavourText").value,
       flavourFont: document.getElementById("flavourFont").value,
       flavourFontSize: document.getElementById("flavourFontSize").value,
-      artist: document.getElementById("artist
+      artist: document.getElementById("artist").value,
+      artistFont: document.getElementById("artistFont").value,
+      artistFontSize: document.getElementById("artistFontSize").value,
+      offsetX: document.getElementById("offsetX").value,
+      offsetY: document.getElementById("offsetY").value,
+      cropTop: document.getElementById("cropTop").value,
+      cropRight: document.getElementById("cropRight").value,
+      cropBottom: document.getElementById("cropBottom").value,
+      cropLeft: document.getElementById("cropLeft").value,
+      scalePercent: document.getElementById("scalePercent").value,
+      frameType: document.getElementById("frameType").value,
+      canvasBgHex: document.getElementById("canvasBgHex").value,  // New background hexcode field.
+      disciplines: disciplineData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      clans: clanData.reduce((acc, item) => {
+        acc[item.id] = document.getElementById(item.id).checked;
+        return acc;
+      }, {}),
+      // Save the original art image (if any) before applying crop/scale.
+      originalArtSrc: originalArtSrc
+    };
+    const jsonStr = JSON.stringify(template, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = "card_template.json";
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  
+  // -------------------------------
+  // Import template from JSON.
+  // -------------------------------
+  function importJSONFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const template = JSON.parse(e.target.result);
+        // Update all form fields:
+        document.getElementById("cardName").value = template.cardName || "";
+        document.getElementById("nameFont").value = template.nameFont || "Arial";
+        document.getElementById("nameFontSize").value = template.nameFontSize || "20";
+        document.getElementById("cardType").value = template.cardType || "Crypt";
+        document.getElementById("cardSubtype").value = template.cardSubtype || "Action";
+        document.getElementById("cardText").value = template.cardText || "";
+        document.getElementById("textFont").value = template.textFont || "Arial";
+        document.getElementById("textFontSize").value = template.textFontSize || "14";
+        document.getElementById("textBoxX").value = template.textBoxX || "20";
+        document.getElementById("textBoxY").value = template.textBoxY || "300";
+        document.getElementById("textBoxWidth").value = template.textBoxWidth || "318";
+        document.getElementById("textBoxHeight").value = template.textBoxHeight || "100";
+        document.getElementById("textBgColor").value = template.textBgColor || "#ffffff";
+        document.getElementById("textBgOpacity").value = template.textBgOpacity || "50";
+        document.getElementById("canvasBgHex").value = template.canvasBgHex || "#000000";
+        document.getElementById("flavourText").value = template.flavourText || "";
+        document.getElementById("flavourFont").value = template.flavourFont || "Arial";
+        document.getElementById("flavourFontSize").value = template.flavourFontSize || "12";
+        document.getElementById("artist").value = template.artist || "";
+        document.getElementById("artistFont").value = template.artistFont || "Arial";
+        document.getElementById("artistFontSize").value = template.artistFontSize || "12";
+        document.getElementById("offsetX").value = template.offsetX || "0";
+        document.getElementById("offsetY").value = template.offsetY || "0";
+        document.getElementById("cropTop").value = template.cropTop || "0";
+        document.getElementById("cropRight").value = template.cropRight || "0";
+        document.getElementById("cropBottom").value = template.cropBottom || "0";
+        document.getElementById("cropLeft").value = template.cropLeft || "0";
+        document.getElementById("scalePercent").value = template.scalePercent || "100";
+        document.getElementById("frameType").value = template.frameType || "none";
+  
+        // Set disciplines checkboxes.
+        for (let key in template.disciplines) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.disciplines[key]; }
+        }
+  
+        // Set clans checkboxes.
+        for (let key in template.clans) {
+          const cb = document.getElementById(key);
+          if (cb) { cb.checked = template.clans[key]; }
+        }
+  
+        // Restore the canvas background hex (if provided)
+        if (template.canvasBgHex) {
+          document.getElementById("canvasBgHex").value = template.canvasBgHex;
+        }
+  
+        // Set the original art image if provided.
+        if (template.originalArtSrc) {
+          originalArtSrc = template.originalArtSrc;
+          mainArtImage.src = originalArtSrc;
+        }
+  
+        updateCard();
+      } catch (err) {
+        alert("Failed to parse JSON: " + err);
+      }
+    };
+    reader.readAsText(file);
+  }
+  
+  // -------------------------------
+  // Event listeners for inputs.
+  // -------------------------------
+  document.querySelectorAll("input, textarea, select").forEach(el => {
+    el.addEventListener("input", updateCard);
+    el.addEventListener("change", updateCard);
+  });
+  
+  // -------------------------------
+  // Art Panel: File upload & URL load.
+  // -------------------------------
+  document.getElementById("artFile").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        originalArtSrc = event.target.result;
+        mainArtImage.src = originalArtSrc;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  document.getElementById("loadArtUrl").addEventListener("click", function () {
+    const url = document.getElementById("artUrl").value;
+    if (url) {
+      originalArtSrc = url;
+      mainArtImage.src = url;
+    }
+  });
+  
+  mainArtImage.onload = updateCard;
+  
+  // -------------------------------
+  // Export as PNG (with transparency and rounded corners).
+  // -------------------------------
+  document.getElementById("exportButton").addEventListener("click", function () {
+    const canvas = document.getElementById("cardCanvas");
+    const dataURL = canvas.toDataURL("image/png"); // Use PNG for transparency.
+    const link = document.createElement("a");
+    link.download = "custom_card.png";
+    link.href = dataURL;
+    link.click();
+  });
+  
+  // -------------------------------
+  // JSON Save/Import button events.
+  // -------------------------------
+  document.getElementById("saveJsonButton").addEventListener("click", saveAsJSON);
+  
+  document.getElementById("importJsonButton").addEventListener("click", function () {
+    document.getElementById("jsonImport").click();
+  });
+  
+  document.getElementById("jsonImport").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) {
+      importJSONFile(e.target.files[0]);
+    }
+  });
+  
+  // Initial render.
+  updateCard();
+});

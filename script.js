@@ -574,7 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
     listenerPair(pickerDefBgCard, pickerHexBgCard);
     listenerPair(pickerDefFlavour, pickerHexFlavour);
     listenerPair(pickerDefBgFlavour, pickerHexBgFlavour);
-    listenerPair(pickerDefArtist, pickerHexArist);
+    listenerPair(pickerDefArtist, pickerHexArtist);
     listenerPair(pickerDefBgArtist, pickerHexBgArtist);      
 
   

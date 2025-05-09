@@ -60,8 +60,8 @@ textarea {
 .inline-selector {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
+  gap: 4px;
+  font-size: 10px;
   margin-top: 3px;
 }
 

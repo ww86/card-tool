@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (frameBgType === "Crypt") {
       if (!frameBgImage) {      
         frameBgImage = new Image();
-        frameBgImage.src = "ellise_frame.png";
+        frameBgImage.src = "ellipse_frame.png";
         frameBgImage.onload = updateCard;
       }
     }

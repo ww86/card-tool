@@ -296,10 +296,15 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     // === DRAW ALL TEXT ON TOP OF THE BACKGROUNDS ===
+    const nameRgba = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value);
+    const textRgba = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value);
+    const flavourRgba = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value);    
+    const artistRgba = hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value);    
+
     
     // --- Header Text (Card Name, Type, Subtype) ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("nameHex").value || "#000000";
+    ctx.fillStyle = nameRgba || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardName").value, nameBoxX + 5, nameBoxY + 20, nameBoxWidth - 10, 18);
@@ -307,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // --- Card Text ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("textHex").value || "#000000";
+    ctx.fillStyle = textRgba || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardText").value, textBoxX + 5, textBoxY + 20, textBoxWidth - 10, 18);
@@ -315,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // --- Flavour Text ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("flavourHex").value || "#000000";
+    ctx.fillStyle = flavourRgba || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     ctx.textAlign = "left";
     wrapText(ctx, document.getElementById("cardFlavour").value, flavourBoxX + 5, flavourBoxY + 20, flavourBoxWidth - 10, 16);
@@ -323,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // --- Artist Text ---
     ctx.save();
-    ctx.fillStyle = document.getElementById("artistHex").value || "#000000";
+    ctx.fillStyle = artistRgba || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
     ctx.textAlign = "right";
     ctx.fillText(

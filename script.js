@@ -216,11 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.strokeStyle = "black";
     
     ctx.beginPath();
-    ctx.moveTo(r, r);
-    ctx.lineTo(1 * r + w, r);
-    ctx.lineTo(1 * r + w, 1 * r + h);
-    ctx.lineTo(r, 1 * r + h);
-    ctx.lineTo(r, r);
+    ctx.moveTo(r * 2, r);
+    ctx.lineTo(w, r);
+    ctx.arc(w, r * 2, 1.5, 0), 
+    ctx.lineTo(1 * r + w, h);
+    ctx.arc(w, h, 0, 0.5);
+    ctx.lineTo(r * 2, 1 * r + h);
+    ctx.arc(r * 2, h, 0.5, 1);
+    ctx.lineTo(r, r * 2);
+    ctx.arc(r * 2, r * 2, 1, 1.5);    
     ctx.closePath();
   
     ctx.stroke();

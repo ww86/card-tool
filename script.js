@@ -217,9 +217,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
     ctx.beginPath();
     ctx.moveTo(r, r);
-    ctx.lineTo(w, r);
-    ctx.lineTo(w, h);
-    ctx.lineTo(r, h);
+    ctx.lineTo(r + w, r);
+    ctx.lineTo(r + w, r + h);
+    ctx.lineTo(r, r + h);
     ctx.lineTo(r, r);
     ctx.closePath();
   

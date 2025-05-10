@@ -210,6 +210,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     
+    ctx.save();
+    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+    ctx.clip();
+    ctx.drawImage(frameBgImage, innerX, innerY, innerWidth, innerHeight);      
+    ctx.restore();
+    
     // --- Frame Overlay: if frame type is "normal", draw the marble image overlay.
     const frameType = document.getElementById("frameType").value;
     if (frameType === "normal") {
@@ -220,8 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       ctx.save();
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-      ctx.clip();
-      ctx.drawImage(frameBgImage, innerX, innerY, innerWidth, innerHeight);      
+      ctx.clip();   
       ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
       ctx.restore();
     } else if (frameType !== "none") {

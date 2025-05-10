@@ -9,17 +9,7 @@ function hexToRgba(hex, opacity) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-// --- Utility: Draw a rounded rectangle path.
-function roundRect(ctx, x, y, width, height, radius) {
-  let r1 = 0.0;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + width, y);
-  ctx.lineTo(x + width, y + height);
-  ctx.lineTo(x, y + height);
-  ctx.lineTo(x, y);
-  ctx.closePath();
-}
+
 
 // --- Wait for DOM loaded.
 document.addEventListener("DOMContentLoaded", function () {
@@ -154,7 +144,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+
+    // --- Utility: Draw a rounded rectangle path.
+    function roundRect(ctx, x, y, width, height, radius) {
+      let r1 = 0.0;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + width, y);
+      ctx.lineTo(x + width, y + height);
+      ctx.lineTo(x, y + height);
+      ctx.lineTo(x, y);
+      ctx.closePath();
+    }
+    
     // Reserve margin
     const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
@@ -221,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Draw black border 
     ctx.save();
-    ctx.lineWidth = margin;
+    ctx.lineWidth = margin * 2;
     ctx.strokeStyle = "black";
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();

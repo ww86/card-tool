@@ -15,13 +15,9 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + r1, y);
   ctx.lineTo(x + width - r1, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + r1);
   ctx.lineTo(x + width, y + height - r1);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - r1, y + height);
   ctx.lineTo(x + r1, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - r1);
   ctx.lineTo(x, y + r1);
-  ctx.quadraticCurveTo(x, y, x + r1, y);
   ctx.closePath();
 }
 
@@ -159,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    // Reserve margin; inner area is 350x492.
+    // Reserve margin
     const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
     const innerY = margin;

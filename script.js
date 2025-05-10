@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameBoxWidth = parseFloat(document.getElementById("nameBoxWidth").value) || 318;
     const nameBoxHeight = parseFloat(document.getElementById("nameBoxHeight").value) || 100;
     const nameBgColor = document.getElementById("nameBgHex").value || document.getElementById("nameBgColor").value;
-    const nameBgOpacity = (parseFloat(document.getElementById("nameBgOpacity").value) || 50) / 100;
+    const nameBgOpacity = (parseFloat(document.getElementById("nameBgOpacity").value) || 0) / 100;
     const nameBgRgba = hexToRgba(nameBgColor, nameBgOpacity);
     ctx.fillStyle = nameBgRgba;
     ctx.fillRect(nameBoxX, nameBoxY, nameBoxWidth, nameBoxHeight);
@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textBoxWidth = parseFloat(document.getElementById("textBoxWidth").value) || 318;
     const textBoxHeight = parseFloat(document.getElementById("textBoxHeight").value) || 100;
     const textBgColor = document.getElementById("textBgHex").value || document.getElementById("textBgColor").value;
-    const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 50) / 100;
+    const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 0) / 100;
     const textBgRgba = hexToRgba(textBgColor, textBgOpacity);
     ctx.fillStyle = textBgRgba;
     ctx.fillRect(textBoxX, textBoxY, textBoxWidth, textBoxHeight);
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const flavourBoxWidth = parseFloat(document.getElementById("flavourBoxWidth").value) || (canvas.width - 40);
     const flavourBoxHeight = parseFloat(document.getElementById("flavourBoxHeight").value) || 50;
     const flavourBgColor = document.getElementById("flavourBgHex").value || document.getElementById("flavourBgColor").value;
-    const flavourBgOpacity = (parseFloat(document.getElementById("flavourBgOpacity").value) || 50) / 100;
+    const flavourBgOpacity = (parseFloat(document.getElementById("flavourBgOpacity").value) || 0) / 100;
     const flavourBgRgba = hexToRgba(flavourBgColor, flavourBgOpacity);
     ctx.fillStyle = flavourBgRgba;
     ctx.fillRect(flavourBoxX, flavourBoxY, flavourBoxWidth, flavourBoxHeight);
@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const artistBoxWidth = parseFloat(document.getElementById("artistBoxWidth").value) || 100;
     const artistBoxHeight = parseFloat(document.getElementById("artistBoxHeight").value) || 20;
     const artistBgColor = document.getElementById("artistBgHex").value || document.getElementById("artistBgColor").value;
-    const artistBgOpacity = (parseFloat(document.getElementById("artistBgOpacity").value) || 50) / 100;
+    const artistBgOpacity = (parseFloat(document.getElementById("artistBgOpacity").value) || 0) / 100;
     const artistBgRgba = hexToRgba(artistBgColor, artistBgOpacity);
     ctx.fillStyle = artistBgRgba;
     ctx.fillRect(artistBoxX, artistBoxY, artistBoxWidth, artistBoxHeight);

@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
     // Reserve 4px margin; inner area is 350x492.
-    const margin = 4;
+    const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
     const innerY = margin;
     const innerWidth = canvas.width - margin * 2;
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // --- Draw a 6px black rounded border around the inner area.
     ctx.save();
-    ctx.lineWidth = 6;
+    ctx.lineWidth = margin + 2;
     ctx.strokeStyle = "black";
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();

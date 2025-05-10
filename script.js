@@ -124,21 +124,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const words = text.split(" ");
     let line = "";
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     for (let i = 0; i < words.length; i++) {
       const testLine = line + words[i] + " ";
       const metrics = ctx.measureText(testLine);
       if (metrics.width > maxWidth && i > 0) {
-        ctx.fillText(line, x, y);
         ctx.strokeText(line, x, y);
+        ctx.fillText(line, x, y);        
         line = words[i] + " ";
         y += lineHeight;
       } else {
         line = testLine;
       }
     }
-    ctx.fillText(line, x, y);
     ctx.strokeText(line, x, y);
+    ctx.fillText(line, x, y);    
   }
   
   // -------------------------------

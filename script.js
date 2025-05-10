@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.stroke();
       ctx.restore();
-
+    }
     
     // === DRAW ALL BACKGROUNDS FIRST ===
     

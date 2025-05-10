@@ -223,15 +223,16 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.clip();   
       ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
       ctx.restore();
+    }      
 
-      // --- 
-      ctx.save();
-      ctx.lineWidth = margin;
-      ctx.strokeStyle = "black";
-      roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-      ctx.stroke();
-      ctx.restore();
-    }
+    // --- 
+    ctx.save();
+    ctx.lineWidth = margin;
+    ctx.strokeStyle = "black";
+    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+    ctx.stroke();
+    ctx.restore();
+
     
     // === DRAW ALL BACKGROUNDS FIRST ===
     

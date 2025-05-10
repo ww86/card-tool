@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
       ctx.save();
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-      ctx.clip();
+      // ctx.clip();
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
                     innerX + offsetX, innerY + offsetY, destWidth, destHeight);
       ctx.restore();
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     ctx.save();
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-    ctx.clip();
+    // ctx.clip();
     ctx.drawImage(frameBgImage, innerX, innerY, innerWidth, innerHeight);      
     ctx.restore();
     
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       ctx.save();
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-      ctx.clip();   
+      // ctx.clip();   
       ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
       ctx.restore();
     }      

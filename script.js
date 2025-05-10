@@ -13,11 +13,11 @@ function hexToRgba(hex, opacity) {
 function roundRect(ctx, x, y, width, height, radius) {
   let r1 = 0.0;
   ctx.beginPath();
-  ctx.moveTo(x + r1, y);
-  ctx.lineTo(x + width - r1, y);
-  ctx.lineTo(x + width, y + height - r1);
-  ctx.lineTo(x + r1, y + height);
-  ctx.lineTo(x, y + r1);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + width, y);
+  ctx.lineTo(x + width, y + height);
+  ctx.lineTo(x, y + height);
+  ctx.lineTo(x, y);
   ctx.closePath();
 }
 

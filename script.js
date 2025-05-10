@@ -11,7 +11,7 @@ function hexToRgba(hex, opacity) {
 
 // --- Utility: Draw a rounded rectangle path.
 function roundRect(ctx, x, y, width, height, radius) {
-  let r1 = radius;
+  let r1 = 0;
   ctx.beginPath();
   ctx.moveTo(x + r1, y);
   ctx.lineTo(x + width - r1, y);

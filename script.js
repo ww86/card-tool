@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
     // Reserve margin
-    const margin = document.getElementById("borderRadius").value;
+    const margin = parseInt(document.getElementById("borderRadius").value);
     const innerX = margin;
     const innerY = margin;
     const innerWidth = canvas.width - (margin * 2);

@@ -123,11 +123,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     const words = text.split(" ");
     let line = "";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
     for (let i = 0; i < words.length; i++) {
       const testLine = line + words[i] + " ";
       const metrics = ctx.measureText(testLine);
       if (metrics.width > maxWidth && i > 0) {
         ctx.fillText(line, x, y);
+        ctx.strokeText(line, x, y);
         line = words[i] + " ";
         y += lineHeight;
       } else {
@@ -135,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     ctx.fillText(line, x, y);
+    ctx.strokeText(line, x, y);
   }
   
   // -------------------------------

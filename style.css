@@ -119,7 +119,7 @@ textarea {
 
 /* Canvas preview: transparent background, centered */
 canvas {
-  border: 1px solid #000;
+  border: 0px solid #000;
   background: transparent;
   display: block;
   margin: 0 auto 10px auto;

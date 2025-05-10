@@ -146,14 +146,14 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // --- Utility: Draw a rounded rectangle path.
-    function roundRect(ctx, x, y, w, h, radius) {
+    function roundRect(ctx, x, y, w, h, r) {
       let r1 = 0.0;
       ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + w, y);
-      ctx.lineTo(x + w, y + h);
-      ctx.lineTo(x, y + h);
-      ctx.lineTo(x, y);
+      ctx.moveTo(r, r);
+      ctx.lineTo(r + w, r);
+      ctx.lineTo(r + w, r + h);
+      ctx.lineTo(r, r + h);
+      ctx.lineTo(r, r);
       ctx.closePath();
     }
     

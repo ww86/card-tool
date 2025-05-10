@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textBgOpacity = (parseFloat(document.getElementById("textBgOpacity").value) || 0) * 0.01;
     const textBgRgba = hexToRgba(textBgColor, textBgOpacity);
     ctx.fillStyle = textBgRgba;
-    drawRoundedRect(textBoxX, textBoxY, textBoxWidth, textBoxHeight, 3);
+    drawRoundedRect(ctx, textBoxX, textBoxY, textBoxWidth, textBoxHeight, 3);
     // ctx.fillRect(textBoxX, textBoxY, textBoxWidth, textBoxHeight);
     
     // --- Flavour Text Background ---

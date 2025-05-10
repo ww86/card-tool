@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.save();
     ctx.lineWidth = margin * 2;
     ctx.strokeStyle = "black";
-    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+    roundRect(ctx, innerX, innerY, innerWidth - margin, innerHeight - margin, cornerRadius);
     ctx.stroke();
     ctx.restore();
 

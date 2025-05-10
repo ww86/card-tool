@@ -161,8 +161,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
     const innerY = margin;
-    const innerWidth = canvas.width - (margin * 2);
-    const innerHeight = canvas.height - (margin * 2);
+    const innerWidth = canvas.width - (margin * 3);
+    const innerHeight = canvas.height - (margin * 3);
     const cornerRadius = margin;
   
     // --- Draw main art image within the inner rounded area.

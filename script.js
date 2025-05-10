@@ -191,13 +191,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.restore();
     }
   
-    // --- Draw a 6px black rounded border around the inner area.
-    ctx.save();
-    ctx.lineWidth = margin + 2;
-    ctx.strokeStyle = "black";
-    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-    ctx.stroke();
-    ctx.restore();
 
 
     // --- Vampire frame
@@ -244,6 +237,15 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.restore();
     }
 
+    // --- Draw a 6px black rounded border around the inner area.
+    ctx.save();
+    ctx.lineWidth = margin + 2;
+    ctx.strokeStyle = "black";
+    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+    ctx.stroke();
+    ctx.restore();
+
+    
     // === DRAW ALL BACKGROUNDS FIRST ===
     
     // --- Header Background ---

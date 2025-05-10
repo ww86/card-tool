@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const words = text.split(" ");
     let line = "";
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
     for (let i = 0; i < words.length; i++) {
       const testLine = line + words[i] + " ";
       const metrics = ctx.measureText(testLine);

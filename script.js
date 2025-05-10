@@ -145,17 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // --- Utility: Draw a rounded rectangle path.
-    function roundRect(ctx, x, y, w, h, r) {
-      let r1 = 0.0;
-      ctx.beginPath();
-      ctx.moveTo(r, r);
-      ctx.lineTo(r + w, r);
-      ctx.lineTo(r + w, r + h);
-      ctx.lineTo(r, r + h);
-      ctx.lineTo(r, r);
-      ctx.closePath();
-    }
+
+
+
     
     // Reserve margin
     const margin = document.getElementById("borderRadius").value;
@@ -215,10 +207,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }      
 
     // Draw black border 
+    let r = margin;
+    let w = canvas.width - 2 * margin;
+    let h = canvas.height - 2 * margin;
+    
     ctx.save();
     ctx.lineWidth = margin * 2;
     ctx.strokeStyle = "black";
-    roundRect(ctx, innerX, innerY, 100, innerHeight - margin, margin);
+    
+    ctx.beginPath();
+    ctx.moveTo(r, r);
+    ctx.lineTo(r + w, r);
+    ctx.lineTo(r + w, r + h);
+    ctx.lineTo(r, r + h);
+    ctx.lineTo(r, r);
+    ctx.closePath();
+  
     ctx.stroke();
     ctx.restore();
 

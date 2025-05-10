@@ -210,6 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let r = margin;
     let w = canvas.width - 2 * margin;
     let h = canvas.height - 2 * margin;
+    let p = Math.PI;
     
     ctx.save();
     ctx.lineWidth = margin * 2;
@@ -218,13 +219,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.beginPath();
     ctx.moveTo(r * 2, r);
     ctx.lineTo(w, r);
-    ctx.arc(w, r * 2, r, 1.5, 2), 
+    ctx.arc(w, r * 2, r, 1.5 * p, 2 * p), 
     ctx.lineTo(1 * r + w, h);
-    ctx.arc(w, h, r, 0, 0.5);
+    ctx.arc(w, h, r, 0 * p, 0.5 * p);
     ctx.lineTo(r * 2, 1 * r + h);
-    ctx.arc(r * 2, h, r, 0.5, 1);
+    ctx.arc(r * 2, h, r, 0.5 * p, 1 * p);
     ctx.lineTo(r, r * 2);
-    ctx.arc(r * 2, r * 2, r, 1, 1.5);    
+    ctx.arc(r * 2, r * 2, r, 1 * p, 1.5 * p);    
     ctx.closePath();
   
     ctx.stroke();

@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const destHeight = srcHeight * (scalePercent / 100);
   
       ctx.save();
-      roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
+      roundRect(ctx, 0, 0, canvas.width, canvas.height, cornerRadius);
       // ctx.clip();
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
                     innerX + offsetX, innerY + offsetY, destWidth, destHeight);

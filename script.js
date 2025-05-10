@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Draw black border 
     ctx.save();
-    ctx.lineWidth = margin * 1.41;
+    ctx.lineWidth = margin * 2;
     ctx.strokeStyle = "black";
     roundRect(ctx, innerX, innerY, innerWidth - margin, innerHeight - margin, margin);
     ctx.stroke();

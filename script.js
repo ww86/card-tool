@@ -211,6 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let w = canvas.width - 2 * margin;
     let h = canvas.height - 2 * margin;
     let p = Math.PI;
+
+    ctx.clearRect(0, 0, canvas.width, r);
+    ctx.clearRect(0, 0, r, canvas.height);    
+    ctx.clearRect(r + w, 0,r + w, canvas.height);
+    ctx.clearRect(0, h + r, canvas.width, canvas.height);    
     
     ctx.save();
     ctx.lineWidth = margin * 2;

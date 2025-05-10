@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const innerY = margin;
     const innerWidth = canvas.width - margin * 2;
     const innerHeight = canvas.height - margin * 2;
-    const cornerRadius = 4;
+    const cornerRadius = margin;
   
     // --- Draw main art image within the inner rounded area.
     if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- Draw a 6px black rounded border around the inner area.
     ctx.save();
-    ctx.lineWidth = margin + 2;
+    ctx.lineWidth = margin + 1;
     ctx.strokeStyle = "black";
     roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
     ctx.stroke();

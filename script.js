@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-    // Reserve 4px margin; inner area is 350x492.
+    // Reserve margin; inner area is 350x492.
     const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
     const innerY = margin;
@@ -223,28 +223,14 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.clip();   
       ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
       ctx.restore();
-    } else if (frameType !== "none") {
+
+      // --- 
       ctx.save();
-      ctx.lineWidth = 6;
-      if (frameType === "simple") {
-        ctx.strokeStyle = "black";
-      } else if (frameType === "classic") {
-        ctx.strokeStyle = "gold";
-      } else if (frameType === "modern") {
-        ctx.strokeStyle = "#444";
-      }
+      ctx.lineWidth = margin;
+      ctx.strokeStyle = "black";
       roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
       ctx.stroke();
       ctx.restore();
-    }
-
-    // --- Draw a 6px black rounded border around the inner area.
-    ctx.save();
-    ctx.lineWidth = margin + 1;
-    ctx.strokeStyle = "black";
-    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-    ctx.stroke();
-    ctx.restore();
 
     
     // === DRAW ALL BACKGROUNDS FIRST ===

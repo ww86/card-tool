@@ -186,9 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
                     innerX + offsetX, innerY + offsetY, destWidth, destHeight);
       ctx.restore();
-    }
-  
-
+    } 
 
     // --- Vampire frame
     const frameBgType = document.getElementById("cardType").value;    
@@ -221,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.restore();
     }      
 
-    // --- 
+    // Draw black border 
     ctx.save();
     ctx.lineWidth = margin;
     ctx.strokeStyle = "black";

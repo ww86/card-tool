@@ -161,9 +161,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const margin = document.getElementById("borderRadius").value;
     const innerX = margin;
     const innerY = margin;
-    const innerWidth = canvas.width - (margin * 3);
-    const innerHeight = canvas.height - (margin * 3);
-    const cornerRadius = margin;
+    const innerWidth = canvas.width - (margin * 2);
+    const innerHeight = canvas.height - (margin * 2);
   
     // --- Draw main art image within the inner rounded area.
     if (mainArtImage.complete && mainArtImage.naturalWidth > 0) {
@@ -183,10 +182,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const destHeight = srcHeight * (scalePercent / 100);
   
       ctx.save();
-      roundRect(ctx, 0, 0, canvas.width, canvas.height, cornerRadius);
-      // ctx.clip();
       ctx.drawImage(mainArtImage, srcX, srcY, srcWidth, srcHeight,
-                    innerX + offsetX, innerY + offsetY, destWidth, destHeight);
+                    0 + offsetX, 0 + offsetY, destWidth, destHeight);
       ctx.restore();
     } 
 
@@ -201,9 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     ctx.save();
-    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-    // ctx.clip();
-    ctx.drawImage(frameBgImage, innerX, innerY, innerWidth, innerHeight);      
+    ctx.drawImage(frameBgImage, 0, 0, canvas.width, canvas.height);      
     ctx.restore();
     
     // --- Frame Overlay: if frame type is "normal", draw the marble image overlay.
@@ -215,9 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
         frameImage.onload = updateCard;
       }
       ctx.save();
-      roundRect(ctx, innerX, innerY, innerWidth, innerHeight, cornerRadius);
-      // ctx.clip();   
-      ctx.drawImage(frameImage, innerX, innerY, innerWidth, innerHeight);
+      ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
       ctx.restore();
     }      
 
@@ -225,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.save();
     ctx.lineWidth = margin * 2;
     ctx.strokeStyle = "black";
-    roundRect(ctx, innerX, innerY, innerWidth - margin, innerHeight - margin, cornerRadius);
+    roundRect(ctx, innerX, innerY, innerWidth, innerHeight, margin);
     ctx.stroke();
     ctx.restore();
 

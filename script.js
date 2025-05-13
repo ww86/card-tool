@@ -1608,6 +1608,8 @@ const typeMap = [
     // Draw text on the backgrounds
     // ----------------------------------
 
+    // wrapText arguments are "ctx, text, x, y, maxWidth, lineHeight, antialias"
+
     const nameRgba = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value);
     const textRgba = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value);
     const flavourRgba = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value);    
@@ -1618,7 +1620,7 @@ const typeMap = [
     ctx.fillStyle = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value) || "#000000";
     ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardName").value, parseFloat(document.getElementById("nameBoxX").value) + 5, parseFloat(document.getElementById("nameBoxY").value) + 20, parseFloat(document.getElementById("nameBoxWidth").value) - 10, 18, document.querySelector('input[name="nameEffect"]:checked').value);
+    wrapText(ctx, document.getElementById("cardName").value, parseFloat(document.getElementById("nameBoxX").value) + 5, parseFloat(document.getElementById("nameBoxY").value) + 20, parseFloat(document.getElementById("nameBoxWidth").value) - 10, document.getElementById("nameFontSize").value + 1, document.querySelector('input[name="nameEffect"]:checked').value);
     ctx.restore();
 
     // --- Card Text ---
@@ -1626,7 +1628,7 @@ const typeMap = [
     ctx.fillStyle = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value) || "#000000";
     ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardText").value, parseFloat(document.getElementById("textBoxX").value) + 5, parseFloat(document.getElementById("textBoxY").value) + 20, parseFloat(document.getElementById("textBoxWidth").value) - 10, 18, document.querySelector('input[name="textEffect"]:checked').value);
+    wrapText(ctx, document.getElementById("cardText").value, parseFloat(document.getElementById("textBoxX").value) + 5, parseFloat(document.getElementById("textBoxY").value) + 20, parseFloat(document.getElementById("textBoxWidth").value) - 10, document.getElementById("textFontSize").value + 1, document.querySelector('input[name="textEffect"]:checked').value);
     ctx.restore();
 
     // --- Flavour Text ---
@@ -1634,15 +1636,15 @@ const typeMap = [
     ctx.fillStyle = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value) || "#000000";
     ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
     ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardFlavour").value, parseFloat(document.getElementById("flavourBoxX").value) + 5, parseFloat(document.getElementById("flavourBoxY").value) + 20, parseFloat(document.getElementById("flavourBoxWidth").value) - 10, 16, document.querySelector('input[name="flavourEffect"]:checked').value);
+    wrapText(ctx, document.getElementById("cardFlavour").value, parseFloat(document.getElementById("flavourBoxX").value) + 5, parseFloat(document.getElementById("flavourBoxY").value) + 20, parseFloat(document.getElementById("flavourBoxWidth").value) - 10, document.getElementById("flavourFontSize").value + 1, document.querySelector('input[name="flavourEffect"]:checked').value);
     ctx.restore();
 
     // --- Artist Text ---
     ctx.save();
     ctx.fillStyle = hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value) || "#000000";
     ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
-    ctx.textAlign = "right";
-    wrapText(ctx, document.getElementById("cardArtist").value, parseFloat(document.getElementById("artistBoxX").value) + parseFloat(document.getElementById("artistBoxWidth").value) - 5, parseFloat(document.getElementById("artistBoxY").value) + parseFloat(document.getElementById("artistBoxHeight").value) - 5, parseFloat(document.getElementById("artistBoxWidth").value) - 10, 16, document.querySelector('input[name="artistEffect"]:checked').value);
+    ctx.textAlign = "left";
+    wrapText(ctx, document.getElementById("cardArtist").value, parseFloat(document.getElementById("artistBoxX").value) + 5, parseFloat(document.getElementById("artistBoxY").value), parseFloat(document.getElementById("artistBoxWidth").value) - 10, document.getElementById("artistFontSize").value + 1, document.querySelector('input[name="artistEffect"]:checked').value);
     ctx.restore();
 
 

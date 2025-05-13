@@ -379,6 +379,11 @@ const clanData = [
     "vampire_generic_1"       : "frame_vampire_generic_1.png",
     "vampire_generic_2"       : "frame_vampire_generic_2.png",
     "vampire_generic_3"       : "frame_vampire_generic_3.png",
+
+    // Generic Library Frame Options
+    "library_generic_01"      : "frame_library_generic_01.png",
+
+    // Clan Frame Options
     "clan_assamite"           : "frame_clan_assamite.png",
     "clan_brujah"             : "frame_clan_brujah.png",
     "clan_brujah_antitribu"   : "frame_clan_brujah_antitribu.png",
@@ -482,8 +487,11 @@ const typeMap = [
   ];
 
   const markdownTextMap = {
-    "[b]": { open: "<strong>",                                   close: "</strong>" },    // Bold
-    "[i]": { open: "<em>",                                       close: "</em>" }        // Italics
+      "[b]"   : "bold",       // Bold text
+      "[/b]"  : "normal",     // End bold
+      "[i]"   : "italic",     // Italic text
+      "[/i]"  : "normal",     // End italic
+      "[n]"   : "newline"     // Newline
   };
 
   const markdownIconMap = {
@@ -665,51 +673,68 @@ const typeMap = [
       };
     };
 
+    function renderStyledText(ctx, text, x, y, style, antialias) {
+        ctx.save();
+
+        // Extract the current font size and family from ctx.font
+        const fontParts = ctx.font.split(" ");
+        const fontSize = fontParts[0]; // e.g., "16px"
+        const fontFamily = fontParts.slice(1).join(" "); // e.g., "Arial"
+
+        // Apply the style
+        if (style === "bold") {
+            ctx.font = `bold ${fontSize} ${fontFamily}`;
+        } else if (style === "italic") {
+            ctx.font = `italic ${fontSize} ${fontFamily}`;
+        } else if (style === "bold italic" || style === "italic bold") {
+            ctx.font = `italic bold ${fontSize} ${fontFamily}`;
+        } else {
+            ctx.font = `${fontSize} ${fontFamily}`; // Default style
+        }
+
+        // Render the text
+        if (antialias !== "none") {
+            ctx.strokeText(text, x, y);
+        }
+        ctx.fillText(text, x, y);
+
+        ctx.restore();
+    };
+
     function renderLine(ctx, incoming_line, x, y, antialias) {
       const tokens = incoming_line.split(/(\[.*?\])/); // Split by markdown-like tokens
       let currentX = x;
+      let currentStyle = "normal"; // Default text style
 
-    tokens.forEach(token => {
-      if (markdownIconMap[token]) {
-        // Render icon
-        renderIcon(markdownIconMap[token], currentX, y, lineHeight);
-        currentX += lineHeight; // Move the cursor forward by the icon size
-      } else if (markdownTextMap[token]) {
-        // Render styled text
-        const style = markdownTextMap[token].open.replace(/<|>/g, "").trim(); // Extract style (e.g., "strong" -> "bold")
-        renderStyledText(token.replace(/[\[\]]/g, ""), currentX, y, style, antialias); // Remove markdown brackets
-        currentX += ctx.measureText(token.replace(/[\[\]]/g, "")).width;
-      } else {
-        // Render plain text
-        if (antialias !== "none") { ctx.strokeText(token, currentX, y); }
-        ctx.fillText(token, currentX, y);
-        currentX += ctx.measureText(token).width;
-      }
-    });
+      tokens.forEach(token => {
+        if (markdownIconMap[token]) {
+            // Render icon
+            renderIcon(wrapImgPath(markdownIconMap[token]), currentX, y, lineHeight);
+            currentX += lineHeight; // Move the cursor forward by the icon size
+        } else if (markdownTextMap[token]) {
+            // Handle markdown text styles
+            const style = markdownTextMap[token];
+
+            if (style === "newline") {
+                // Move to the next line
+                y += lineHeight;
+                currentX = x;
+            } else {
+                // Update the current style (e.g., bold, italic, normal)
+                currentStyle = style;
+            }
+        } else {
+
+          // Render plain text
+          renderStyledText(ctx, token, currentX, y, currentStyle, antialias);
+          currentX += ctx.measureText(token).width;
+
+        }
+      });
+
     }
 
-    const renderStyledText = (text, x, y, style, antialias) => {
-      ctx.save();
 
-      // Extract the current font size and family from ctx.font
-      const fontParts = ctx.font.split(" ");
-      const fontSize = fontParts[0]; // e.g., "16px"
-      const fontFamily = fontParts.slice(1).join(" "); // e.g., "Arial"
-
-      // Apply the style
-      if (style === "bold") {
-        ctx.font = `bold ${fontSize} ${fontFamily}`;
-      } else if (style === "italic") {
-        ctx.font = `italic ${fontSize} ${fontFamily}`;
- 
-      } else {
-        // Default plain text
-        if (antialias !== "none") { ctx.strokeText(text, x, y); }
-        ctx.fillText(text, x, y);
-      }
-
-      ctx.restore();
-    };
 
     for (let i = 0; i < words.length; i++) {
       let testLine = line + words[i] + " ";

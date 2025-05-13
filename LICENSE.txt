@@ -1,0 +1,5 @@
+All of the image files may be copyrighted by 'Paradox Interactive AB'.
+<br>
+Make a pinkie promise not to use these image files in a way that breaks the law.
+<br>
+The codebase: script.js, index.html and style.css are intended as free to use, but not properly licensed.

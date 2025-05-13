@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VTES Custom Card Editor</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine&family=Vollkorn+SC&family=Cinzel&family=Cormorant+Garamond:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+    /* Define custom fonts using @font-face */
+    @font-face {
+      font-family: 'Ankha VTES';
+      src: url('./fonts/ankha_vtes_font_original.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Ankha VTES Modified';
+      src: url('./fonts/ankha_vtes_font_modified.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'World of Darkness';
+      src: url('./fonts/world_of_darkness.ttf') format('truetype');
+    }    
+    @font-face {
+      font-family: 'World of Darkness 2';
+      src: url('./fonts/world_of_darkness_2.ttf') format('truetype');
+    }        
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel: Card details & text styling -->
+    <div class="left-panel">
+      <h2>Details</h2>
+      
+      <!-- Card Name with font controls -->
+      <div class="input-group">
+        <div class="h-selector">
+          <label for="cardName">Name:</label>
+          <input type="text" id="cardName" placeholder="Card Name">
+        </div>
+
+        <div class="settings-group">
+          <!-- Text -->                         
+          <div class="inline-selector">
+            <label for="nameFont">Font:</label>
+            <select id="nameFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Impact">Impact</option>
+              <!-- Imported Google Fonts -->
+              <option value="Tangerine">Tangerine</option>
+              <option value="Vollkorn SC">Vollkorn SC</option>
+              <option value="Cinzel">Cinzel</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+              <option value="Ankha VTES">Ankha VTES</option>
+              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
+              <option value="World of Darkness">World of Darkness</option>
+              <option value="World of Darkness 2">World of Darkness 2</option>
+            </select>
+            <label for="nameFontSize">Size:</label>
+            <select id="nameFontSize">
+              <option value="6">6</option>
+              <option value="8">8</option>                         
+              <option value="10">10</option>                   
+              <option value="12">12</option>                   
+              <option value="14">14</option>                   
+              <option value="16">16</option>                            
+              <option value="18">18</option>              
+              <option value="20" selected>20</option>
+              <option value="22">22</option>              
+              <option value="24">24</option>
+              <option value="26">26</option>                            
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="nameColor">Color:</label>
+            <input type="color" id="nameColor" value="#FFFFFF">
+            <label for="nameHex">#:</label>
+            <input type="text" id="nameHex" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF">
+            <label for="nameOpacity">α:</label>
+            <input type="number" id="nameOpacity" value="100" min="0" max="100">               
+          </div>
+          <div class="inline-selector">
+            <label>Effect:</label>
+            <label><input type="radio" id="nameEffectNone" name="nameEffect" value="none"> None</label>
+            <label><input type="radio" id="nameEffectShadow" name="nameEffect" value="aa1"> aa1</label>
+            <label><input type="radio" id="nameEffectOutline" name="nameEffect" value="aa2" checked> aa2</label>
+            <label><input type="radio" id="nameEffectGlow" name="nameEffect" value="aa3"> aa3</label>
+          </div>          
+
+          
+          <!-- Background -->
+          <div class="input-group">     
+            <div class="inline-selector">
+              <label for="nameBoxX">X:</label>
+              <input type="number" id="nameBoxX" value="16">
+              <label for="nameBoxY">Y:</label>
+              <input type="number" id="nameBoxY" value="10">
+            </div>
+            <div class="inline-selector">
+              <label for="nameBoxWidth">W:</label>
+              <input type="number" id="nameBoxWidth" value="300">
+              <label for="nameBoxHeight">H:</label>
+              <input type="number" id="nameBoxHeight" value="28">
+            </div>
+            <div class="inline-selector">
+              <label for="nameBgColor">C:</label>
+              <input type="color" id="nameBgColor" class="bg-color-picker" value="#ffffff">
+              <label for="nameBgHex">#:</label>
+              <input type="text" id="nameBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              <label for="nameBgOpacity">α:</label>
+              <input type="number" id="nameBgOpacity" value="0" min="0" max="100">
+              <label for="nameBgBorder">B:</label>
+              <input type="number" id="nameBgBorder" class="bg-border-input" value="0" min="0" max="4">                  
+            </div>
+          </div>  
+        </div>    
+      </div>              
+      
+
+      
+      <!-- Card Text with font controls -->
+      <div class="input-group">
+        <div class="h-selector">
+          <label for="cardText">Card Text:</label>
+          <input type="text" id="cardText" placeholder="Card Text">
+        </div>
+
+        <div class="settings-group">
+          <!-- Text -->                    
+          <div class="inline-selector">
+            <label for="textFont">Font:</label>
+            <select id="textFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Impact">Impact</option>
+              <!-- Imported Google Fonts -->
+              <option value="Tangerine">Tangerine</option>
+              <option value="Vollkorn SC">Vollkorn SC</option>
+              <option value="Cinzel">Cinzel</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+              <option value="Ankha VTES">Ankha VTES</option>
+              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
+              <option value="World of Darkness">World of Darkness</option>
+              <option value="World of Darkness 2">World of Darkness 2</option>              
+            </select>
+            <label for="textFontSize">Size:</label>
+            <select id="textFontSize">
+              <option value="6">6</option>
+              <option value="8">8</option>                         
+              <option value="10">10</option>                   
+              <option value="12">12</option>                   
+              <option value="14" selected>14</option>                   
+              <option value="16">16</option>                            
+              <option value="18">18</option>              
+              <option value="20">20</option>
+              <option value="22">22</option>              
+              <option value="24">24</option>
+              <option value="26">26</option>                            
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="textColor">Color:</label>
+            <input type="color" id="textColor" value="#000000">
+            <label for="textHex">#:</label>
+            <input type="text" id="textHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="textOpacity">α:</label>
+            <input type="number" id="textOpacity" value="100" min="0" max="100">               
+          </div>
+          <div class="inline-selector">
+            <label>Effect:</label>
+            <label><input type="radio" id="textEffectNone" name="textEffect" value="none" checked> None</label>
+            <label><input type="radio" id="textEffectShadow" name="textEffect" value="aa1"> aa1</label>
+            <label><input type="radio" id="textEffectOutline" name="textEffect" value="aa2"> aa2</label>
+            <label><input type="radio" id="textEffectGlow" name="textEffect" value="aa3"> aa3</label>
+          </div>          
+
+        
+          <!-- Background -->
+          <div class="input-group">     
+            <div class="inline-selector">
+              <label for="textBoxX">X:</label>
+              <input type="number" id="textBoxX" value="74">
+              <label for="textBoxY">Y:</label>
+              <input type="number" id="textBoxY" value="315">
+            </div>
+            <div class="inline-selector">
+              <label for="textBoxWidth">W:</label>
+              <input type="number" id="textBoxWidth" value="264">
+              <label for="textBoxHeight">H:</label>
+              <input type="number" id="textBoxHeight" value="160">
+            </div>
+            <div class="inline-selector">
+              <label for="textBgColor">C:</label>
+              <input type="color" id="textBgColor" class="bg-color-picker" value="#ffffff">
+              <label for="textBgHex">#:</label>
+              <input type="text" id="textBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              <label for="textBgOpacity">α:</label>
+              <input type="number" id="textBgOpacity" value="0" min="0" max="100">      
+              <label for="textBgBorder">B:</label>                  
+              <input type="number" id="textBgBorder" class="bg-border-input" value="0" min="0" max="4">                     
+            </div>
+          </div>  
+        </div>
+      </div>            
+      
+      <!-- Flavour Text with font controls -->    
+      <div class="input-group">
+        <div class="h-selector">
+          <label for="cardFlavour">Flavour:</label>
+          <input type="text" id="cardFlavour" placeholder="Card Flavour">
+        </div>
+
+        <div class="settings-group">     
+          <!-- Text -->        
+          <div class="inline-selector">        
+            <label for="flavourFont">Font:</label>
+            <select id="flavourFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Impact">Impact</option>
+              <!-- Imported Google Fonts -->
+              <option value="Tangerine">Tangerine</option>
+              <option value="Vollkorn SC">Vollkorn SC</option>
+              <option value="Cinzel">Cinzel</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+              <option value="Ankha VTES">Ankha VTES</option>
+              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
+              <option value="World of Darkness">World of Darkness</option>
+              <option value="World of Darkness 2">World of Darkness 2</option>              
+            </select>
+            <label for="flavourFontSize">Size:</label>
+            <select id="flavourFontSize">
+              <option value="6">6</option>
+              <option value="8">8</option>                         
+              <option value="10">10</option>                   
+              <option value="12">12</option>                   
+              <option value="14" selected>14</option>                   
+              <option value="16">16</option>                            
+              <option value="18">18</option>              
+              <option value="20">20</option>
+              <option value="22">22</option>              
+              <option value="24">24</option>
+              <option value="26">26</option>                            
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="flavourColor">Color:</label>
+            <input type="color" id="flavourColor" value="#000000">
+            <label for="flavourHex">#:</label>
+            <input type="text" id="flavourHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="flavourOpacity">α:</label>
+            <input type="number" id="flavourOpacity" value="100" min="0" max="100">               
+          </div>
+          <div class="inline-selector">
+            <label>Effect:</label>
+            <label><input type="radio" id="flavourEffectNone" name="flavourEffect" value="none" checked> None</label>
+            <label><input type="radio" id="flavourEffectShadow" name="flavourEffect" value="aa1"> aa1</label>
+            <label><input type="radio" id="flavourEffectOutline" name="flavourEffect" value="aa2"> aa2</label>
+            <label><input type="radio" id="flavourEffectGlow" name="flavourEffect" value="aa3"> aa3</label>
+          </div>          
+
+        
+          <!-- Background -->
+          <div class="input-group">   
+            <div class="inline-selector">
+              <label for="flavourBoxX">X:</label>
+              <input type="number" id="flavourBoxX" value="80">
+              <label for="flavourBoxY">Y:</label>
+              <input type="number" id="flavourBoxY" value="446">
+            </div>
+            <div class="inline-selector">
+              <label for="flavourBoxWidth">W:</label>
+              <input type="number" id="flavourBoxWidth" value="240">
+              <label for="flavourBoxHeight">H:</label>
+              <input type="number" id="flavourBoxHeight" value="24">
+            </div>
+            <div class="inline-selector">
+              <label for="flavourBgColor">C:</label>
+              <input type="color" id="flavourBgColor" class="bg-color-picker" value="#ffffff">
+              <label for="flavourBgHex">#:</label>
+              <input type="text" id="flavourBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              <label for="flavourBgOpacity">α:</label>
+              <input type="number" id="flavourBgOpacity" value="0" min="0" max="100">
+              <label for="flavourBgBorder">B:</label>                  
+              <input type="number" id="flavourBgBorder" class="bg-border-input" value="0" min="0" max="4">                              
+            </div>
+          </div>  
+        </div>
+      </div>            
+      
+      <!-- Artist with font controls -->
+      <div class="input-group">
+        <div class="h-selector">
+          <label for="cardArtist">Artist:</label>
+          <input type="text" id="cardArtist" placeholder="Card artist">
+        </div>
+
+        <div class="settings-group">
+          <!-- Text -->        
+          <div class="inline-selector">
+            <label for="artistFont">Font:</label>
+            <select id="artistFont">
+              <option value="Arial" selected>Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Impact">Impact</option>
+              <!-- Imported Google Fonts -->
+              <option value="Tangerine">Tangerine</option>
+              <option value="Vollkorn SC">Vollkorn SC</option>
+              <option value="Cinzel">Cinzel</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+              <option value="Ankha VTES">Ankha VTES</option>
+              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
+              <option value="World of Darkness">World of Darkness</option>
+              <option value="World of Darkness 2">World of Darkness 2</option>              
+            </select>
+            <label for="artistFontSize">Size:</label>
+            <select id="artistFontSize">
+              <option value="6">6</option>
+              <option value="8">8</option>                         
+              <option value="10">10</option>                   
+              <option value="12" selected>12</option>                   
+              <option value="14">14</option>                   
+              <option value="16">16</option>                            
+              <option value="18">18</option>              
+              <option value="20">20</option>
+              <option value="22">22</option>              
+              <option value="24">24</option>
+              <option value="26">26</option>                            
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="artistColor">C:</label>
+            <input type="color" id="artistColor" class="bg-color-picker" value="#000000">
+            <label for="artistHex">#:</label>
+            <input type="text" id="artistHex" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF">
+            <label for="artistOpacity">α:</label>
+            <input type="number" id="artistOpacity" value="100" min="0" max="100">               
+          </div>
+          <div class="inline-selector">
+            <label>Effect:</label>
+            <label><input type="radio" id="artistEffectNone" name="artistEffect" value="none"> None</label>
+            <label><input type="radio" id="artistEffectShadow" name="artistEffect" value="aa1" checked> aa1</label>
+            <label><input type="radio" id="artistEffectOutline" name="artistEffect" value="aa2"> aa2</label>
+            <label><input type="radio" id="artistEffectGlow" name="artistEffect" value="aa3"> aa3</label>
+          </div>          
+  
+          
+          <!-- Background -->
+          <div class="input-group">     
+            <div class="inline-selector">
+              <label for="artistBoxX">X:</label>
+              <input type="number" id="artistBoxX" value="60">
+              <label for="artistBoxY">Y:</label>
+              <input type="number" id="artistBoxY" value="475">
+            </div>
+            <div class="inline-selector">
+              <label for="artistBoxWidth">W:</label>
+              <input type="number" id="artistBoxWidth" value="160">
+              <label for="artistBoxHeight">H:</label>
+              <input type="number" id="artistBoxHeight" value="20">
+            </div>
+            <div class="inline-selector">
+              <label for="artistBgColor">C:</label>
+              <input type="color" id="artistBgColor" class="bg-color-picker" value="#ffffff">
+              <label for="artistBgHex">#:</label>
+              <input type="text" id="artistBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              <label for="artistBgOpacity">α:</label>
+              <input type="number" id="artistBgOpacity" value="0" min="0" max="100">          
+              <label for="artistBgBorder">B:</label>                  
+              <input type="number" id="artistBgBorder" class="bg-border-input" value="0" min="0" max="4">                    
+            </div>
+          </div>  
+        </div>   
+      </div>  
+    </div>          
+    
+    <!-- Middle Panel: Toggle selectors -->
+    <div class="middle-panel">
+      <div class="section">
+        <h2>Card type icons</h2>
+        <div id="typeHeader" class="section">
+          <!-- Settings header is injected via script.js -->          
+        </div>        
+        <div class="toggle-grid-type" id="typeGrid">
+          <!-- Card type toggles are injected via script.js -->
+        </div>
+      </div>      
+
+      <div class="section">
+        <h2>Disciplines</h2>
+        <div id="disciplineHeader" class="section">
+          <!-- Settings header is injected via script.js -->
+        </div>
+        <div class="toggle-grid-discipline" id="disciplinesGrid">
+          <!-- Discipline toggles are injected via script.js -->
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Clan Symbols</h2>
+        <div class="toggle-grid" id="clansGrid">       
+        </div>
+      </div>
+       
+    </div>
+    
+    <!-- Art Panel: Image import & adjustments -->    
+    <div class="art-panel">
+      <h2>Art and Frame</h2>      
+      <!-- Type and Subtype -->
+
+
+
+     <!-- Main Frame Dropdown -->
+    <div class="input-group">
+      <label for="mainFrame">Main Frame:</label>
+      <select id="mainFrame">
+        <!-- Generic Vampire Frames -->
+        <optgroup label="Generic Vampire Frames">
+          <option value="none" selected>None</option>          
+          <option value="vampire_generic_1">Generic 1</option>
+          <option value="vampire_generic_2">Generic 2</option>
+          <option value="vampire_generic_3">Generic 3</option>
+        </optgroup>
+
+        <!-- Clan-Specific Frames -->
+        <optgroup label="Vampire Clans">
+          <option value="clan_assamite">Assamite</option>
+          <option value="clan_brujah">Brujah</option>
+          <option value="clan_brujah_antitribu">Brujah Antitribu</option>
+          <option value="clan_cappadocian">Cappadocian</option>
+          <option value="clan_gangrel">Gangrel</option>
+          <option value="clan_gangrel_antitribu">Gangrel Antitribu</option>
+          <option value="clan_giovanni">Giovanni</option>
+          <option value="clan_lamia">Lamia</option>
+          <option value="clan_lasombra">Lasombra</option>
+          <option value="clan_malkavian">Malkavian</option>
+          <option value="clan_malkavian_antitribu">Malkavian Antitribu</option>
+          <option value="clan_nosferatu">Nosferatu</option>
+          <option value="clan_nosferatu_antitribu">Nosferatu Antitribu</option>
+          <option value="clan_ravnos">Ravnos</option>
+          <option value="clan_salubri">Salubri</option>
+          <option value="clan_salubri_antitribu">Salubri Antitribu</option>
+          <option value="clan_toreador">Toreador</option>
+          <option value="clan_toreador_antitribu">Toreador Antitribu</option>
+          <option value="clan_tremere">Tremere</option>
+          <option value="clan_tremere_antitribu">Tremere Antitribu</option>
+          <option value="clan_tzimisce">Tzimisce</option>
+          <option value="clan_ventrue">Ventrue</option>
+          <option value="clan_ventrue_antitribu">Ventrue Antitribu</option>
+        </optgroup>
+
+        <!-- Library Card Types -->
+        <optgroup label="Library Card Types">
+          <option value="modifier_card">Modifier</option>
+          <option value="action_card">Action</option>
+          <option value="political_action_card">Political Action</option>
+          <option value="event_card">Event</option>
+          <option value="master_card">Master</option>
+          <option value="reaction_card">Reaction</option>
+          <option value="combat_card">Combat</option>
+          <option value="equipment_card">Equipment</option>
+          <option value="ally_card">Ally</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Side Panel Dropdown -->
+    <div class="input-group">
+      <label for="sidePanel">Side Panel Overlay:</label>
+      <select id="sidePanel">
+        <!-- Generic Side Panels -->
+        <optgroup label="Generic Side Panels">
+          <option value="none" selected>None</option>
+          <option value="generic_green_marble">Generic (Green Marble)</option>
+          <option value="generic_black_marble">Generic (Black Marble)</option>
+        </optgroup>
+
+        <!-- Library Card Types -->
+        <optgroup label="Library Card Types">
+          <option value="sidepanel_action">Action</option>
+          <option value="sidepanel_political_action">Political Action</option>
+          <option value="sidepanel_event">Event</option>
+          <option value="sidepanel_master">Master</option>
+          <option value="sidepanel_reaction">Reaction</option>
+          <option value="sidepanel_combat">Combat</option>
+          <option value="sidepanel_equipment">Equipment</option>
+          <option value="sidepanel_ally">Ally</option>
+        </optgroup>
+
+        <!-- Clan-Specific Side Panels -->
+        <optgroup label="Vampire Clans">
+          <option value="sidepanel_assamite">Assamite</option>
+          <option value="sidepanel_brujah">Brujah</option>
+          <option value="sidepanel_brujah_antitribu">Brujah Antitribu</option>
+          <option value="sidepanel_cappadocian">Cappadocian</option>
+          <option value="sidepanel_gangrel">Gangrel</option>
+          <option value="sidepanel_gangrel_antitribu">Gangrel Antitribu</option>
+          <option value="sidepanel_giovanni">Giovanni</option>
+          <option value="sidepanel_lamia">Lamia</option>
+          <option value="sidepanel_lasombra">Lasombra</option>
+          <option value="sidepanel_malkavian">Malkavian</option>
+          <option value="sidepanel_malkavian_antitribu">Malkavian Antitribu</option>
+          <option value="sidepanel_nosferatu">Nosferatu</option>
+          <option value="sidepanel_nosferatu_antitribu">Nosferatu Antitribu</option>
+          <option value="sidepanel_ravnos">Ravnos</option>
+          <option value="sidepanel_salubri">Salubri</option>
+          <option value="sidepanel_salubri_antitribu">Salubri Antitribu</option>
+          <option value="sidepanel_toreador">Toreador</option>
+          <option value="sidepanel_toreador_antitribu">Toreador Antitribu</option>
+          <option value="sidepanel_tremere">Tremere</option>
+          <option value="sidepanel_tremere_antitribu">Tremere Antitribu</option>
+          <option value="sidepanel_tzimisce">Tzimisce</option>
+          <option value="sidepanel_ventrue">Ventrue</option>
+          <option value="sidepanel_ventrue_antitribu">Ventrue Antitribu</option>
+        </optgroup>
+      </select>
+    </div>
+
+      <div class="input-group">
+        <label for="artFile">Upload Image:</label>
+        <input type="file" id="artFile" accept="image/*">
+      </div>
+      <div class="input-group">
+        <label for="artUrl">Image URL:</label>
+        <input type="text" id="artUrl" placeholder="Enter image URL">
+        <button id="loadArtUrl">Load Image</button>
+      </div>
+      <div class="input-group">
+        <label for="offsetX">Offset X (px):</label>
+        <input type="number" id="offsetX" value="0">
+      </div>
+      <div class="input-group">
+        <label for="offsetY">Offset Y (px):</label>
+        <input type="number" id="offsetY" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropTop">Crop Top (px):</label>
+        <input type="number" id="cropTop" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropRight">Crop Right (px):</label>
+        <input type="number" id="cropRight" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropBottom">Crop Bottom (px):</label>
+        <input type="number" id="cropBottom" value="0">
+      </div>
+      <div class="input-group">
+        <label for="cropLeft">Crop Left (px):</label>
+        <input type="number" id="cropLeft" value="0">
+      </div>
+      <div class="input-group">
+        <label for="scalePercent">Scale (%):</label>
+        <input type="number" id="scalePercent" value="100">
+      </div>
+      <div class="input-group">
+        <label for="borderRadius">Border:</label>
+        <input type="number" id="borderRadius" value="6">
+      </div>      
+    
+    </div>
+
+    <!-- Right Panel: Card preview and action buttons -->
+    <div class="right-panel">
+      <h2>Card Preview</h2>
+      <canvas id="cardCanvas" width="358" height="500"></canvas>
+      <div class="button-container">
+        <button id="updateCardButton">Update card</button>        
+        <button id="exportButton">Export as PNG</button>
+        <button id="saveJsonButton">Save as JSON</button>
+        <button id="importJsonButton">Import JSON</button>
+      </div>
+      <input type="file" id="jsonImport" accept="application/json" style="display:none;">
+      <div id="darkPackSection">  
+        Dark Pack Logo
+      </div>                
+      <div id="errorLog" class="error-log"></div>
+      <div id="onloadErrorLog" class="onload-error-log"></div>   
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+
+  <div id="licensePopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <img src="symbol_dark_pack_logo_bw.png" alt="Dark Pack Logo" class="popup-logo">
+      <div id="licenseText" class="popup-text">Loading license...</div>
+      <div class="popup-buttons">
+        <button id="acceptButton">Accept</button>
+        <button id="declineButton">Decline</button>
+      </div>
+    </div>
+  </div>  
+
+</body>
+</html>

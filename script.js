@@ -655,6 +655,82 @@ const typeMap = [
 
   if (tested === false) { testAllImages(); tested = true; }
 
+
+
+
+  // -------------------------------
+  // renderIcon(), renderStyledText() and renderLine() functions
+  // -------------------------------
+
+  function renderIcon (ctx, iconSrc, x, y, size) {
+    const img = new Image();
+    img.src = iconSrc;
+    img.onload = () => {
+      ctx.drawImage(img, x, y - size, size * 1.25, size * 1.25); // Adjust vertical alignment
+    };
+  };
+
+  function renderStyledText(ctx, text, x, y, style, antialias) {
+      ctx.save();
+
+      // Extract the current font size and family from ctx.font
+      const fontParts   = ctx.font.split(" ");
+      const fontSize    = fontParts[0]; // e.g., "16px"
+      const fontFamily  = fontParts.slice(1).join(" "); // e.g., "Arial"
+
+      // Apply the style
+      ctx.font = `${fontSize} ${fontFamily}`;
+
+      if (style === "bold")           { ctx.font = `bold ${fontSize} ${fontFamily}`;        }        
+      if (style === "italic")         { ctx.font = `italic ${fontSize} ${fontFamily}`;      }
+      if (style === "bold italic")    { ctx.font = `bold italic ${fontSize} ${fontFamily}`; }
+      if (style === "italic bold")    { ctx.font = `bold italic ${fontSize} ${fontFamily}`; }
+
+      // Render the text
+      if (antialias !== "none")       { ctx.strokeText(text, x, y); }
+
+      ctx.fillText(text, x, y);
+      ctx.restore();
+  };
+
+  function renderLine(ctx, incoming_line, x, y, antialias, h) {
+
+      const tokens = incoming_line.split(/(\[.*?\])/); // Split by markdown-like tokens
+      let currentX = x;
+      let currentStyle = "normal"; // Default text style
+      let style = "normal"; // Default text style
+      let icon = false;
+      let symbol = false
+
+      tokens.forEach(token => {
+
+        icon = false;
+        symbol = false;
+
+        if (markdownIconMap[token])         { icon = true;    }
+        if (markdownTextMap[token])         { symbol = true;  }
+
+        if (icon)                           { renderIcon(ctx, wrapImgPath(markdownIconMap[token]), currentX, y, h); }
+        if (icon)                           { currentX += h;  }
+
+        if (symbol)                         { style = markdownTextMap[token]; }
+
+        if (style === "newline")            { y += h;       }
+        if (style === "newline")            { currentX = x; }
+
+        if (symbol && style !== "newline")  { currentStyle = style; }
+                
+        if (!icon && !symbol)               { renderStyledText(ctx, token, currentX, y, currentStyle, antialias); }
+        if (!icon && !symbol)               { currentX += ctx.measureText(token).width; }
+                   
+      });
+
+  };
+
+  // -------------------------------
+  // wrapText function
+  // -------------------------------
+
   function wrapText(ctx, text, x, y, maxWidth, lineHeight, antialias) {
     const words = text.split(" ");
     let line = "";
@@ -665,94 +741,25 @@ const typeMap = [
 
     ctx.strokeStyle = "black";
 
-    const renderIcon = (iconSrc, x, y, size) => {
-      const img = new Image();
-      img.src = iconSrc;
-      img.onload = () => {
-        ctx.drawImage(img, x, y - size, size * 1.25, size * 1.25); // Adjust vertical alignment
-      };
-    };
-
-    function renderStyledText(ctx, text, x, y, style, antialias) {
-        ctx.save();
-
-        // Extract the current font size and family from ctx.font
-        const fontParts = ctx.font.split(" ");
-        const fontSize = fontParts[0]; // e.g., "16px"
-        const fontFamily = fontParts.slice(1).join(" "); // e.g., "Arial"
-
-        // Apply the style
-        if (style === "bold") {
-            ctx.font = `bold ${fontSize} ${fontFamily}`;
-        } else if (style === "italic") {
-            ctx.font = `italic ${fontSize} ${fontFamily}`;
-        } else if (style === "bold italic" || style === "italic bold") {
-            ctx.font = `italic bold ${fontSize} ${fontFamily}`;
-        } else {
-            ctx.font = `${fontSize} ${fontFamily}`; // Default style
-        }
-
-        // Render the text
-        if (antialias !== "none") {
-            ctx.strokeText(text, x, y);
-        }
-        ctx.fillText(text, x, y);
-
-        ctx.restore();
-    };
-
-    function renderLine(ctx, incoming_line, x, y, antialias) {
-      const tokens = incoming_line.split(/(\[.*?\])/); // Split by markdown-like tokens
-      let currentX = x;
-      let currentStyle = "normal"; // Default text style
-
-      tokens.forEach(token => {
-        if (markdownIconMap[token]) {
-            // Render icon
-            renderIcon(wrapImgPath(markdownIconMap[token]), currentX, y, lineHeight);
-            currentX += lineHeight; // Move the cursor forward by the icon size
-        } else if (markdownTextMap[token]) {
-            // Handle markdown text styles
-            const style = markdownTextMap[token];
-
-            if (style === "newline") {
-                // Move to the next line
-                y += lineHeight;
-                currentX = x;
-            } else {
-                // Update the current style (e.g., bold, italic, normal)
-                currentStyle = style;
-            }
-        } else {
-
-          // Render plain text
-          renderStyledText(ctx, token, currentX, y, currentStyle, antialias);
-          currentX += ctx.measureText(token).width;
-
-        }
-      });
-
-    }
-
-
-
     for (let i = 0; i < words.length; i++) {
+
       let testLine = line + words[i] + " ";
       const metrics = ctx.measureText(testLine);
 
       if (metrics.width > maxWidth && i > 0) {
-        renderLine(ctx, line, x, y, antialias);
+        renderLine(ctx, line, x, y, antialias, lineHeight);
         line = words[i] + " ";
         y += lineHeight;
       } else {
         line = testLine;
       }
-      testLine = "";
+
     }
 
-    renderLine(ctx, line, x, y, antialias);
+    renderLine(ctx, line, x, y, antialias, lineHeight);
 
   }
+
 
 
   // -------------------------------
@@ -1610,89 +1617,120 @@ const typeMap = [
 
     // wrapText arguments are "ctx, text, x, y, maxWidth, lineHeight, antialias"
 
-    const nameRgba = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value);
-    const textRgba = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value);
-    const flavourRgba = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value);    
-    const artistRgba = hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value);    
+    const nameRgba          = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value);
+    const textRgba          = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value);
+    const flavourRgba       = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value);    
+    const artistRgba        = hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value);    
     
     // --- Header Text (Card Name, Type, Subtype) ---
+    const nameString        = document.getElementById("cardName").value;
+    const nameBgX           = parseFloat(document.getElementById("nameBoxX").value) + 5;
+    const nameBgY           = parseFloat(document.getElementById("nameBoxY").value) + 20;
+    const nameBgW           = parseFloat(document.getElementById("nameBoxWidth").value) - 10;
+    const nameLineHeight    = parseFloat(document.getElementById("nameFontSize").value);
+    const nameAntialias     = document.querySelector('input[name="nameEffect"]:checked').value;
+
     ctx.save();
-    ctx.fillStyle = hexToRgba(document.getElementById("nameHex").value, document.getElementById("nameOpacity").value) || "#000000";
-    ctx.font = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardName").value, parseFloat(document.getElementById("nameBoxX").value) + 5, parseFloat(document.getElementById("nameBoxY").value) + 20, parseFloat(document.getElementById("nameBoxWidth").value) - 10, document.getElementById("nameFontSize").value + 1, document.querySelector('input[name="nameEffect"]:checked').value);
+    ctx.fillStyle           = nameRgba;
+    ctx.font                = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
+    ctx.textAlign           = "left";
+    wrapText(ctx, nameString, nameBgX, nameBgY, nameBgW, nameLineHeight, nameAntialias);
     ctx.restore();
 
     // --- Card Text ---
+    const textString        = document.getElementById("cardText").value;
+    const textBgX           = parseFloat(document.getElementById("textBoxX").value) + 5;
+    const textBgY           = parseFloat(document.getElementById("textBoxY").value) + 20;
+    const textBgW           = parseFloat(document.getElementById("textBoxWidth").value) - 10;
+    const textLineHeight    = parseFloat(document.getElementById("textFontSize").value);
+    const textAntialias     = document.querySelector('input[name="textEffect"]:checked').value;
+
     ctx.save();
-    ctx.fillStyle = hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value) || "#000000";
-    ctx.font = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardText").value, parseFloat(document.getElementById("textBoxX").value) + 5, parseFloat(document.getElementById("textBoxY").value) + 20, parseFloat(document.getElementById("textBoxWidth").value) - 10, document.getElementById("textFontSize").value + 1, document.querySelector('input[name="textEffect"]:checked').value);
+    ctx.fillStyle           = textRgba;
+    ctx.font                = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
+    ctx.textAlign           = "left";
+    wrapText(ctx, textString, textBgX, textBgY, textBgW, textLineHeight, textAntialias);
     ctx.restore();
 
     // --- Flavour Text ---
+    const flavourString     = document.getElementById("cardFlavour").value;
+    const flavourBgX        = parseFloat(document.getElementById("flavourBoxX").value) + 5;
+    const flavourBgY        = parseFloat(document.getElementById("flavourBoxY").value) + 20;
+    const flavourBgW        = parseFloat(document.getElementById("flavourBoxWidth").value) - 10;
+    const flavourLineHeight = parseFloat(document.getElementById("flavourFontSize").value);
+    const flavourAntialias  = document.querySelector('input[name="flavourEffect"]:checked').value;
+
     ctx.save();
-    ctx.fillStyle = hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value) || "#000000";
-    ctx.font = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardFlavour").value, parseFloat(document.getElementById("flavourBoxX").value) + 5, parseFloat(document.getElementById("flavourBoxY").value) + 20, parseFloat(document.getElementById("flavourBoxWidth").value) - 10, document.getElementById("flavourFontSize").value + 1, document.querySelector('input[name="flavourEffect"]:checked').value);
+    ctx.fillStyle           = flavourRgba;
+    ctx.font                = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
+    ctx.textAlign           = "left";
+    wrapText(ctx, flavourString, flavourBgX, flavourBgY, flavourBgW, flavourLineHeight, flavourAntialias);
     ctx.restore();
 
     // --- Artist Text ---
+    const artistString      = document.getElementById("cardArtist").value;
+    const artistBgX         = parseFloat(document.getElementById("artistBoxX").value) + 5;
+    const artistBgY         = parseFloat(document.getElementById("artistBoxY").value);
+    const artistBgW         = parseFloat(document.getElementById("artistBoxWidth").value) - 10;
+    const artistLineHeight  = parseFloat(document.getElementById("artistFontSize").value);
+    const artistAntialias   = document.querySelector('input[name="artistEffect"]:checked').value;
+
     ctx.save();
-    ctx.fillStyle = hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value) || "#000000";
-    ctx.font = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
-    ctx.textAlign = "left";
-    wrapText(ctx, document.getElementById("cardArtist").value, parseFloat(document.getElementById("artistBoxX").value) + 5, parseFloat(document.getElementById("artistBoxY").value), parseFloat(document.getElementById("artistBoxWidth").value) - 10, document.getElementById("artistFontSize").value + 1, document.querySelector('input[name="artistEffect"]:checked').value);
+    ctx.fillStyle           = artistRgba;
+    ctx.font                = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
+    ctx.textAlign           = "left";
+    wrapText(ctx, artistString, artistBgX, artistBgY, artistBgW, artistLineHeight, artistAntialias);
     ctx.restore();
 
 
 
-  // -------------------------------
-  // Render the Dark Pack logo
-  // -------------------------------
+    // -------------------------------
+    // Render the Dark Pack logo
+    // -------------------------------
 
-  function renderDarkPackLogo(ctx, symbolMap) {
-    const toggle = document.getElementById("darkPackToggle");
-    if (!toggle || !toggle.checked) { return; }
+    function renderDarkPackLogo(ctx, symbolMap) {
+      const toggle = document.getElementById("darkPackToggle");
+      if (!toggle || !toggle.checked) { return; }
 
-    const x = parseFloat(document.getElementById("darkPackX").value) || 0;
-    const y = parseFloat(document.getElementById("darkPackY").value) || 0;
-    const sizeH = parseFloat(document.getElementById("darkPackH").value) || 50; // Default height
-    const sizeW = parseFloat(document.getElementById("darkPackW").value) || 0; // Default width (0 means preserve proportions)   
+      const x = parseFloat(document.getElementById("darkPackX").value) || 0;
+      const y = parseFloat(document.getElementById("darkPackY").value) || 0;
+      const sizeH = parseFloat(document.getElementById("darkPackH").value) || 50; // Default height
+      const sizeW = parseFloat(document.getElementById("darkPackW").value) || 0; // Default width (0 means preserve proportions)   
 
-    // Get the image path for the Dark Pack logo
-    const logoSrc = "symbol_dark_pack_logo_bw.png";
+      // Get the image path for the Dark Pack logo
+      const logoSrc = "symbol_dark_pack_logo_bw.png";
 
-    // Load the image
-    const logoImage = new Image();
-    logoImage.src = logoSrc;
+      // Load the image
+      const logoImage = new Image();
+      logoImage.src = logoSrc;
 
-    logoImage.onload = function () {
-      if (logoImage.width > 0 && logoImage.height > 0) {
-        // Calculate the width and height
-        let renderWidth = sizeW > 0 ? sizeW : sizeH * (logoImage.width / logoImage.height); // Use sizeW if defined, otherwise preserve proportions
-        let renderHeight = sizeH;
+      logoImage.onload = function () {
+        if (logoImage.width > 0 && logoImage.height > 0) {
+          // Calculate the width and height
+          let renderWidth = sizeW > 0 ? sizeW : sizeH * (logoImage.width / logoImage.height); // Use sizeW if defined, otherwise preserve proportions
+          let renderHeight = sizeH;
 
-        // Draw the logo on the canvas
-        ctx.save();
-        ctx.drawImage(logoImage, x, y, renderWidth, renderHeight);
-        ctx.restore();
-      } else {
-        console.error("Dark Pack logo image has invalid dimensions:", logoImage.width, logoImage.height);
-      }
-    };
+          // Draw the logo on the canvas
+          ctx.save();
+          ctx.drawImage(logoImage, x, y, renderWidth, renderHeight);
+          ctx.restore();
+        } else {
+          console.error("Dark Pack logo image has invalid dimensions:", logoImage.width, logoImage.height);
+        }
+      };
 
-    logoImage.onerror = function () {
-      console.error("Failed to load the Dark Pack logo image.");
-    };
+      logoImage.onerror = function () {
+        console.error("Failed to load the Dark Pack logo image.");
+      };
+    }
+
+    // Call the function to render the Dark Pack logo
+    renderDarkPackLogo(ctx, symbolMap);
+
   }
-
-  // Call the function to render the Dark Pack logo
-  renderDarkPackLogo(ctx, symbolMap);
-
-  }
+  // -------------------------------
+  // END of updateCard() 
+  // -------------------------------  
 
 
 

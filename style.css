@@ -127,7 +127,7 @@ textarea {
   font-size: 12px;
   height: 26px;
   display: grid;
-  grid-template-columns: 54px 16px 44px 16px 44px 28px 44px 80px 44px 44px auto;
+  grid-template-columns: 54px 16px 48px 16px 48px 28px 44px 72px 40px 44px auto;
   gap: 4px;
 }
 

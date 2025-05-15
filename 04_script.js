@@ -1334,7 +1334,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const flavourBgBorder   = parseFloat(document.getElementById("flavourBgBorder").value) || 0;
     ctx.fillStyle           = flavourBgRgba;
     global.util.drawRoundedRect(ctx, flavourBoxX, flavourBoxY, flavourBoxWidth, flavourBoxHeight, 3, flavourBgBorder);    
-    // ctx.fillRect(flavourBoxX, flavourBoxY, flavourBoxWidth, flavourBoxHeight);
+
     
     // --- Artist Background ---
     const artistBoxX        = parseFloat(document.getElementById("artistBoxX").value) || (canvas.width - 110);
@@ -1347,7 +1347,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const artistBgBorder    = parseFloat(document.getElementById("artistBgBorder").value) || 0;
     ctx.fillStyle           = artistBgRgba;
     global.util.drawRoundedRect(ctx, artistBoxX, artistBoxY, artistBoxWidth, artistBoxHeight, 3, artistBgBorder);  
-    // ctx.fillRect(artistBoxX, artistBoxY, artistBoxWidth, artistBoxHeight);
+
+        // --- Artist Background ---
+    const miniBoxX        = parseFloat(document.getElementById("miniBoxX").value) || (canvas.width - 110);
+    const miniBoxY        = parseFloat(document.getElementById("miniBoxY").value) || (canvas.height - 30);
+    const miniBoxWidth    = parseFloat(document.getElementById("miniBoxWidth").value) || 100;
+    const miniBoxHeight   = parseFloat(document.getElementById("miniBoxHeight").value) || 20;
+    const miniBgColor     = document.getElementById("miniBgHex").value || document.getElementById("miniBgColor").value;
+    const miniBgOpacity   = (parseFloat(document.getElementById("miniBgOpacity").value) || 0) * 0.01;
+    const miniBgRgba      = global.util.hexToRgba(miniBgColor, miniBgOpacity);
+    const miniBgBorder    = parseFloat(document.getElementById("miniBgBorder").value) || 0;
+    ctx.fillStyle         = miniBgRgba;
+    global.util.drawRoundedRect(ctx, miniBoxX, miniBoxY, miniBoxWidth, miniBoxHeight, 3, miniBgBorder);  
+    
     
     
     
@@ -1361,6 +1373,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textRgba          = global.util.hexToRgba(document.getElementById("textHex").value, document.getElementById("textOpacity").value);
     const flavourRgba       = global.util.hexToRgba(document.getElementById("flavourHex").value, document.getElementById("flavourOpacity").value);    
     const artistRgba        = global.util.hexToRgba(document.getElementById("artistHex").value, document.getElementById("artistOpacity").value);    
+    const miniRgba          = global.util.hexToRgba(document.getElementById("miniHex").value, document.getElementById("miniOpacity").value);    
     
     // --- Header Text (Card Name, Type, Subtype) ---
     const nameString        = document.getElementById("cardName").value;
@@ -1421,6 +1434,21 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.textAlign           = "left";
     wrapText(ctx, artistString, artistBgX, artistBgY, artistBgW, artistLineHeight, artistAntialias);
     ctx.restore();
+
+    // --- Mini Text ---
+    const miniString        = document.getElementById("cardMini").value;
+    const miniBgX           = parseFloat(document.getElementById("miniBoxX").value) + 5;
+    const miniBgY           = parseFloat(document.getElementById("miniBoxY").value);
+    const miniBgW           = parseFloat(document.getElementById("miniBoxWidth").value) - 10;
+    const miniLineHeight    = parseFloat(document.getElementById("miniFontSize").value);
+    const miniAntialias     = document.querySelector('input[name="miniEffect"]:checked').value;
+
+    ctx.save();
+    ctx.fillStyle           = miniRgba;
+    ctx.font                = `${document.getElementById("miniFontSize").value}px ${document.getElementById("miniFont").value}`;
+    ctx.textAlign           = "left";
+    wrapText(ctx, miniString, miniBgX, miniBgY, miniBgW, miniLineHeight, miniAntialias);
+    ctx.restore();    
 
 
 
@@ -1771,7 +1799,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const pickerDefArtist     = document.getElementById("artistColor");
     const pickerHexArtist     = document.getElementById("artistHex");  
     const pickerDefBgArtist   = document.getElementById("artistBgColor");
-    const pickerHexBgArtist   = document.getElementById("artistBgHex");    
+    const pickerHexBgArtist   = document.getElementById("artistBgHex");   
+    
+    const pickerDefMini       = document.getElementById("miniColor");
+    const pickerHexMini       = document.getElementById("miniHex");
+    const pickerDefBgMini     = document.getElementById("miniBgColor");
+    const pickerHexBgMini     = document.getElementById("miniBgHex");    
 
     // Function to update hex input when color picker changes
     function listenerPair(pick1,pick2) {
@@ -1784,14 +1817,16 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    listenerPair(pickerDefName, pickerHexName);
-    listenerPair(pickerDefBgName, pickerHexBgName);
-    listenerPair(pickerDefCard, pickerHexCard);
-    listenerPair(pickerDefBgCard, pickerHexBgCard);
-    listenerPair(pickerDefFlavour, pickerHexFlavour);
-    listenerPair(pickerDefBgFlavour, pickerHexBgFlavour);
-    listenerPair(pickerDefArtist, pickerHexArtist);
-    listenerPair(pickerDefBgArtist, pickerHexBgArtist);      
+    listenerPair(pickerDefName      , pickerHexName);
+    listenerPair(pickerDefBgName    , pickerHexBgName);
+    listenerPair(pickerDefCard      , pickerHexCard);
+    listenerPair(pickerDefBgCard    , pickerHexBgCard);
+    listenerPair(pickerDefFlavour   , pickerHexFlavour);
+    listenerPair(pickerDefBgFlavour , pickerHexBgFlavour);
+    listenerPair(pickerDefArtist    , pickerHexArtist);
+    listenerPair(pickerDefBgArtist  , pickerHexBgArtist);  
+    listenerPair(pickerDefMini      , pickerHexMini);
+    listenerPair(pickerDefBgMini    , pickerHexBgMini);          
 
   
   // Initial render.

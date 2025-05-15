@@ -377,7 +377,7 @@
           </div>
           <div class="inline-selector">
             <label for="artistColor">C:</label>
-            <input type="color" id="artistColor" class="bg-color-picker" value="#000000">
+            <input type="color" id="artistColor" class="bg-color-picker" value="#FFFFFF">
             <label for="artistHex">#:</label>
             <input type="text" id="artistHex" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF">
             <label for="artistOpacity">α:</label>
@@ -419,6 +419,106 @@
           </div>  
         </div>   
       </div>  
+
+      <!-- Mini card type text with font controls -->
+      <div class="input-group">
+        <div class="h-selector">
+          <label for="cardMini">Mini:</label>
+          <input type="text" id="cardMini" placeholder="Mini type text">
+        </div>
+
+        <div class="settings-group">
+          <!-- Text -->        
+          <div class="inline-selector">
+            <label for="miniFont">Font:</label>
+            <select id="miniFont">
+              <option value="Arial">Arial</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Impact">Impact</option>
+              <!-- Imported Google Fonts -->
+              <option value="Tangerine">Tangerine</option>
+              <option value="Vollkorn SC">Vollkorn SC</option>
+              <option value="Cinzel">Cinzel</option>
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
+              <option value="Ankha VTES">Ankha VTES</option>
+              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
+              <option value="World of Darkness">World of Darkness</option>
+              <option value="World of Darkness 2" selected>World of Darkness 2</option>              
+            </select>
+            <label for="miniFontSize">Size:</label>
+            <select id="miniFontSize">
+              <option value="5" selected>5</option>              
+              <option value="6">6</option>
+              <option value="7">7</option>              
+              <option value="8">8</option>                         
+              <option value="8">9</option>                                       
+              <option value="10">10</option>                   
+              <option value="12">12</option>                   
+              <option value="14">14</option>                   
+              <option value="16">16</option>                            
+              <option value="18">18</option>              
+              <option value="20">20</option>
+              <option value="22">22</option>              
+              <option value="24">24</option>
+              <option value="26">26</option>                            
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+            </select>
+          </div>
+          <div class="inline-selector">
+            <label for="miniColor">C:</label>
+            <input type="color" id="miniColor" class="bg-color-picker" value="#000000">
+            <label for="miniHex">#:</label>
+            <input type="text" id="miniHex" value="#000000" maxlength="7" placeholder="#000000">
+            <label for="miniOpacity">α:</label>
+            <input type="number" id="miniOpacity" value="100" min="0" max="100">               
+          </div>
+          <div class="inline-selector">
+            <label>Effect:</label>
+            <label><input type="radio" id="miniEffectNone" name="miniEffect" value="none"> None</label>
+            <label><input type="radio" id="miniEffectShadow" name="miniEffect" value="aa1" checked> aa1</label>
+            <label><input type="radio" id="miniEffectOutline" name="miniEffect" value="aa2"> aa2</label>
+            <label><input type="radio" id="miniEffectGlow" name="miniEffect" value="aa3"> aa3</label>
+          </div>          
+  
+          
+          <!-- Background -->
+          <div class="input-group">     
+            <div class="inline-selector">
+              <label for="miniBoxX">X:</label>
+              <input type="number" id="miniBoxX" value="13">
+              <label for="miniBoxY">Y:</label>
+              <input type="number" id="miniBoxY" value="113">
+            </div>
+            <div class="inline-selector">
+              <label for="miniBoxWidth">W:</label>
+              <input type="number" id="miniBoxWidth" value="160">
+              <label for="miniBoxHeight">H:</label>
+              <input type="number" id="miniBoxHeight" value="20">
+            </div>
+            <div class="inline-selector">
+              <label for="miniBgColor">C:</label>
+              <input type="color" id="miniBgColor" class="bg-color-picker" value="#ffffff">
+              <label for="miniBgHex">#:</label>
+              <input type="text" id="miniBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              <label for="miniBgOpacity">α:</label>
+              <input type="number" id="miniBgOpacity" value="0" min="0" max="100">          
+              <label for="miniBgBorder">B:</label>                  
+              <input type="number" id="miniBgBorder" class="bg-border-input" value="0" min="0" max="4">                    
+            </div>
+          </div>  
+        </div>   
+      </div>  
+
     </div>          
     
     <!-- Middle Panel: Toggle selectors -->
@@ -476,18 +576,35 @@
     <div class="input-group">
       <label for="mainFrame">Main Frame:</label>
       <select id="mainFrame">
+
+        <!-- Library Card Types -->
+        <optgroup label="Library Card Types (Quality currently off)">
+          <option value="modifier_card">Modifier</option>
+          <option value="action_card">Action</option>
+          <option value="political_action_card">Political Action</option>
+          <option value="event_card">Event</option>
+          <option value="master_card">Master</option>
+          <option value="reaction_card">Reaction</option>
+          <option value="combat_card">Combat</option>
+          <option value="equipment_card">Equipment</option>
+          <option value="ally_card">Ally</option>
+        </optgroup>        
+
         <!-- Generic Vampire Frames -->
-        <optgroup label="Generic Vampire Frames">
+        <optgroup label="Generic Custom Vampire Frames">
           <option value="none" selected>None</option>          
-          <option value="vampire_generic_1">Generic 1</option>
-          <option value="vampire_generic_2">Generic 2</option>
-          <option value="vampire_generic_3">Generic 3</option>
+          <option value="vampire_generic_01">Generic 1</option>
+          <option value="vampire_generic_02">Generic 2</option>
+          <option value="vampire_generic_03">Generic 3</option>
+          <option value="vampire_generic_04">Generic 4</option>          
         </optgroup>
 
         <!-- Custom library frames -->
         <optgroup label="Library (Custom)">
           <option value="library_generic_01">Generic Library Frame 1</option>
-          <option value="library_generic_02">Generic Library Frame 2</option>          
+          <option value="library_generic_02">Generic Library Frame 2</option>   
+          <option value="library_generic_03">Generic Library Frame 3</option>
+          <option value="library_generic_04">Generic Library Frame 4</option>           
         </optgroup>
 
         <!-- Clan-Specific Frames -->
@@ -496,7 +613,7 @@
         </optgroup>          
 
         <!-- Clan-Specific Frames -->
-        <optgroup label="Vampire Clans">
+        <optgroup label="Vampire Clans (currently missing)">
           <option value="clan_assamite">Assamite</option>
           <option value="clan_brujah">Brujah</option>
           <option value="clan_brujah_antitribu">Brujah Antitribu</option>
@@ -520,20 +637,7 @@
           <option value="clan_tzimisce">Tzimisce</option>
           <option value="clan_ventrue">Ventrue</option>
           <option value="clan_ventrue_antitribu">Ventrue Antitribu</option>
-        </optgroup>
-
-        <!-- Library Card Types -->
-        <optgroup label="Library Card Types (screenshot images, low quality)">
-          <option value="modifier_card">Modifier</option>
-          <option value="action_card">Action</option>
-          <option value="political_action_card">Political Action</option>
-          <option value="event_card">Event</option>
-          <option value="master_card">Master</option>
-          <option value="reaction_card">Reaction</option>
-          <option value="combat_card">Combat</option>
-          <option value="equipment_card">Equipment</option>
-          <option value="ally_card">Ally</option>
-        </optgroup>
+        </optgroup>        
       </select>
     </div>
 

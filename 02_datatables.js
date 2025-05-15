@@ -95,16 +95,19 @@
 
         frameMap : {
             // Main Frame Options
-            "vampire_generic_1"       : "frame_vampire_generic_1.png",
-            "vampire_generic_2"       : "frame_vampire_generic_2.png",
-            "vampire_generic_3"       : "frame_vampire_generic_3.png",
+            "vampire_generic_01"      : "frame_vampire_generic_01.png",
+            "vampire_generic_02"      : "frame_vampire_generic_02.png",
+            "vampire_generic_03"      : "frame_vampire_generic_03.png",
+            "vampire_generic_04"      : "frame_vampire_generic_04.png",
 
             // Imbued frame
             "imbued_generic_01"       : "frame_imbued_generic_01.png",
 
             // Generic Library Frame Options
             "library_generic_01"      : "frame_library_generic_01.png",
-            "library_generic_02"      : "frame_library_generic_02.png",    
+            "library_generic_02"      : "frame_library_generic_02.png",  
+            "library_generic_03"      : "frame_library_generic_03.png",
+            "library_generic_04"      : "frame_library_generic_04.png",            
 
             // Clan Frame Options
             "clan_assamite"           : "frame_clan_assamite.png",

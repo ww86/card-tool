@@ -99,6 +99,9 @@
             "vampire_generic_2"       : "frame_vampire_generic_2.png",
             "vampire_generic_3"       : "frame_vampire_generic_3.png",
 
+            // Imbued frame
+            "imbued_generic_01"       : "frame_imbued_generic_01.png",
+
             // Generic Library Frame Options
             "library_generic_01"      : "frame_library_generic_01.png",
             "library_generic_02"      : "frame_library_generic_02.png",    

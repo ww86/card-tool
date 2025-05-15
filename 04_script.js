@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   };
 
-  function renderStyledText(ctx, text, x, y, style, antialias) {
+  function renderStyledText(ctx, text, x, y, style, strokeWidth) {
       ctx.save();
 
       // Extract the current font size and family from ctx.font
@@ -257,13 +257,22 @@ document.addEventListener("DOMContentLoaded", function () {
       if (style === "italic bold")    { ctx.font = `bold italic ${fontSize} ${fontFamily}`; }
 
       // Render the text
-      if (antialias !== "none")       { ctx.strokeText(text, x, y); }
+      ctx.strokeStyle   = "black";
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      
+      if (strokeWidth >   0     )       { ctx.lineWidth     = strokeWidth;        }
+      if (strokeWidth >   1     )       { ctx.shadowOffsetX = 0;                  }
+      if (strokeWidth >   1     )       { ctx.shadowOffsetY = 1;                  }
+      if (strokeWidth >   1     )       { ctx.shadowBlur    = 3;                  }
+      if (strokeWidth >   1     )       { ctx.shadowColor   = "#000000EE";        }
+      if (strokeWidth >   0     )       { ctx.strokeText(text, x, y);             }
 
       ctx.fillText(text, x, y);
       ctx.restore();
   };
 
-  function renderLine(ctx, incoming_line, x, y, antialias, h) {
+  function renderLine(ctx, incoming_line, x, y, strokeWidth, h) {
 
       const tokens = incoming_line.split(/(\[.*?\])/); // Split by markdown-like tokens
       let currentX = x;
@@ -287,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (symbol && style !== "newline")              { currentStyle = style; }
                 
-        if (!icon && !symbol)                           { renderStyledText(ctx, token, currentX, y, currentStyle, antialias); }
+        if (!icon && !symbol)                           { renderStyledText(ctx, token, currentX, y, currentStyle, strokeWidth); }
         if (!icon && !symbol)                           { currentX += ctx.measureText(token).width; }
                    
       });
@@ -305,17 +314,16 @@ document.addEventListener("DOMContentLoaded", function () {
    
     let line = "";
     let y2 = y;
+    let strokeWidth = 0;
 
-    if (antialias === "aa1") { ctx.lineWidth = 1; }
-    if (antialias === "aa2") { ctx.lineWidth = 2; }
-    if (antialias === "aa3") { ctx.lineWidth = 3; }
-
-    ctx.strokeStyle = "black";
+    if (antialias === "aa1") { strokeWidth = 1; }
+    if (antialias === "aa2") { strokeWidth = 2; }
+    if (antialias === "aa3") { strokeWidth = 3; }  
 
     for (let i = 0; i < segments.length; i++) {
 
       if (global.data.markdownTextMap[segments[i]] == "newline") {
-        renderLine(ctx, line, x, y2, antialias, lineHeight);
+        renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
         line = "";
         y2 += lineHeight;
         i++;
@@ -325,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const metrics = ctx.measureText(testLine);
 
       if (metrics.width > maxWidth && i > 0) {
-        renderLine(ctx, line, x, y2, antialias, lineHeight);
+        renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
         line = segments[i] + " ";
         y2 += lineHeight;
       } else {
@@ -334,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    renderLine(ctx, line, x, y2, antialias, lineHeight);
+    renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
 
   }
 
@@ -421,44 +429,84 @@ document.addEventListener("DOMContentLoaded", function () {
   // ------------------------------------
 
   // Generate pool cost, blood cost, capacity, and life symbols
-  const middlePanel           = document.querySelector(".middle-panel");
-  const costSymbolSection     = document.createElement("div");
-  costSymbolSection.className = "cost-symbol-section";
-  costSymbolSection.innerHTML = "<h2>Costs and Symbols</h2>";
+  const costSymbolSection     = document.getElementById("symbolHeader");
+  const costSymbolGrid        = document.getElementById("symbolGrid");
 
-  const costSymbolGrid        = document.createElement("div");
-  costSymbolGrid.className    = "cost-symbol-grid";
-  costSymbolSection.appendChild(costSymbolGrid);
+  const poolSettings = [
+    { id: "poolX",            label: "X:",              defaultValue: 18, min: 0,   max: 358 },
+    { id: "poolY",            label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
+    { id: "poolSize",         label: "Size:",           defaultValue: 38, min: 10,  max: 100 },
+    { id: "poolTextOffset",   label: "Text Offset Y:",  defaultValue: 0,  min: -10, max: 40  },
+    { id: "poolAmount",       label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+  ];
 
-  // Generate the items
-  global.data.costSymbolData.forEach(({ id, label, hasToggle }) => {
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "cost-symbol-item";
+    const bloodSettings = [
+    { id: "bloodX",            label: "X:",              defaultValue: 12, min: 0,   max: 358 },
+    { id: "bloodY",            label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
+    { id: "bloodSize",         label: "Size:",           defaultValue: 50, min: 10,  max: 100 },
+    { id: "bloodTextOffset",   label: "Text Offset Y:",  defaultValue: 8,  min: -10, max: 40  },
+    { id: "bloodAmount",       label: "Amount:",         defaultValue: 0,   min: 0,   max: 20 },
+  ];
 
-    // Create label
-    const inputLabel = global.util.createLabel(id, label);
-    itemDiv.appendChild(inputLabel);
+  const capacitySettings = [
+    { id: "capacityX",            label: "X:",              defaultValue: 300, min: 0,   max: 358 },
+    { id: "capacityY",            label: "Y:",              defaultValue: 420, min: 0,   max: 500 },
+    { id: "capacitySize",         label: "Size:",           defaultValue: 33, min: 10,  max: 100 },
+    { id: "capacityTextOffset",   label: "Text Offset Y:",  defaultValue: 2,  min: -10, max: 40  },
+    { id: "capacityAmount",       label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+  ];
 
-    // Create a container for toggle and input
-    const inputToggleContainer = document.createElement("div");
-    inputToggleContainer.className = "input-toggle-container";
+  const lifeSettings = [
+    { id: "lifeX",                label: "X:",              defaultValue: 12, min: 0,   max: 358 },
+    { id: "lifeY",                label: "Y:",              defaultValue: 300,min: 0,   max: 500 },
+    { id: "lifeSize",             label: "Size:",           defaultValue: 60, min: 10,  max: 100 },
+    { id: "lifeTextOffset",       label: "Text Offset Y:",  defaultValue: 8,  min: -10, max: 40  },
+    { id: "lifeAmount",           label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+  ];  
 
-    // Add toggle if applicable
-    if (hasToggle) {
-      inputToggleContainer.appendChild(global.util.createToggle(id, global.util.createNumberInput(id)));
-    }
+  function createSymbolSettings (setting) {
+    const label     = document.createElement("div");
+    const input     = document.createElement("input");
 
-    // Create input
-    const input = global.util.createNumberInput(id);
-    inputToggleContainer.appendChild(input);
+    label.htmlFor   = setting.id;
+    label.innerText = setting.label;
 
-    itemDiv.appendChild(inputToggleContainer);
-    costSymbolGrid.appendChild(itemDiv);
-  });
+    input.type      = "number";
+    input.id        = setting.id;
+    input.value     = setting.defaultValue;
+    input.min       = setting.min;
+    input.max       = setting.max;
 
-  // Append the cost and symbol section to the top of the middle panel
-  middlePanel.prepend(costSymbolSection);
+    return [input, label];
+  };
 
+  function createSettingsDiv (settings, name) {
+    const setDiv = document.createElement("div");
+    const title = document.createElement("div");
+    title.innerHTML = name + ":";
+    setDiv.className = "symbol-inline";
+    setDiv.appendChild(title);
+
+    settings.forEach(set => {
+      const [input,label] = createSymbolSettings(set);
+      setDiv.appendChild(label);
+      setDiv.appendChild(input);
+    });
+
+    return setDiv;
+
+  };
+
+  let poolDiv       = createSettingsDiv(poolSettings, "Pool");
+  let bloodDiv      = createSettingsDiv(bloodSettings, "Blood");
+  let capacityDiv   = createSettingsDiv(capacitySettings, "Capacity");
+  let lifeDiv       = createSettingsDiv(lifeSettings, "Life");
+  
+  costSymbolGrid.appendChild(poolDiv);
+  costSymbolGrid.appendChild(bloodDiv);
+  costSymbolGrid.appendChild(capacityDiv);
+  costSymbolGrid.appendChild(lifeDiv);
+  
 
 
   // -------------------------------
@@ -719,38 +767,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Create the settings panels
       const clansSettingsDiv1   = document.createElement("div");
-      const clansSettingsDiv2   = document.createElement("div");
-      const clanToggle          = document.createElement("input");
-      const clanToggleLabel     = document.createElement("label");
-      const clanToggleContainer = document.createElement("div");
-
-      clanToggle.type           = "checkbox";
-      clanToggle.id             = "clanToggle";
-      clanToggle.checked        = false;
-      clanToggleLabel.htmlFor   = "clanToggle";
-      clanToggleLabel.innerText = "Below settings are used when this is toggled";
-
-      clanToggleContainer.appendChild(clanToggle);
-      clanToggleContainer.appendChild(clanToggleLabel);
-
-      clanToggleContainer.className = "inline-selector";
       clansSettingsDiv1.className   = "inline-selector";
-      clansSettingsDiv2.className   = "inline-selector";
+
 
       // Add global settings for X, Y, Size, Spacing, and Orientation
       const clanSettings1 = [
           { id: "clanX",            label: "X:",      defaultValue: 12, min: 0,   max: 358 },
           { id: "clanY",            label: "Y:",      defaultValue: 48, min: 0,   max: 500 },
           { id: "clanSize",         label: "Size:",   defaultValue: 38, min: 10,  max: 100 },
-          { id: "clanSpacing",      label: "Gap:",    defaultValue: 2,  min: 0,   max: 20  }
+          { id: "clanSpacing",      label: "Gap:",    defaultValue: 2,  min: 0,   max: 20  },
+          { id: "clanOffset",       label: "Offset:", defaultValue: 60, min: 0,   max: 400 },
       ];
 
-      const clanSettings2 = [
-          { id: "clanToggleX",      label: "X:",      defaultValue: 12, min: 0,   max: 358 },
-          { id: "clanToggleY",      label: "Y:",      defaultValue: 220, min: 0,  max: 500 },
-          { id: "clanToggleSize",   label: "Size:",   defaultValue: 38, min: 10,  max: 100 },
-          { id: "clanToggleSpacing",label: "Gap:",    defaultValue: 2,  min: 0,   max: 20  }
-      ];
 
       function createClanSettings(setting, div) {
           const label       = document.createElement("label");
@@ -769,40 +797,28 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       clanSettings1.forEach(setting => createClanSettings(setting, clansSettingsDiv1));
-      clanSettings2.forEach(setting => createClanSettings(setting, clansSettingsDiv2));
-
+    
       // Add orientation toggle
       const clanOrientationLabel1     = document.createElement("label");
       const clanOrientationCheckbox1  = document.createElement("input");
-      const clanOrientationLabel2     = document.createElement("label");
-      const clanOrientationCheckbox2  = document.createElement("input");
 
       clanOrientationLabel1.htmlFor   = "clanOrientation";
       clanOrientationLabel1.innerText = "V/H:";
-      clanOrientationLabel2.htmlFor   = "clanToggleOrientation";
-      clanOrientationLabel2.innerText = "V/H:";
+ 
 
       clanOrientationCheckbox1.type     = "checkbox";
       clanOrientationCheckbox1.id       = "clanOrientation";
       clanOrientationCheckbox1.checked  = false; // Default to vertical
-      clanOrientationCheckbox2.type     = "checkbox";
-      clanOrientationCheckbox2.id       = "clanToggleOrientation";
-      clanOrientationCheckbox2.checked  = false; // Default to vertical
 
       // Add event listener to toggle between vertical and horizontal
       clanOrientationCheckbox1.addEventListener("change", updateCard);
-      clanOrientationCheckbox2.addEventListener("change", updateCard);
 
       clansSettingsDiv1.appendChild(clanOrientationLabel1);
       clansSettingsDiv1.appendChild(clanOrientationCheckbox1);
 
-      clansSettingsDiv2.appendChild(clanOrientationLabel2);
-      clansSettingsDiv2.appendChild(clanOrientationCheckbox2);
-
       // Append the settings panels to the clans header
       clansHeader.appendChild(clansSettingsDiv1);
-      clansHeader.appendChild(clanToggleContainer);
-      clansHeader.appendChild(clansSettingsDiv2);
+
   }
 
   // Call the function to generate the settings panel
@@ -963,14 +979,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Render Clan symbols
     // ------------------------------------
 
-    const clan_location_1 = [ 12 , 48 ];
-    const clan_location_2 = [ 12 , 220 ];
+    const clan_location_1 = [ document.getElementById("clanX").value , document.getElementById("clanY").value ].flatMap(x => parseFloat(x));
+    const clan_location_2 = [ parseFloat(document.getElementById("clanX").value) , parseFloat(document.getElementById("clanY").value) + parseFloat(document.getElementById("clanOffset").value) ];
 
     function renderClanIcon(ctx, clanData, loc1, loc2) {
         // Track the current y-offset for each location to avoid overlaps
-        let loc1YOffset = loc1[1];
-        let loc2YOffset = loc2[1];
-        let size = 38.0;
+        let [x1, y1] = loc1;
+        let [x2, y2] = loc2;
+        let size = parseFloat(document.getElementById("clanSize").value);
+        let spacing = parseFloat(document.getElementById("clanSpacing").value);
+        let isHorizontal = (document.getElementById("clanOrientation").checked);
 
         // Keep track of missing icons to avoid duplicate error messages
         const missingIcons = new Set();
@@ -985,15 +1003,15 @@ document.addEventListener("DOMContentLoaded", function () {
             if (symbol.image.complete && symbol.image.naturalWidth > 0) {
                 if (checkbox1 && checkbox1.checked) {
                     // Render in the first location (upper left corner)
-                    const [x1, y1] = loc1;
-                    ctx.drawImage(symbol.image, x1, loc1YOffset, size, size); // Adjust size as needed
-                    loc1YOffset += (size + 2); // Increment y-offset to avoid overlap
+                    ctx.drawImage(symbol.image, x1, y1, size, size); // Adjust size as needed
+                    if (!isHorizontal)    { y1 += (size + spacing); }
+                    if (isHorizontal)     { x1 += (size + spacing); }
                 }
                 if (checkbox2 && checkbox2.checked) {
                     // Render in the second location (middle of the left panel)
-                    const [x2, y2] = loc2;
-                    ctx.drawImage(symbol.image, x2, loc2YOffset, size, size); // Adjust size as needed
-                    loc2YOffset -= (size + 2); // Decrement y-offset to avoid overlap
+                    ctx.drawImage(symbol.image, x2, y2, size, size); // Adjust size as needed
+                    if (!isHorizontal)    { y2 += (size + spacing); }
+                    if (isHorizontal)     { x2 += (size + spacing); }
                 }
             } else {
                 // If the image is not found or in a broken state
@@ -1119,68 +1137,100 @@ document.addEventListener("DOMContentLoaded", function () {
     renderDisciplineIcons(ctx, global.data.disciplineData);
 
     // END render discipline symbols
-    // Render blood cost symbol, pool cost symbol (logic)
+
+
+
+    // ---------------------------------------------
+    // Render pool cost, blood cost, capacity, life
+    // ---------------------------------------------
 
     // Helper function to render a cost or capacity symbol
-    function renderCostSymbol(ctx, symbol, value, x, y, size, symbolMap) {
-        const symbolSrc = symbolMap[symbol];
-        if (!symbolSrc || symbolSrc === "none") return;
+    function renderCostSymbol(ctx, image, x, y, sizeW, sizeH, textOffset, value, color) {
+    
+      ctx.save();  
 
-        const symbolImage = new Image();
-        symbolImage.src = wrapImgPath(symbolSrc);
+      ctx.drawImage(image, x, y, sizeW, sizeH);
+      ctx.font          = "bold 18px Arial";
+      ctx.textAlign     = "center";
+      ctx.textBaseline  = "middle";
+      ctx.fillStyle     = color;
+      ctx.fillText(value, x + sizeW / 2, textOffset + y + sizeH / 2);
 
-        symbolImage.onload = function () {
-            // Draw the symbol
-            ctx.drawImage(symbolImage, x, y, size, size);
-            let offset = 1;
+      ctx.restore();
 
-            // Draw the value or "X" on top of the symbol
-            ctx.save();
-            if (symbol == "symbol_capacity")  { ctx.fillStyle = "#FFFFFF"; }
-            if (symbol == "symbol_blood")     { ctx.fillStyle = "#FFFFFF"; }
-            if (symbol == "symbol_blood")     { offset = size * 0.20;      }
-            if (symbol == "symbol_pool")      { ctx.fillStyle = "#000000"; }
-            if (symbol == "symbol_pool")      { offset = size * 0.30;      }
-            ctx.font = "bold 18px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-
-            // Determine what to display: 'X' for pool/blood cost, or the number for capacity/life
-            const displayValue = value === "X" ? "X" : parseInt(value, 10) || 0;
-            ctx.fillText(displayValue, x + size / 2, offset + y + size / 2);
-            ctx.restore();
-        };
-    }
+    };
 
     function renderCostAndCapacitySymbols(ctx, symbolMap) {
-        const lowerLeft     = [10, 420]; // Coordinates for pool/blood cost
-        const lowerRight    = [304, 450]; // Coordinates for capacity/life symbol
-        const iconSize      = 60; // Size of the icons
-        const capacity_size = 32;
 
         // Get user selections
-        const poolCostToggle    = document.getElementById("poolCostToggle");
-        const bloodCostToggle   = document.getElementById("bloodCostToggle");
-        const capacityValue     = parseInt(document.getElementById("capacitySymbol").value, 10);
-        const lifeValue         = parseInt(document.getElementById("lifeSymbol").value, 10);
+        const poolAmount            = parseInt(document.getElementById("poolAmount").value);
+        const bloodAmount           = parseInt(document.getElementById("bloodAmount").value);
+        const capacityAmount        = parseInt(document.getElementById("capacityAmount").value);
+        const lifeAmount            = parseInt(document.getElementById("lifeAmount").value);
 
-        const poolCostValue     = (poolCostToggle.checked) ? "X" : document.getElementById("poolCost").value;
-        const bloodCostValue    = (bloodCostToggle.checked) ? "X" : document.getElementById("bloodCost").value;
-  
-        // Ensure only one of pool or blood cost is rendered
-        if ((poolCostToggle && poolCostToggle.checked) || (poolCostValue && poolCostValue !== "0")) {
-            renderCostSymbol(ctx, "symbol_pool", poolCostValue, lowerLeft[0], lowerLeft[1], iconSize, symbolMap);
-        } else if (bloodCostToggle && bloodCostToggle.checked && bloodCostValue && bloodCostValue !== "0") {
-            renderCostSymbol(ctx, "symbol_blood", bloodCostValue, lowerLeft[0], lowerLeft[1], iconSize, symbolMap);
+        const poolX                 = parseFloat(document.getElementById("poolX").value);
+        const poolY                 = parseFloat(document.getElementById("poolY").value);
+        const poolSize              = parseFloat(document.getElementById("poolSize").value);
+        const poolTextOffset        = parseFloat(document.getElementById("poolTextOffset").value);
+
+        const bloodX                = parseFloat(document.getElementById("bloodX").value);
+        const bloodY                = parseFloat(document.getElementById("bloodY").value);
+        const bloodSize             = parseFloat(document.getElementById("bloodSize").value);
+        const bloodTextOffset       = parseFloat(document.getElementById("bloodTextOffset").value);
+
+        const capacityX             = parseFloat(document.getElementById("capacityX").value);
+        const capacityY             = parseFloat(document.getElementById("capacityY").value);
+        const capacitySize          = parseFloat(document.getElementById("capacitySize").value);
+        const capacityTextOffset    = parseFloat(document.getElementById("capacityTextOffset").value);
+
+        const lifeX                 = parseFloat(document.getElementById("lifeX").value);
+        const lifeY                 = parseFloat(document.getElementById("lifeY").value);
+        const lifeSize              = parseFloat(document.getElementById("lifeSize").value);
+        const lifeTextOffset        = parseFloat(document.getElementById("lifeTextOffset").value);        
+        
+        function newW (img, size) {
+            let scalar              = img.naturalWidth / img.naturalHeight;          
+            let w                   = size / scalar;
+            return w;
+        };
+
+        if (poolAmount > 0 ) {
+          const poolImage             = new Image ();
+          poolImage.src               = wrapImgPath(symbolMap["symbol_pool"]);
+          poolImage.onload = function () { 
+            let w = newW(poolImage, poolSize);
+            renderCostSymbol(ctx, poolImage, poolX, poolY, poolSize, w, poolTextOffset, poolAmount, "black");
+          }          
         }
 
-        // Ensure only one of capacity or life symbol is rendered
-        if (!isNaN(capacityValue) && capacityValue > 0) {
-            renderCostSymbol(ctx, "symbol_capacity", capacityValue, lowerRight[0], lowerRight[1], capacity_size, symbolMap);
-        } else if (!isNaN(lifeValue) && lifeValue > 0) {
-            renderCostSymbol(ctx, "symbol_life", lifeValue, lowerRight[0], lowerRight[1], capacity_size, symbolMap);
+        if (bloodAmount > 0) {
+          const bloodImage            = new Image ();
+          bloodImage.src              = wrapImgPath(symbolMap["symbol_blood"]);
+          bloodImage.onload = function () { 
+            let w = newW(bloodImage, bloodSize);
+            renderCostSymbol(ctx, bloodImage, bloodX, bloodY, bloodSize, w, bloodTextOffset, bloodAmount, "white");
+          }
+        }        
+        
+        if (capacityAmount > 0 ) { 
+          const capacityImage         = new Image ();
+          capacityImage.src           = wrapImgPath(symbolMap["symbol_capacity"]);
+          capacityImage.onload = function () { 
+            let w = newW(capacityImage, capacitySize);      
+            renderCostSymbol(ctx, capacityImage, capacityX, capacityY, capacitySize, w, capacityTextOffset, capacityAmount, "white");
+          }           
         }
-    }
+
+        if (lifeAmount > 0) {
+          const lifeImage             = new Image ();
+          lifeImage.src               = wrapImgPath(symbolMap["symbol_life"]);
+          lifeImage.onload = function () {
+            let w = newW(lifeImage, lifeSize);      
+            renderCostSymbol(ctx, lifeImage, lifeX, lifeY, lifeSize, w, lifeTextOffset, lifeAmount, "white");
+          }           
+        }        
+
+    };
 
     renderCostAndCapacitySymbols(ctx, global.data.symbolMap);
 
@@ -1188,7 +1238,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     
-    // Render type icons (logic)
+    // ---------------------------------------------
+    // Render card type icons
+    // ---------------------------------------------
     
     function renderTypeIcons(ctx, typeMap) {
       // Get global settings

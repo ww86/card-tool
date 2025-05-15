@@ -15,7 +15,6 @@
             frameMap            : [],
             typeMap             : {},
             symbolMap           : {},
-            costSymbolData      : [],
             markdownTextmap     : {},
             markdownIconmap     : {},
         },

@@ -204,13 +204,6 @@
 
         },
 
-        costSymbolData : [
-            { id: "poolCost",       label: "Pool Cost",   hasToggle: true },
-            { id: "bloodCost",      label: "Blood Cost",  hasToggle: true },
-            { id: "capacitySymbol", label: "Capacity",    hasToggle: false },
-            { id: "lifeSymbol",     label: "Life",        hasToggle: false },
-        ],
-
         markdownTextMap : {
             "[b]"   : "bold",       // Bold text
             "[/b]"  : "normal",     // End bold

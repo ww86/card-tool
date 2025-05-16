@@ -293,6 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (icon)                                       { currentX += h;  }
 
         if (symbol)                                     { style = global.data.markdownTextMap[token]; }
+        if (symbol)                                     { currentX -= 0.32 * h; }
 
         if (symbol && style !== "newline")              { currentStyle = style; }
                 

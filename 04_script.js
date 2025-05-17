@@ -1129,6 +1129,13 @@ document.addEventListener("DOMContentLoaded", function () {
             img.src = symbol.imgSrc;
             img.onload = () => {
 
+              ctx.save();
+
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+              ctx.shadowBlur = 3;
+              ctx.shadowOffsetX = 0;
+              ctx.shadowOffsetY = 0;              
+
                 // Currently doesn't support other tiers than 1 & 2 
                 if         (symbol.tier == 1)                      { ctx.drawImage(img, x + x2         , y + y2          , iconSize, iconSize);   }
                 if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img, x + x2         , y + y2 - adjust , iconSize2, iconSize2); }                
@@ -1139,6 +1146,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if        ((symbol.tier == 1) && (isHorizontal))   { x2 += iconSize + spacing;  } 
                 if        ((symbol.tier == 1) && (!isHorizontal))  { y2 -= iconSize + spacing;  }
+
+              ctx.restore();
 
             }
         });

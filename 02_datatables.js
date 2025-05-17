@@ -108,7 +108,8 @@
             "library_generic_01"      : "frame_library_generic_01.png",
             "library_generic_02"      : "frame_library_generic_02.png",  
             "library_generic_03"      : "frame_library_generic_03.png",
-            "library_generic_04"      : "frame_library_generic_04.png",            
+            "library_generic_04"      : "frame_library_generic_04.png",
+            "frame_black_marble_01"   : "frame_black_marble_01.png",        
 
             // Clan Frame Options
             "clan_assamite"           : "frame_clan_assamite.png",

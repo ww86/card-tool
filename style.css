@@ -59,8 +59,26 @@ textarea {
   box-sizing: border-box;
 }
 
+#cardName    {}
+
+#cardText {
+  height: auto;
+  min-height: 80px;
+  overflow-wrap: break-word;
+  padding: 4px 8px;                
+  box-sizing: border-box;
+  white-space: normal;             
+  resize: vertical;                
+  align-self: flex-start;          
+}
+
+#cardFlavour {}
+#cardArtist  {}
+#cardMini    {}
+
 textarea {
   resize: vertical;
+  white-space: normal;
 }
 
 /* Inline selectors for font, color, etc. */

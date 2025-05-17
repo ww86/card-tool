@@ -145,7 +145,7 @@
       <div class="input-group">
         <div class="h-selector">
           <label for="cardText">Card Text:</label>
-          <input type="text" id="cardText" placeholder="Card Text">
+          <textarea id="cardText" placeholder="Card Text"></textarea>
         </div>
 
         <div class="settings-group">
@@ -624,6 +624,7 @@
 
         <!-- Library Card Types -->
         <optgroup label="Library Card Types (Quality currently off)">
+          <option value="none" selected>None</option>                 
           <option value="modifier_card">Modifier</option>
           <option value="action_card">Action</option>
           <option value="political_action_card">Political Action</option>
@@ -636,8 +637,7 @@
         </optgroup>        
 
         <!-- Generic Vampire Frames -->
-        <optgroup label="Generic Custom Vampire Frames">
-          <option value="none" selected>None</option>          
+        <optgroup label="Generic Custom Vampire Frames"> 
           <option value="vampire_generic_01">Generic 1</option>
           <option value="vampire_generic_02">Generic 2</option>
           <option value="vampire_generic_03">Generic 3</option>
@@ -650,6 +650,7 @@
           <option value="library_generic_02">Generic Library Frame 2</option>   
           <option value="library_generic_03">Generic Library Frame 3</option>
           <option value="library_generic_04">Generic Library Frame 4</option>           
+          <option value="frame_black_marble_01">Black Marble 1</option>          
         </optgroup>
 
         <!-- Clan-Specific Frames -->

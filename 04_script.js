@@ -993,6 +993,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Keep track of missing icons to avoid duplicate error messages
         const missingIcons = new Set();
+        ctx.save();
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.7)';
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
 
         clanData.forEach(symbol => {
             const checkbox1 = document.getElementById(symbol.id); // First checkbox
@@ -1025,6 +1030,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+
+        ctx.restore();
 
         // Optionally, display a summary of missing icons (only once)
         if (missingIcons.size > 0) {
@@ -1122,14 +1129,16 @@ document.addEventListener("DOMContentLoaded", function () {
             img.src = symbol.imgSrc;
             img.onload = () => {
 
-                // Directly draw the image onto the main canvas
-                if         (symbol.tier == 1)                     { ctx.drawImage(img, x + x2         , y + y2          , iconSize, iconSize);
-                } else if ((symbol.tier == 2) && (isHorizontal))  { ctx.drawImage(img, x + x2         , y + y2 - adjust , iconSize2, iconSize2);                  
-                } else if ((symbol.tier == 2) && (!isHorizontal)) { ctx.drawImage(img, x + x2 - adjust, y + y2          , iconSize2, iconSize2);                 
-                } 
+                // Currently doesn't support other tiers than 1 & 2 
+                if         (symbol.tier == 1)                      { ctx.drawImage(img, x + x2         , y + y2          , iconSize, iconSize);   }
+                if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img, x + x2         , y + y2 - adjust , iconSize2, iconSize2); }                
+                if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(img, x + x2 - adjust, y + y2          , iconSize2, iconSize2); }                        
 
-            if (isHorizontal)   { x2 += iconSize + spacing; } 
-            if (!isHorizontal)  { y2 -= iconSize + spacing; }
+                if        ((symbol.tier == 2) && (isHorizontal))   { x2 += iconSize2 + spacing; } 
+                if        ((symbol.tier == 2) && (!isHorizontal))  { y2 -= iconSize2 + spacing; }
+
+                if        ((symbol.tier == 1) && (isHorizontal))   { x2 += iconSize + spacing;  } 
+                if        ((symbol.tier == 1) && (!isHorizontal))  { y2 -= iconSize + spacing;  }
 
             }
         });

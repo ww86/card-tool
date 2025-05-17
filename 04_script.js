@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const img = new Image();
     img.src = iconSrc;
     img.onload = () => {
-      ctx.drawImage(img, x, y - 0.8 * size - 1, size * 1.25, size * 1.25); // Adjust vertical alignment
+      ctx.drawImage(img, x, y - 0.8 * size - 1, size * 1.2, size * 1.2); // Adjust vertical alignment
     };
   };
 

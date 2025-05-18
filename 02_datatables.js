@@ -9,6 +9,77 @@
 
     global.data = {
 
+        availableFonts : [
+            { name: "Verdana",              displayName: "Verdana" },
+            { name: "Helvetica",            displayName: "Helvetica" },
+            { name: "Times New Roman",      displayName: "Times New Roman" },
+            { name: "Georgia",              displayName: "Georgia" },
+            { name: "Courier New",          displayName: "Courier New" },
+            { name: "Tahoma",               displayName: "Tahoma" },
+            { name: "Copperplate Gothic",   displayName: "Copperplate Gothic" },
+
+            // Fonts imported via files (as per @font-face in index.html)
+            { name: "Manuskript Gothisch",  displayName: "Manuskript Gothisch" },
+            { name: "Aquiline 2",           displayName: "Aquiline 2" },
+
+            // Imported Google Fonts (as per <link> tags in index.html)
+            { name: "Tangerine",            displayName: "Tangerine" },
+            { name: "Vollkorn SC",          displayName: "Vollkorn SC" },
+            { name: "Cinzel",               displayName: "Cinzel" },
+            { name: "Cormorant Garamond",   displayName: "Cormorant Garamond" },
+            { name: "UnifrakturMaguntia",   displayName: "UnifrakturMaguntia" },
+            { name: "Dai Banna SIL",        displayName: "Dai Banna SIL" },
+            { name: "Crimson Text",         displayName: "Crimson Text" }
+        ],
+
+        fontSelectorConfigs : [
+            { id: "nameFont",       default: "Vollkorn SC"  },
+            { id: "textFont",       default: "Verdana"      },
+            { id: "flavourFont",    default: "Verdana"      },
+            { id: "artistFont",     default: "Verdana"      },
+            { id: "miniFont",       default: "Verdana"      }
+        ],
+
+        miscIconData   : {
+
+            poolSettings : [
+                { id: "poolX",              type : "number" ,     label: "X:",              defaultValue: 18, min: 0,   max: 358 },
+                { id: "poolY",              type : "number" ,     label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
+                { id: "poolSize",           type : "number" ,     label: "Size:",           defaultValue: 38, min: 10,  max: 100 },
+                { id: "poolTextOffset",     type : "number" ,     label: "Offset:",         defaultValue: 0,  min: -10, max: 40  },
+                { id: "poolAmount",         type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+                { id: "poolEnable",         type : "checkbox",    label: "Sh:",             defaultValue: false }
+            ],
+
+            bloodSettings : [
+                { id: "bloodX",             type : "number" ,     label: "X:",              defaultValue: 12, min: 0,   max: 358 },
+                { id: "bloodY",             type : "number" ,     label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
+                { id: "bloodSize",          type : "number" ,     label: "Size:",           defaultValue: 50, min: 10,  max: 100 },
+                { id: "bloodTextOffset",    type : "number" ,     label: "Offset:",         defaultValue: 8,  min: -10, max: 40  },
+                { id: "bloodAmount",        type : "number" ,     label: "Amount:",         defaultValue: 0,   min: 0,   max: 20 },
+                { id: "bloodEnable",        type : "checkbox",    label: "Sh:",             defaultValue: false }
+            ],
+
+            capacitySettings : [
+                { id: "capacityX",          type : "number" ,     label: "X:",              defaultValue: 300, min: 0,   max: 358 },
+                { id: "capacityY",          type : "number" ,     label: "Y:",              defaultValue: 420, min: 0,   max: 500 },
+                { id: "capacitySize",       type : "number" ,     label: "Size:",           defaultValue: 33, min: 10,  max: 100 },
+                { id: "capacityTextOffset", type : "number" ,     label: "Offset:",         defaultValue: 2,  min: -10, max: 40  },
+                { id: "capacityAmount",     type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+                { id: "capacityEnable",     type : "checkbox",    label: "Sh:",             defaultValue: true }
+            ],
+
+            lifeSettings : [
+                { id: "lifeX",              type : "number" ,     label: "X:",              defaultValue: 12, min: 0,   max: 358 },
+                { id: "lifeY",              type : "number" ,     label: "Y:",              defaultValue: 300,min: 0,   max: 500 },
+                { id: "lifeSize",           type : "number" ,     label: "Size:",           defaultValue: 60, min: 10,  max: 100 },
+                { id: "lifeTextOffset",     type : "number" ,     label: "Offset:",         defaultValue: 8,  min: -10, max: 40  },
+                { id: "lifeAmount",         type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
+                { id: "lifeEnable",         type : "checkbox",    label: "Sh:",             defaultValue: true }
+            ]  
+
+        },
+
         disciplineData : [
             { id: "disciplineAbombwe",      label: "Abombwe",      img_1_src: "icon_discipline_abombwe_inferior.png",      img_2_src: "icon_discipline_abombwe_superior.png",      img_3_src: "icon_discipline_abombwe_other.png",      img_4_src: "icon_discipline_abombwe_inferior_innate.png",      img_5_src: "icon_discipline_abombwe_superior_innate.png",      img_6_src: "icon_discipline_abombwe_other_innate.png" },
             { id: "disciplineAuspex",       label: "Auspex",       img_1_src: "icon_discipline_auspex_inferior.png",       img_2_src: "icon_discipline_auspex_superior.png",       img_3_src: "icon_discipline_auspex_other.png",       img_4_src: "icon_discipline_auspex_inferior_innate.png",       img_5_src: "icon_discipline_auspex_superior_innate.png",       img_6_src: "icon_discipline_auspex_other_innate.png" },

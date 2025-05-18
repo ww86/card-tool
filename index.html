@@ -4,29 +4,28 @@
   <meta charset="UTF-8">
   <title>VTES Custom Card Editor</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tangerine&family=Vollkorn+SC&family=Cinzel&family=Cormorant+Garamond:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap"                        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vollkorn+SC&display=swap"                      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap"                           rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap"  rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap"               rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap"                     rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dai+Banna+SIL&display=swap"                    rel="stylesheet">
+
+
 <style>
-    /* Define custom fonts using @font-face */
     @font-face {
-      font-family: 'Ankha VTES';
-      src: url('./fonts/ankha_vtes_font_original.ttf') format('truetype');
+      font-family: 'Manuskript Gothisch';
+      src: url('./fonts/manuskript_gothisch_unz1a.ttf') format('truetype');
     }
 
     @font-face {
-      font-family: 'Ankha VTES Modified';
-      src: url('./fonts/ankha_vtes_font_modified.ttf') format('truetype');
-    }
-
-    @font-face {
-      font-family: 'World of Darkness';
-      src: url('./fonts/world_of_darkness.ttf') format('truetype');
+      font-family: 'Aquiline 2';
+      src: url('./fonts/aquiline_2.ttf') format('truetype');
     }    
-    @font-face {
-      font-family: 'World of Darkness 2';
-      src: url('./fonts/world_of_darkness_2.ttf') format('truetype');
-    }        
 
 </style>
+
 </head>
 <body>
   <div class="container">
@@ -45,26 +44,7 @@
           <!-- Text -->                         
           <div class="inline-selector">
             <label for="nameFont">Font:</label>
-            <select id="nameFont">
-              <option value="Arial" selected>Arial</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Tahoma">Tahoma</option>
-              <option value="Impact">Impact</option>
-              <!-- Imported Google Fonts -->
-              <option value="Tangerine">Tangerine</option>
-              <option value="Vollkorn SC">Vollkorn SC</option>
-              <option value="Cinzel">Cinzel</option>
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
-              <option value="Ankha VTES">Ankha VTES</option>
-              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
-              <option value="World of Darkness">World of Darkness</option>
-              <option value="World of Darkness 2">World of Darkness 2</option>
+            <select id="nameFont">         
             </select>
             <label for="nameFontSize">Size:</label>
             <select id="nameFontSize">
@@ -84,7 +64,7 @@
               <option value="32">32</option>
               <option value="34">34</option>
               <option value="36">36</option>              
-              <option value="38">34</option>
+              <option value="38">38</option>
               <option value="40">40</option>
               <option value="42">42</option>                            
               <option value="44">44</option>                                          
@@ -152,26 +132,7 @@
           <!-- Text -->                    
           <div class="inline-selector">
             <label for="textFont">Font:</label>
-            <select id="textFont">
-              <option value="Arial" selected>Arial</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Tahoma">Tahoma</option>
-              <option value="Impact">Impact</option>
-              <!-- Imported Google Fonts -->
-              <option value="Tangerine">Tangerine</option>
-              <option value="Vollkorn SC">Vollkorn SC</option>
-              <option value="Cinzel">Cinzel</option>
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
-              <option value="Ankha VTES">Ankha VTES</option>
-              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
-              <option value="World of Darkness">World of Darkness</option>
-              <option value="World of Darkness 2">World of Darkness 2</option>              
+            <select id="textFont">      
             </select>
             <label for="textFontSize">Size:</label>
             <select id="textFontSize">
@@ -191,7 +152,7 @@
               <option value="32">32</option>
               <option value="34">34</option>
               <option value="36">36</option>              
-              <option value="38">34</option>
+              <option value="38">38</option>
               <option value="40">40</option>
               <option value="42">42</option>                            
               <option value="44">44</option>                                          
@@ -257,26 +218,7 @@
           <!-- Text -->        
           <div class="inline-selector">        
             <label for="flavourFont">Font:</label>
-            <select id="flavourFont">
-              <option value="Arial" selected>Arial</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Tahoma">Tahoma</option>
-              <option value="Impact">Impact</option>
-              <!-- Imported Google Fonts -->
-              <option value="Tangerine">Tangerine</option>
-              <option value="Vollkorn SC">Vollkorn SC</option>
-              <option value="Cinzel">Cinzel</option>
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
-              <option value="Ankha VTES">Ankha VTES</option>
-              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
-              <option value="World of Darkness">World of Darkness</option>
-              <option value="World of Darkness 2">World of Darkness 2</option>              
+            <select id="flavourFont">         
             </select>
             <label for="flavourFontSize">Size:</label>
             <select id="flavourFontSize">
@@ -296,7 +238,7 @@
               <option value="32">32</option>
               <option value="34">34</option>
               <option value="36">36</option>              
-              <option value="38">34</option>
+              <option value="38">38</option>
               <option value="40">40</option>
               <option value="42">42</option>                            
               <option value="44">44</option>                                          
@@ -362,26 +304,7 @@
           <!-- Text -->        
           <div class="inline-selector">
             <label for="artistFont">Font:</label>
-            <select id="artistFont">
-              <option value="Arial" selected>Arial</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Tahoma">Tahoma</option>
-              <option value="Impact">Impact</option>
-              <!-- Imported Google Fonts -->
-              <option value="Tangerine">Tangerine</option>
-              <option value="Vollkorn SC">Vollkorn SC</option>
-              <option value="Cinzel">Cinzel</option>
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
-              <option value="Ankha VTES">Ankha VTES</option>
-              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
-              <option value="World of Darkness">World of Darkness</option>
-              <option value="World of Darkness 2">World of Darkness 2</option>              
+            <select id="artistFont">         
             </select>
             <label for="artistFontSize">Size:</label>
             <select id="artistFontSize">
@@ -401,7 +324,7 @@
               <option value="32">32</option>
               <option value="34">34</option>
               <option value="36">36</option>              
-              <option value="38">34</option>
+              <option value="38">38</option>
               <option value="40">40</option>
               <option value="42">42</option>                            
               <option value="44">44</option>                                          
@@ -467,26 +390,7 @@
           <!-- Text -->        
           <div class="inline-selector">
             <label for="miniFont">Font:</label>
-            <select id="miniFont">
-              <option value="Arial">Arial</option>
-              <option value="Verdana">Verdana</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Tahoma">Tahoma</option>
-              <option value="Impact">Impact</option>
-              <!-- Imported Google Fonts -->
-              <option value="Tangerine">Tangerine</option>
-              <option value="Vollkorn SC">Vollkorn SC</option>
-              <option value="Cinzel">Cinzel</option>
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="UnifrakturMaguntia">UnifrakturMaguntia</option>
-              <option value="Ankha VTES">Ankha VTES</option>
-              <option value="Ankha VTES Modified">Ankha VTES Modified</option>
-              <option value="World of Darkness">World of Darkness</option>
-              <option value="World of Darkness 2" selected>World of Darkness 2</option>              
+            <select id="miniFont">     
             </select>
             <label for="miniFontSize">Size:</label>
             <select id="miniFontSize">
@@ -509,7 +413,7 @@
               <option value="32">32</option>
               <option value="34">34</option>
               <option value="36">36</option>              
-              <option value="38">34</option>
+              <option value="38">38</option>
               <option value="40">40</option>
               <option value="42">42</option>                            
               <option value="44">44</option>                                          
@@ -805,7 +709,8 @@
   <script src="01_global_variables.js"></script>
   <script src="02_datatables.js"></script> 
   <script src="03_utility_functions.js"></script>
-  <script src="04_script.js"></script>
+  <script src="04_darkpack_license.js"></script>  
+  <script src="05_script.js"></script>
 
   <div id="licensePopup" class="popup-overlay" style="display: none;">
     <div class="popup-content">

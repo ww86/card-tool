@@ -7,9 +7,17 @@
     // Global variables object
     // -------------------------------
 
-    var global                = {
+    var global = {
+
+        art                     : {
+            mainImage           : new Image (),
+            mainSrc             : "",
+        },
 
         data                    : {
+            availableFonts      : [],
+            fontSelectorConfigs : [],
+            miscIconData        : {},
             disciplineData      : [],
             clanData            : [],
             frameMap            : [],
@@ -28,6 +36,10 @@
             createNumberInput   : function(){},
             createToggle        : function(){},
 
-        }
+        },
+
+        showLicensePopup        : function(){},
+        darkPack                : function(){},
+        renderDarkPackLogo      : function(){},
 
     };

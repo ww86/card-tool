@@ -75,128 +75,10 @@ global.text.Word = function (text, font, fontColor, effect) {
 
 
   // -------------------------------
-  // wrapText function
-  // -------------------------------
-
-global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, antialias) {
-
-    function renderIcon (ctx, iconSrc, x, y, size) {
-        const img = new Image();
-        img.src = iconSrc;
-        img.onload = () => {
-        ctx.drawImage(img, x, y - 0.8 * size - 1, size * 1.2, size * 1.2); // Adjust vertical alignment
-        };
-    };
-
-    function renderStyledText(ctx, text, x, y, style, strokeWidth) {
-        ctx.save();
-
-        // Extract the current font size and family from ctx.font
-        const fontParts   = ctx.font.split(" ");
-        const fontSize    = fontParts[0]; // e.g., "16px"
-        const fontFamily  = fontParts.slice(1).join(" "); // e.g., "Arial"
-
-        // Apply the style
-        ctx.font = `${fontSize} ${fontFamily}`;
-
-        if (style === "bold")           { ctx.font = `bold ${fontSize} ${fontFamily}`;        }        
-        if (style === "italic")         { ctx.font = `italic ${fontSize} ${fontFamily}`;      }
-        if (style === "bold italic")    { ctx.font = `bold italic ${fontSize} ${fontFamily}`; }
-        if (style === "italic bold")    { ctx.font = `bold italic ${fontSize} ${fontFamily}`; }
-
-        // Render the text
-        ctx.strokeStyle   = "black";
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-        
-        if (strokeWidth >   0     )       { ctx.lineWidth     = strokeWidth;        }
-        if (strokeWidth >   1     )       { ctx.shadowOffsetX = 0;                  }
-        if (strokeWidth >   1     )       { ctx.shadowOffsetY = 1;                  }
-        if (strokeWidth >   1     )       { ctx.shadowBlur    = 3;                  }
-        if (strokeWidth >   1     )       { ctx.shadowColor   = "#000000EE";        }
-        if (strokeWidth >   0     )       { ctx.strokeText(text, x, y);             }
-
-        ctx.fillText(text, x, y);
-        ctx.restore();
-    };
-
-    function renderLine(ctx, incoming_line, x, y, strokeWidth, h) {
-
-        const tokens = incoming_line.split(/(\[.*?\])/); // Split by markdown-like tokens
-        let currentX = x;
-        let currentStyle = "normal"; // Default text style
-        let style = "normal"; // Default text style
-        let icon = false;
-        let symbol = false
-
-        tokens.forEach(token => {
-
-            icon = false;
-            symbol = false;
-
-            if (global.data.markdownIconMap[token])         { icon = true;    }
-            if (global.data.markdownTextMap[token])         { symbol = true;  }
-
-            if (icon)                                       { renderIcon(ctx, wrapImgPath(global.data.markdownIconMap[token]), currentX, y, h); }
-            if (icon)                                       { currentX += h;  }
-
-            if (symbol)                                     { style = global.data.markdownTextMap[token]; }
-            if (symbol)                                     { currentX -= 0.32 * h; }
-
-            if (symbol && style !== "newline")              { currentStyle = style; }
-                    
-            if (!icon && !symbol)                           { renderStyledText(ctx, token, currentX, y, currentStyle, strokeWidth); }
-            if (!icon && !symbol)                           { currentX += ctx.measureText(token).width; }
-                    
-        });
-
-    };
-
-
-    const words = text.split(" ");
-    const segments = words.flatMap(word => word.split(/(?=\[.*?\])|(?<=\])/));
-   
-    let line = "";
-    let y2 = y;
-    let strokeWidth = 0;
-
-    if (antialias === "aa1") { strokeWidth = 1; }
-    if (antialias === "aa2") { strokeWidth = 2; }
-    if (antialias === "aa3") { strokeWidth = 3; }  
-
-    for (let i = 0; i < segments.length; i++) {
-
-      if (global.data.markdownTextMap[segments[i]] == "newline") {
-        renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
-        line = "";
-        y2 += lineHeight;
-        i++;
-      }
-
-      let testLine = line + segments[i] + " ";
-      const metrics = ctx.measureText(testLine);
-
-      if (metrics.width > maxWidth && i > 0) {
-        renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
-        line = segments[i] + " ";
-        y2 += lineHeight;
-      } else {
-        line = testLine;
-      }
-
-    }
-
-    renderLine(ctx, line, x, y2, strokeWidth, lineHeight);
-
-  };
-
-
-
-  // -------------------------------
   // NEW wrapText function
   // -------------------------------
 
-  global.text.newWrapText = function (ctx, text, x, y, maxWidth, lineHeight, effect, font, fontColor) {
+  global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, effect, font, fontColor) {
 
     if (!ctx || typeof text !== "string") { global.util.showError('Invalid arguments to wrapText'); return; }
 
@@ -233,7 +115,7 @@ global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, antialia
         img.src = iconSrc;
         img.onload = () => {
         ctx.save();
-        ctx.drawImage(img, x, y - 0.8 * size - 1, size * 1.2, size * 1.2); // Adjust vertical alignment
+        ctx.drawImage(img, x, y - 0.75 * size - 1, size * 1.1, size * 1.1); // Adjust vertical alignment
         ctx.restore();
         };
     };
@@ -331,7 +213,7 @@ global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, antialia
             }
             return element.width;
         } else if (isIconToken(element)) {
-            return lHeight; // Assume icon width is lineHeight
+            return lHeight * 1.25; // Assume icon width is lineHeight
         }
         return 0;
     };    
@@ -379,8 +261,8 @@ global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, antialia
                     currentXPos += element.width;
                 } else if (isIconToken(element)) {
                     const iconFileName = global.util.wrapImgPath(global.data.markdownIconMap[element]);
-                    console.log(iconFileName);
-                    if (iconFileName) { renderIcon(context, iconFileName, currentXPos, currentYPos, lHeight); currentXPos += lHeight; }
+                    if (iconFileName) { renderIcon(context, iconFileName, currentXPos, currentYPos, lHeight); }
+                    if (iconFileName) { currentXPos += 1.25 * lHeight; } 
                 } else if (typeof element === 'string' && element.trim() === '') { currentXPos += context.measureText(' ').width; } // Handle spaces
             }
             currentYPos += lHeight;

@@ -1104,7 +1104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameFont          = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
 
     ctx.save();
-    global.text.newWrapText(ctx, nameString, nameBgX, nameBgY, nameBgW, nameLineHeight, nameAntialias, nameFont, nameRgba);
+    global.text.wrapText(ctx, nameString, nameBgX, nameBgY, nameBgW, nameLineHeight, nameAntialias, nameFont, nameRgba);
     ctx.restore();
 
     // --- Card Text ---
@@ -1117,7 +1117,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textFont          = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
 
     ctx.save();
-    global.text.newWrapText(ctx, textString, textBgX, textBgY, textBgW, textLineHeight, textAntialias, textFont, textRgba);
+    global.text.wrapText(ctx, textString, textBgX, textBgY, textBgW, textLineHeight, textAntialias, textFont, textRgba);
     ctx.restore();
 
     // --- Flavour Text ---
@@ -1130,7 +1130,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const flavourFont      = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
 
     ctx.save();
-    global.text.newWrapText(ctx, flavourString, flavourBgX, flavourBgY, flavourBgW, flavourLineHeight, flavourAntialias, flavourFont, flavourRgba);
+    global.text.wrapText(ctx, flavourString, flavourBgX, flavourBgY, flavourBgW, flavourLineHeight, flavourAntialias, flavourFont, flavourRgba);
     ctx.restore();
 
     // --- Artist Text ---
@@ -1143,7 +1143,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const artistFont        = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
 
     ctx.save();
-    global.text.newWrapText(ctx, artistString, artistBgX, artistBgY, artistBgW, artistLineHeight, artistAntialias, artistFont, artistRgba);
+    global.text.wrapText(ctx, artistString, artistBgX, artistBgY, artistBgW, artistLineHeight, artistAntialias, artistFont, artistRgba);
     ctx.restore();
 
     // --- Mini Text ---
@@ -1157,7 +1157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     ctx.save();
-    global.text.newWrapText(ctx, miniString, miniBgX, miniBgY, miniBgW, miniLineHeight, miniAntialias, miniFont, miniRgba);
+    global.text.wrapText(ctx, miniString, miniBgX, miniBgY, miniBgW, miniLineHeight, miniAntialias, miniFont, miniRgba);
     ctx.restore();    
 
 

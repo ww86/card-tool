@@ -112,7 +112,19 @@
             toggleDiv.appendChild(toggleLabel);
             toggleDiv.appendChild(toggleCheckbox);
             return toggleDiv;
-        }
+        },
 
+        wrapImgPath : function(path) {
+            const imgPath = "./img/";
+            if (!path) return ""; // Handle empty or undefined paths
+
+            if (path.startsWith(imgPath)) {
+            global.util.showError(`Path already starts with:` + imgPath + `; ${path}`);
+            return path; // Return the path as-is
+            }
+
+            return imgPath + `${path}`;
+        }
+       
     };
     // END Utility Functions

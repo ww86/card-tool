@@ -1,457 +1,421 @@
+/* ========================================
+   GLOBAL STYLES & BODY
+   ======================================== */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f2f2f2;
+  font-family: Arial, Helvetica, sans-serif;
+  margin:      0;
+  padding:     0;
+  background:  #f2f2f2;
 }
 
 .container {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-  background: #ddd;
+  display:     flex;
+  flex-wrap:   wrap;
+  gap:         12px;
+  padding:     12px;
+  background:  #ddd;
   box-sizing: border-box;
 }
 
-/* Four panels */
 .left-panel, .middle-panel, .art-panel, .right-panel {
   background: #fff;
-  padding: 12px;
-  border: 2px solid #ccc;
+  padding:    12px;
+  border:     2px solid #ccc;
   box-sizing: border-box;
 }
 
-.left-panel { width: 320px; }
-.middle-panel {width: 540px; }
-.art-panel { width: 282px; }
+.left-panel   { width: 320px; }
+.middle-panel { width: 540px; }
+.art-panel    { width: 282px; }
 
 .right-panel {
-  flex: 1;
+  flex:      1;
+  min-width: 250px; /* Ensure right panel has a minimum width */
 }
 
-/* Input Groups */
-.input-group {
-  margin-bottom: 15px;
+/* ========================================
+   GENERAL UI ELEMENTS & FORM CONTROLS
+   ======================================== */
+.section h2, /* General section heading style */
+.cost-symbol-section h2 { /* Combined for consistency */
+  font-size:      16px;
+  margin:         0 0 10px 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 3px;
 }
 
-.settings-group {
-  background-color: #EEE;
+.sub-header {
+  font-size: 12px;
+  margin:    5px 0 0px 0;
+  padding:   5px 0 2px 0;
 }
 
-.h-selector { 
-  margin-bottom: 5px; 
-  font-size: 14px;
+.input-group { margin-bottom: 15px; }
+.h-selector {
+  margin-bottom: 5px;
+  font-size:     14px;
 }
 
 .input-group label {
-  display: block;
-  font-size: 12px;
+  display:       block;
+  font-size:     12px;
   margin-bottom: 5px;
 }
+
+.settings-group { background-color: #EEE; } /* Often used with input groups */
 
 input[type="text"],
 input[type="number"],
 select,
 textarea {
-  width: 100%;
-  padding: 4px;
-  font-size: 12px;
+  width:      100%;
+  padding:    4px;
+  font-size:  12px;
   box-sizing: border-box;
 }
 
-#cardName    {}
+textarea { /* General textarea styling */
+  resize:      vertical;
+  white-space: normal; /* Ensure default wrapping */
+}
 
 #cardText {
-  height: auto;
-  min-height: 80px;
+  height:        auto;
+  min-height:    80px;
   overflow-wrap: break-word;
-  padding: 4px 8px;                
-  box-sizing: border-box;
-  white-space: normal;             
-  resize: vertical;                
-  align-self: flex-start;          
-}
-
-#cardFlavour {}
-#cardArtist  {}
-#cardMini    {}
-
-textarea {
-  resize: vertical;
-  white-space: normal;
+  padding:       4px 8px;
+  box-sizing:    border-box;
+  white-space:   normal;
+  resize:        vertical;
+  align-self:    flex-start;
 }
 
 /* Inline selectors for font, color, etc. */
 .inline-selector {
-  display: inline-flex;
+  display:     inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  margin-top: 5px;
+  gap:         4px;
+  font-size:   10px;
+  margin-top:  5px;
 }
 
 .bg-color-picker { width: 80px; }
 
-/* Button container: stack buttons vertically */
+/* ========================================
+   BUTTONS
+   ======================================== */
 .button-container {
   text-align: center;
   margin-top: 10px;
 }
 
 .button-container button {
-  display: block;
-  width: 80%;
-  margin: 5px auto;
-  padding: 8px;
+  display:   block;
+  width:     80%;
+  margin:    5px auto;
+  padding:   8px;
   font-size: 14px;
-  cursor: pointer;
+  cursor:    pointer;
 }
 
-/* Toggle grid */
-.section {
-  margin-bottom: 20px;
-}
-
-.section h2 {
-  font-size: 16px;
-  margin: 0 0 10px 0;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 3px;
-}
-
-#darkPackSection {
-  width: auto;
-}
+/* ========================================
+   GRID SYSTEMS & TOGGLES (GENERAL)
+   ======================================== */
+.section { margin-bottom: 20px; }
+#darkPackSection { width: auto; }
 
 .toggle-grid {
-  display: grid;
+  display:               grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap:                   8px;
 }
 
 .toggle-grid-type {
-  display: grid;
+  display:               grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 4px;
+  gap:                   4px;
 }
 
 .toggle-grid-symbol {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.symbol-inline {
-  font-size: 12px;
-  height: 26px;
-  display: grid;
-  grid-template-columns: 54px 16px 48px 16px 48px 28px 44px 40px 40px 44px 40px 20px auto;
-  gap: 4px;
+  gap:            4px;
 }
 
 .toggle-item {
-  display: flex;
+  display:     flex;
   align-items: center;
-  font-size: 14px;
+  font-size:   14px;
 }
 
-.toggle-item input[type="checkbox"] {
-  margin-right: 5px;
+.toggle-item input[type="checkbox"] { margin-right: 5px; }
+
+/* Container for an input field next to a toggle switch */
+.input-toggle-container {
+  display:     flex;
+  align-items: center;
+  font-size:   12px;
+  gap:         5px; /* Space between input and toggle */
+  min-height:  30px; /* Ensure consistent height for alignment, useful for cost symbols */
 }
 
+/* ========================================
+   CANVAS & PREVIEW
+   ======================================== */
 /* Canvas preview: transparent background, centered */
 canvas {
-  border: 0px solid #000;
+  border:     0px solid #000;
   background: transparent;
-  display: block;
-  margin: 0 auto 10px auto;
+  display:    block;
+  margin:     0 auto 10px auto;
 }
 
+/* ========================================
+   CARD TYPE SPECIFIC STYLES
+   ======================================== */
 .card-type-item {
-  flex: 0 0 auto; /* Fixed width for labels */
-  font-size: 12px;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
+  flex:          0 0 auto; /* Fixed width for labels */
+  font-size:     12px;
+  text-align:    left;
+  white-space:   nowrap;
+  overflow:      hidden;
   text-overflow: ellipsis;
 }
 
-.card-type-label { 
-  width: 100%;
-}
+.card-type-label { width: 100%; }
 
-
-/*        */
-/* Clans  */
-/*        */
-
+/* ========================================
+   CLAN SELECTION STYLES
+   ======================================== */
 #clansGrid {
-  display: grid;
-  font-size: 12px;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 6px; /* Space between items */
+  display:                grid;
+  font-size:              12px;
+  grid-template-columns:  repeat(2, 1fr); 
+  gap:                    6px; /* Space between items */
 }
 
-
-
-/* -------------------- */
-/* Discipline Panel CSS */
-/* -------------------- */
-
+/* ========================================
+   DISCIPLINE PANEL STYLES
+   ======================================== */
 .toggle-grid-discipline {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 8px;  
-}
-
-.sub-header {
-  font-size: 12px;
-  margin: 5px 0 0px 0;
-  padding: 5px 0 2px 0;
-}
-
-#disciplineHeader { 
-  display: flex;
-  flex-direction: column; 
+  display:                grid;
+  grid-template-columns:  1fr 1fr 1fr 1fr;
+  gap:                    8px;
 }
 
 .discipline-item {
-  display: grid;
-  grid-template-columns: 62px 20px auto; /* Fixed width for label, compact slider, and remaining space for toggles */
-  align-items: center; /* Align items vertically in the center */
-  gap: 4px; /* Minimal gap between columns */
-  font-size: 10px;
-  border: 1px solid #ccc;
-  padding: 2px;
-  border-radius: 4px;
-  box-sizing: border-box;
+  display:                grid;
+  grid-template-columns:  62px 20px auto; /* Fixed width for label, compact slider, and remaining space for toggles */
+  align-items:            center; /* Align items vertically in the center */
+  gap:                    4px; /* Minimal gap between columns */
+  font-size:              10px;
+  border:                 1px solid #ccc;
+  padding:                2px;
+  border-radius:          4px;
+  box-sizing:             border-box;
 }
 
 /* Fixed width for discipline labels */
 .discipline-item label {
-  text-align: left; /* Align text to the left */
-  white-space: nowrap; /* Prevent text wrapping */
-  overflow: hidden; /* Hide overflow if the name is too long */
+  text-align:    left; /* Align text to the left */
+  white-space:   nowrap; /* Prevent text wrapping */
+  overflow:      hidden; /* Hide overflow if the name is too long */
   text-overflow: ellipsis; /* Add ellipsis for long names */
 }
 
 /* Compact Vertical Slider */
 .discipline-slider {
-  display: flex;
+  display:        flex;
   flex-direction: column-reverse; /* Reverse the order so 0 is at the bottom */
-  align-items: center;
-  gap: 2px; /* Minimal gap between slider blocks */
-  width: 14px; /* Reduced width for compactness */
-  height: 24px; /* Total height for 4 tiers */
-  cursor: pointer; /* Indicate clickable element */
-  position: relative;
-  border: 1px solid #aaa;
-  border-radius: 2px;
-  overflow: hidden;
+  align-items:    center;
+  gap:            2px; /* Minimal gap between slider blocks */
+  width:          14px; /* Reduced width for compactness */
+  height:         24px; /* Total height for 4 tiers */
+  cursor:         pointer; /* Indicate clickable element */
+  position:       relative;
+  border:         1px solid #aaa;
+  border-radius:  2px;
+  overflow:       hidden;
 }
-
 .tier-block {
-  width: 100%;
-  height: 5px; /* Each tier takes up 25% of the slider height */
+  width:       100%;
+  height:      5px; /* Each tier takes up 25% of the slider height */
   flex-shrink: 0;
 }
 
 /* Color coding for tiers */
-.discipline-slider.tier-0 .tier-block:nth-child(1) {
-  background-color: #ddd; /* Gray for 0 */
-}
-.discipline-slider.tier-1 .tier-block:nth-child(2) {
-  background-color: #00ff7f; /* Spring green for 1 */
-}
-.discipline-slider.tier-2 .tier-block:nth-child(3) {
-  background-color: #ffa500; /* Orange for 2 */
-}
-.discipline-slider.tier-3 .tier-block:nth-child(4) {
-  background-color: #ff4500; /* Red for 3 */
-}
+.discipline-slider.tier-0 .tier-block:nth-child(1) { background-color: #dddddd; } 
+.discipline-slider.tier-1 .tier-block:nth-child(2) { background-color: #00ff7f; } 
+.discipline-slider.tier-2 .tier-block:nth-child(3) { background-color: #ffa500; } 
+.discipline-slider.tier-3 .tier-block:nth-child(4) { background-color: #ff4500; } 
 
-/* Highlight selected tier */
 .discipline-slider {
   border-color: #000; /* Black border for selected */
-  box-shadow: 0 0 2px #000; /* Add a subtle glow */
+  box-shadow:   0 0 2px #000; /* Add a subtle glow */
 }
 
 /* Inline Toggle Switches */
 .discipline-toggle {
-  display: flex;
+  display:     flex;
   align-items: center;
-  gap: 2px; /* Reduce space between toggle elements */
+  gap:         2px; /* Reduce space between toggle elements */
 }
 
 .discipline-toggle label {
-  font-size: 10px;
+  font-size:   10px;
   white-space: nowrap; /* Prevent text wrapping */
 }
 
-.discipline-toggle input[type="checkbox"] {
-  margin-left: 2px;
+.discipline-toggle input[type="checkbox"] { margin-left: 2px; }
+
+/* ========================================
+   COST & SYMBOL SECTION STYLES
+   ======================================== */
+.cost-symbol-section { margin-bottom: 10px; }
+
+/* Specific layout for inline symbol controls */
+.symbol-inline {
+  font-size:             12px;
+  height:                26px;
+  display:               grid;
+  /* Very specific column setup for symbol controls */
+  grid-template-columns: 54px 16px 48px 16px 48px 28px 44px 40px 40px 44px 40px 20px auto;
+  gap:                   4px;
+  align-items:           center; /* Vertically align items in the row */
 }
 
-/* Container for input and toggle */
-.input-toggle-container {
-  display: flex;
-  font-size: 12px;
+.symbol-checkbox {
+  font-size:   12px;
+  display:     flex;
   align-items: center;
-  gap: 5px; /* Space between input and toggle */
-}
-
-
-
-/*                         */
-/* Cost and Symbol Section */
-/*                         */
-
-/* Container for input and toggle */
-.input-toggle-container {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  gap: 5px; /* Space between toggle and input */
-  min-height: 30px; /* Ensure consistent height for alignment */
-}
-
-/* Cost and Symbol Section */
-.cost-symbol-section {
-  margin-bottom: 10px;
-}
-
-.cost-symbol-section h2 {
-  font-size: 16px;
-  margin-bottom: 5px;
 }
 
 /* Grid Layout for Costs and Symbols */
 .cost-symbol-grid {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two columns */
-  gap: 5px; /* Space between items */
+  gap:                   5px; /* Space between items */
 }
 
 .cost-symbol-item {
-  display: flex;
-  align-items: center;
+  display:         flex;
+  align-items:     center;
   justify-content: space-between; /* Push content to the right edge */
-  gap: 5px; /* Space between label and input-toggle-container */
+  gap:             5px; /* Space between label and input-toggle-container */
 }
 
 .cost-symbol-item label {
-  flex: 0 0 auto; /* Fixed width for labels */
-  font-size: 12px;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
+  flex:          0 0 auto; /* Fixed width for labels */
+  font-size:     12px;
+  text-align:    left;
+  white-space:   nowrap;
+  overflow:      hidden;
   text-overflow: ellipsis;
 }
 
 /* Compact Number Input */
 .cost-symbol-item input[type="number"] {
-  width: 50px; /* Compact width for number input */
-  margin: 0; /* Remove default margins */
+  width:   50px; /* Compact width for number input */
+  margin:  0; /* Remove default margins */
   padding: 0; /* Remove default padding */
 }
 
 /* Inline Toggle */
 .cost-symbol-toggle {
-  display: flex;
+  display:     flex;
   align-items: center;
-  gap: 2px; /* Reduce space between toggle label and checkbox */
-  min-width: 40px; /* Ensure consistent width for the toggle container */
+  gap:         2px; /* Reduce space between toggle label and checkbox */
+  min-width:   40px; /* Ensure consistent width for the toggle container */
 }
 
 .cost-symbol-toggle label {
-  margin: 0; /* Remove default margins */
-  padding: 0; /* Remove default padding */
-  font-size: 12px; /* Consistent font size */
+  margin:      0; /* Remove default margins */
+  padding:     0; /* Remove default padding */
+  font-size:   12px; /* Consistent font size */
   white-space: nowrap; /* Prevent wrapping */
 }
 
 .cost-symbol-toggle input[type="checkbox"] {
-  margin: 0; /* Remove default margins */
-  padding: 0; /* Remove default padding */
+  min-width: 2px;
+  width:     auto;
+  height:    auto;
+  margin:    0; /* Remove default margins */
+  padding:   0; /* Remove default padding */
 }
 
 /* Placeholder for rows without toggles */
 .cost-symbol-item .input-toggle-container.no-toggle::before {
   content: ""; /* Add an empty placeholder */
   display: inline-block;
-  width: 40px; /* Match the width of the toggle container */
-  height: 1px; /* Invisible but ensures alignment */
+  width:   40px; /* Match the width of the toggle container */
+  height:  1px; /* Invisible but ensures alignment */
 }
 
-/* Add this to your CSS file or <style> block */
+/* ========================================
+   ERROR LOGGING STYLES
+   ======================================== */
+.log-message { /* Base class for log messages */
+    margin-top:       10px;
+    padding:          10px;
+    font-family:      Arial, sans-serif;
+    font-size:        14px;
+    max-height:       150px;
+    overflow-y:       auto;
+    display:          none; /* Hidden by default */
+}
+
 .error-log {
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ff0000;
+    margin-top:       15px;
+    border:           0px solid #ff0000;
     background-color: #ffe6e6;
-    color: #ff0000;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    max-height: 150px;
-    overflow-y: auto;
-    display: none; /* Hidden by default */
+    color:            #ff0000;
 }
 
-/* Add this to your CSS file or <style> block */
 .onload-error-log {
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ff9900;
+    margin-top:       15px;
+    border:           1px solid #ff9900;
     background-color: #fff4e6;
-    color: #ff9900;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    max-height: 150px;
-    overflow-y: auto;
-    display: none; /* Hidden by default */
+    color:            #ff9900;
 }
 
-
-
-/* -------------------- */
-/* Popup CSS            */
-/* -------------------- */
-
+/* ========================================
+   POPUP DIALOG STYLES
+   ======================================== */
 .popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
+  position:        fixed;
+  top:             0;
+  left:            0;
+  width:           100%;
+  height:          100%;
+  background:      rgba(0, 0, 0, 0.8);
+  display:         flex;
   justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  align-items:     center;
+  z-index:         1000;
 }
 
 .popup-content {
-  background: #fff;
-  padding: 20px;
+  background:    #fff;
+  padding:       20px;
   border-radius: 8px;
-  text-align: center;
-  max-width: 548px;
-  width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align:    center;
+  max-width:     548px;
+  width:         90%;
+  box-shadow:    0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .popup-logo {
-  max-width: 100px;
+  max-width:     100px;
   margin-bottom: 20px;
 }
 
 .popup-text {
-  font-size: 14px;
-  color: #333;
+  font-size:     14px;
+  color:         #333;
   margin-bottom: 20px;
-  max-height: 700px;
-  overflow-y: auto;
-  text-align: left;
+  max-height:    700px;
+  overflow-y:    auto;
+  text-align:    left;
 }
 
 .popup-buttons {
@@ -460,19 +424,11 @@ canvas {
 }
 
 .popup-buttons button {
-  padding: 10px 20px;
-  border: none;
+  padding:       10px 20px;
+  border:        none;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
+  cursor:        pointer;
+  font-size:     14px;
 }
-
-#acceptButton {
-  background-color: #4CAF50;
-  color: white;
-}
-
-#declineButton {
-  background-color: #f44336;
-  color: white;
-}
+#acceptButton { background-color: #4CAF50; color: white; }
+#declineButton { background-color: #f44336; color: white; }

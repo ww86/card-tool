@@ -38,6 +38,21 @@
 
         },
 
+        text                    : {
+            Word                : function (){},
+            wrapText            : function (){},
+        },
+
+        json                    : {
+            exportJson          : function(){},
+            importJson          : function(){},
+        },
+
+        tests                   : {
+            testAllImages       : function(){},
+            testAllFonts        : function(){},
+        },
+
         showLicensePopup        : function(){},
         darkPack                : function(){},
         renderDarkPackLogo      : function(){},

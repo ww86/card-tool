@@ -248,6 +248,7 @@ global.text.Word = function (text, font, fontColor, effect) {
     };
 
     function renderFinalLines(finalLineSegments, context, startX, startY, lHeight) {
+        const space = context.measureText(' ').width;
         let currentYPos = startY;
         for (const lineArray of finalLineSegments) {
             let currentXPos = startX;
@@ -258,7 +259,7 @@ global.text.Word = function (text, font, fontColor, effect) {
             for (const element of lineArray) {
                 if (element instanceof global.text.Word) {
                     renderWord(context, element, currentXPos, currentYPos);
-                    currentXPos += element.width;
+                    currentXPos += element.width + space;
                 } else if (isIconToken(element)) {
                     const iconFileName = global.util.wrapImgPath(global.data.markdownIconMap[element]);
                     if (iconFileName) { renderIcon(context, iconFileName, currentXPos, currentYPos, lHeight); }

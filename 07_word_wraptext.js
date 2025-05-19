@@ -212,11 +212,15 @@ global.text.wrapText = function(ctx, text, x, y, maxWidth, lineHeight, effect, f
                     ctx.shadowOffsetX = 0;
                     ctx.shadowOffsetY = 0;
                     ctx.shadowBlur = 8;
-                } else if (effectToApply === 5) { // Hard Offset Shadow
+                } else if (effectToApply === 5) { // Drop shadow and outline
                     ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
-                    ctx.shadowOffsetX = 2; // Adjust for desired offset
-                    ctx.shadowOffsetY = 2; // Adjust for desired offset
-                    ctx.shadowBlur = 0; // No blur for a hard edge
+                    ctx.shadowOffsetX = 0; // Adjust for desired offset
+                    ctx.shadowOffsetY = 1; // Adjust for desired offset
+                    ctx.shadowBlur = 3; // No blur for a hard edge
+                    ctx.lineWidth = 2.0;
+                    ctx.lineJoin = "round";
+                    ctx.strokeStyle = "black";
+                    ctx.strokeText(element.text, currentX, currentY);                    
                 } else if (effectToApply === 6) { // Fancy: White Outline + Soft Dark Drop Shadow
                     // Draw the white outline first
                     ctx.strokeStyle = "white";

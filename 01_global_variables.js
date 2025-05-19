@@ -12,6 +12,8 @@
         art                     : {
             mainImage           : new Image (),
             mainSrc             : "",
+            frameBgImage        : new Image (),
+            sidePanelImage      : new Image (),
         },
 
         data                    : {
@@ -35,6 +37,7 @@
             createLabel         : function(){},
             createNumberInput   : function(){},
             createToggle        : function(){},
+            wrapImgPath         : function(){},
 
         },
 

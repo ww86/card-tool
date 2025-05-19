@@ -99,6 +99,10 @@ textarea { /* General textarea styling */
   margin-top:  5px;
 }
 
+.radio-selector {
+  gap: 2px;
+}
+
 .bg-color-picker { width: 80px; }
 
 /* ========================================

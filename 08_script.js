@@ -544,14 +544,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // -------------------------------
   // updateCard(): Renders the complete card.
   // -------------------------------
+  let lastProcessedMainFrameKey = null; // Track the last processed key for the main frame
+  let lastProcessedSidePanelKey = null; // Track the last processed key for the side panel
 
   function updateCard() {
 
     const mainImage = global.art.mainImage;
     mainImage.crossOrigin = "anonymous";
-    let frameImage = null;
-    let frameBgImage = null;    
-
+    // Removed local frameImage and frameBgImage variables
+    // We will use global.art.frameBgImage and global.art.sidePanelImage
+    
     const canvas = document.getElementById("cardCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -569,57 +571,53 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // --- Draw main art image within the inner rounded area.
     if (mainImage.complete && mainImage.naturalWidth > 0) {
-      const offsetX       = parseFloat(document.getElementById("offsetX").value) || 0;
-      const offsetY       = parseFloat(document.getElementById("offsetY").value) || 0;
-      const cropTop       = parseFloat(document.getElementById("cropTop").value) || 0;
-      const cropRight     = parseFloat(document.getElementById("cropRight").value) || 0;
-      const cropBottom    = parseFloat(document.getElementById("cropBottom").value) || 0;
-      const cropLeft      = parseFloat(document.getElementById("cropLeft").value) || 0;
-      const scalePercent  = parseFloat(document.getElementById("scalePercent").value) || 100;
-  
-      const srcX          = cropLeft;
-      const srcY          = cropTop;
-      const srcWidth      = mainImage.naturalWidth - cropLeft - cropRight;
-      const srcHeight     = mainImage.naturalHeight - cropTop - cropBottom;
-      const destWidth     = srcWidth * (scalePercent / 100);
-      const destHeight    = srcHeight * (scalePercent / 100);
-  
-      ctx.save();
-      ctx.drawImage(mainImage, srcX, srcY, srcWidth, srcHeight,
-                    0 + offsetX, 0 + offsetY, destWidth, destHeight);
-      ctx.restore();
+        const offsetX       = parseFloat(document.getElementById("offsetX").value) || 0;
+        const offsetY       = parseFloat(document.getElementById("offsetY").value) || 0;
+        const cropTop       = parseFloat(document.getElementById("cropTop").value) || 0;
+        const cropRight     = parseFloat(document.getElementById("cropRight").value) || 0;
+        const cropBottom    = parseFloat(document.getElementById("cropBottom").value) || 0;
+        const cropLeft      = parseFloat(document.getElementById("cropLeft").value) || 0;
+        const scalePercent  = parseFloat(document.getElementById("scalePercent").value) || 100;
+    
+        const srcX          = cropLeft;
+        const srcY          = cropTop;
+        const srcWidth      = mainImage.naturalWidth - cropLeft - cropRight;
+        const srcHeight     = mainImage.naturalHeight - cropTop - cropBottom;
+        const destWidth     = srcWidth * (scalePercent / 100);
+        const destHeight    = srcHeight * (scalePercent / 100);
+    
+
+        ctx.drawImage(mainImage, srcX, srcY, srcWidth, srcHeight,
+                      0 + offsetX, 0 + offsetY, destWidth, destHeight);
+
     }
     
     // --- Vampire or Other Frame
-    const mainFrameKey = document.getElementById("mainFrame").value;
-    const mainFrameSrc = wrapImgPath(global.data.frameMap[mainFrameKey]);
-
-    if (mainFrameSrc) {
-      if (!frameBgImage || frameBgImage.src !== mainFrameSrc) {
-        frameBgImage = new Image();
-        frameBgImage.src = mainFrameSrc;
-      }
+    const currentMainFrameKey = document.getElementById("mainFrame").value;
+    if (lastProcessedMainFrameKey !== currentMainFrameKey) {
+        lastProcessedMainFrameKey = currentMainFrameKey; // Update tracker
+        const mainFrameNewSrc = currentMainFrameKey === "none" ? "" : wrapImgPath(global.data.frameMap[currentMainFrameKey]);
+        global.art.frameBgImage.src = mainFrameNewSrc; // Set src on the global Image object
+        // Image will load asynchronously. No onload here to call updateCard.
     }
     
     ctx.save();
-    if (frameBgImage && frameBgImage.complete && mainFrameKey !== "none") {
-      ctx.drawImage(frameBgImage, 0, 0, canvas.width, canvas.height);
+    // Draw if the key is not "none" and the global image object is loaded
+    if (currentMainFrameKey !== "none" && global.art.frameBgImage.complete && global.art.frameBgImage.naturalWidth > 0) {
+      ctx.drawImage(global.art.frameBgImage, 0, 0, canvas.width, canvas.height);
     }
     ctx.restore();
     
     // --- Frame Overlay: Draw the side panel overlay
-    const sidePanelKey = document.getElementById("sidePanel").value;
-    const sidePanelSrc = wrapImgPath(global.data.frameMap[sidePanelKey]);
-    if (sidePanelSrc) {
-      if (!frameImage || frameImage.src !== sidePanelSrc) {
-        frameImage = new Image();
-        frameImage.src = sidePanelSrc;
-      }
+    const currentSidePanelKey = document.getElementById("sidePanel").value;
+    if (lastProcessedSidePanelKey !== currentSidePanelKey) {
+        lastProcessedSidePanelKey = currentSidePanelKey; // Update tracker
+        const sidePanelNewSrc = currentSidePanelKey === "none" ? "" : wrapImgPath(global.data.frameMap[currentSidePanelKey]);
+        global.art.sidePanelImage.src = sidePanelNewSrc; // Set src on the global Image object
     }
-
     ctx.save();
-    if (frameImage && frameImage.complete && sidePanelKey !== "none") {
-      ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+    if (currentSidePanelKey !== "none" && global.art.sidePanelImage.complete && global.art.sidePanelImage.naturalWidth > 0) {
+      ctx.drawImage(global.art.sidePanelImage, 0, 0, canvas.width, canvas.height);
     }
     ctx.restore();
 
@@ -1100,7 +1098,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameBgY           = parseFloat(document.getElementById("nameBoxY").value) + 20;
     const nameBgW           = parseFloat(document.getElementById("nameBoxWidth").value) - 10;
     const nameLineHeight    = parseFloat(document.getElementById("nameFontSize").value);
-    const nameAntialias     = document.querySelector('input[name="nameEffect"]:checked').value;
+    const nameAntialias     = parseFloat(document.querySelector('input[name="nameEffect"]:checked').value);
     const nameFont          = `${document.getElementById("nameFontSize").value}px ${document.getElementById("nameFont").value}`;
 
     ctx.save();
@@ -1113,7 +1111,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textBgY           = parseFloat(document.getElementById("textBoxY").value) + 20;
     const textBgW           = parseFloat(document.getElementById("textBoxWidth").value) - 10;
     const textLineHeight    = parseFloat(document.getElementById("textFontSize").value);
-    const textAntialias     = document.querySelector('input[name="textEffect"]:checked').value;
+    const textAntialias     = parseFloat(document.querySelector('input[name="textEffect"]:checked').value);
     const textFont          = `${document.getElementById("textFontSize").value}px ${document.getElementById("textFont").value}`;
 
     ctx.save();
@@ -1126,7 +1124,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const flavourBgY        = parseFloat(document.getElementById("flavourBoxY").value) + 20;
     const flavourBgW        = parseFloat(document.getElementById("flavourBoxWidth").value) - 10;
     const flavourLineHeight = parseFloat(document.getElementById("flavourFontSize").value);
-    const flavourAntialias  = document.querySelector('input[name="flavourEffect"]:checked').value;
+    const flavourAntialias  = parseFloat(document.querySelector('input[name="flavourEffect"]:checked').value);
     const flavourFont      = `${document.getElementById("flavourFontSize").value}px ${document.getElementById("flavourFont").value}`;
 
     ctx.save();
@@ -1139,7 +1137,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const artistBgY         = parseFloat(document.getElementById("artistBoxY").value);
     const artistBgW         = parseFloat(document.getElementById("artistBoxWidth").value) - 10;
     const artistLineHeight  = parseFloat(document.getElementById("artistFontSize").value);
-    const artistAntialias   = document.querySelector('input[name="artistEffect"]:checked').value;
+    const artistAntialias   = parseFloat(document.querySelector('input[name="artistEffect"]:checked').value);
     const artistFont        = `${document.getElementById("artistFontSize").value}px ${document.getElementById("artistFont").value}`;
 
     ctx.save();
@@ -1152,7 +1150,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const miniBgY           = parseFloat(document.getElementById("miniBoxY").value);
     const miniBgW           = parseFloat(document.getElementById("miniBoxWidth").value) - 10;
     const miniLineHeight    = parseFloat(document.getElementById("miniFontSize").value);
-    const miniAntialias     = document.querySelector('input[name="miniEffect"]:checked').value;
+    const miniAntialias     = parseFloat(document.querySelector('input[name="miniEffect"]:checked').value);
     const miniFont          = `${document.getElementById("miniFontSize").value}px ${document.getElementById("miniFont").value}`;
 
 
@@ -1225,6 +1223,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   global.art.mainImage.onload = updateCard;
+  // Explicitly NOT setting onload for frameBgImage and sidePanelImage
+  // global.art.frameBgImage.onload = updateCard; // Ensure this is commented or removed
+  // global.art.sidePanelImage.onload = updateCard; // Ensure this is commented or removed
   
   // -------------------------------
   // Export the canvas as a PNG (preserving transparency).

@@ -3,294 +3,274 @@
 
 
 
-// -------------------------------
-// Word constructor function
-// -------------------------------
-global.text.Word = function (text, font, fontColor, effect) {
+// ------------------------------------------------------------------
+// global.text.wrapText function, code was written by Google Gemini
+// ------------------------------------------------------------------
 
-    if (typeof effect !== "number") { global.util.showError("Word constructor argument 'effect'  is not a number"); }
+if (typeof global === 'undefined') {
+    // This is a simplified mock for environments where 'global' might not be fully set up,
+    // e.g., during isolated testing. In the actual application, 'global' is populated by other scripts.
+    global = {
+        util: {
+            showError: console.error,
+            wrapImgPath: (path) => `./img/${path}` // Adjust if your img folder is elsewhere
+        },
+        data: {
+            markdownIconMap: { /* Mock data can be added here for testing */ }
+        }
+    };
+}
 
-    this.text       = text; 
-    this.effect     = effect; 
-    this.font       = "Arial"; 
-    this.fontSize   = 12;
-    this.fontColor  = fontColor;  
-    this.italic     = false; 
-    this.bold       = false; 
-    
-    // Properties related to canvas measurement
-    this.measured   = false; // True once ctx.measureText() is called
-    this.width      = 0;        // Measured width of the word in pixels
-    
-    // Parse the font string if provided
-    if (typeof font === 'string' && font.trim() !== '') {
-        let styleString = font.trim(); // Work with a trimmed copy
-        
-        // Check for 'bold' keyword (case-insensitive, whole word)
-        if (/\bbold\b/i.test(styleString)) {
-            this.bold = true;
-            styleString = styleString.replace(/\bbold\b/i, "").trim(); // Remove 'bold'
-        }
-        
-        // Check for 'italic' keyword (case-insensitive, whole word)
-        if (/\bitalic\b/i.test(styleString)) {
-            this.italic = true;
-            styleString = styleString.replace(/\bitalic\b/i, "").trim(); // Remove 'italic'
-        }
-        
-        // After removing bold/italic, styleString should contain font-size and/or font-family
-        // e.g., "16px Arial", "12pt Times New Roman", "Arial", "16px"
-        
-        if (styleString) { // If there's anything left to parse
+if (!global.text) global.text = {};
+
+/**
+ * Renders text onto a canvas, handling markdown for styles, newlines, icons, and text wrapping.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The canvas 2D rendering context.
+ * @param {string} text - The text string to render, possibly containing markdown.
+ * @param {number} x - The x-coordinate for the start of the text block.
+ * @param {number} y - The y-coordinate for the baseline of the first line of text.
+ * @param {number} maxWidth - The maximum width the text can occupy before wrapping.
+ * @param {number} lineHeight - The height of each line of text (used for vertical spacing and icon scaling).
+ * @param {number} effect - Text effect: 0 (none), 1 (outline), 2 (shadow), 3 (stronger shadow), 4 (soft colored glow), 5 (hard offset shadow), 6 (white outline + dark shadow).
+ * @param {string} font - The base font string (e.g., "16px Arial", "bold 12px Verdana").
+ *                         The font size specified here will be used for rendering.
+ * @param {string} fontColor - The color of the text (e.g., "#RRGGBB", "rgba(...)").
+ */
+global.text.wrapText = function(ctx, text, x, y, maxWidth, lineHeight, effect, font, fontColor) {
+    if (!ctx || typeof text !== "string" || text === null) {
+        global.util.showError('wrapText: Invalid arguments (ctx or text).');
+        return;
+    }
+    if (lineHeight <= 0) {
+        global.util.showError('wrapText: lineHeight must be positive.');
+        return;
+    }
+    if (maxWidth <= 0) {
+        // global.util.showError('wrapText: maxWidth must be positive. Rendering without wrapping.');
+        // Allow rendering very short text if maxWidth is too small, but it might look odd.
+    }
+
+    // --- Helper Functions ---
+
+    function parseInitialFont(fontStr, baseLineHeight) {
+        const style = {
+            size: baseLineHeight, // Use lineHeight as the authoritative size for styling
+            family: "Arial",
+            isBold: false,
+            isItalic: false
+        };
+
+        if (typeof fontStr === 'string' && fontStr.trim() !== '') {
+            let tempFontStr = fontStr.trim();
+
+            if (/\bbold\b/i.test(tempFontStr)) {
+                style.isBold = true;
+                tempFontStr = tempFontStr.replace(/\bbold\b/i, "").trim();
+            }
+            if (/\bitalic\b/i.test(tempFontStr)) {
+                style.isItalic = true;
+                tempFontStr = tempFontStr.replace(/\bitalic\b/i, "").trim();
+            }
+
             // Regex to extract font size and font family
-            // e.g., "16px Arial", "12pt Times New Roman"
-            const sizeFamilyRegex = /^(\d+)\s*(?:px|pt|em|rem|%)?\s*(.+)$/i;
-            let match = styleString.match(sizeFamilyRegex);
-            
+            const sizeFamilyRegex = /^(\d+)(?:px|pt|em|rem|%)?\s*(.+)$/i;
+            let match = tempFontStr.match(sizeFamilyRegex);
             if (match) {
-                // Matched both size and family
-                this.fontSize = parseInt(match[1], 10);
-                this.font = match[2].trim();
-            } else {
-                // Did not match "size family", try "size only" or "family only"
-                const sizeOnlyRegex = /^(\d+)\s*(?:px|pt|em|rem|%)?$/i;
-                match = styleString.match(sizeOnlyRegex);
-                
-                if (match) {
-                    // Matched size only
-                    this.fontSize = parseInt(match[1], 10);
-                    // this.font remains the default ("Arial")
-                } else {
-                    // Assume what's left is the font family only
-                    this.font = styleString.trim();
-                    // this.fontSize remains the default (12)
-                }
+                // style.size = parseInt(match[1], 10); // We use baseLineHeight for consistency
+                style.family = match[2].trim();
+            } else if (tempFontStr) { // Assume what's left is the font family only
+                style.family = tempFontStr;
             }
         }
-        // If styleString became empty after removing bold/italic (e.g., font was "bold italic"),
-        // font and fontSize will correctly use their defaults.
+        return style;
     }
-};
 
+    function buildFontString(currentStyle) {
+        return `${currentStyle.isItalic ? 'italic ' : ''}${currentStyle.isBold ? 'bold ' : ''}${currentStyle.size}px ${currentStyle.family}`;
+    }
 
+    // --- Main Logic ---
 
-  // -------------------------------
-  // NEW wrapText function
-  // -------------------------------
+    const initialFont = parseInitialFont(font, lineHeight);
+    let currentStyle = {
+        family: initialFont.family,
+        size: initialFont.size, // This is effectively lineHeight for styling text
+        isBold: initialFont.isBold,
+        isItalic: initialFont.isItalic,
+        color: fontColor,
+        effect: effect
+    };
 
-  global.text.wrapText = function (ctx, text, x, y, maxWidth, lineHeight, effect, font, fontColor) {
+    const tokens = String(text).split(/(\[n\])|(\[b\])|(\[\/b\])|(\[i\])|(\[\/i\])|(\[[a-zA-Z]{3}\])|([^\s\[\]]+)|(\s+)/g).filter(token => token && token.length > 0);
 
-    if (!ctx || typeof text !== "string") { global.util.showError('Invalid arguments to wrapText'); return; }
+    const renderableElements = [];
+    tokens.forEach(token => {
+        if (token === "[n]") {
+            renderableElements.push({ type: 'newline' });
+        } else if (token === "[b]") {
+            currentStyle.isBold = true;
+        } else if (token === "[/b]") {
+            currentStyle.isBold = false;
+        } else if (token === "[i]") {
+            currentStyle.isItalic = true;
+        } else if (token === "[/i]") {
+            currentStyle.isItalic = false;
+        } else if (global.data.markdownIconMap && global.data.markdownIconMap[token]) {
+            const iconSrc = global.util.wrapImgPath(global.data.markdownIconMap[token]);
+            const tokenContent = token.substring(1, token.length - 1);
+            const isSuperior = tokenContent === tokenContent.toUpperCase();
+            renderableElements.push({
+                type: 'icon',
+                src: iconSrc,
+                isSuperior: isSuperior,
+                style: { ...currentStyle },
+                originalToken: token
+            });
+        } else if (/\s+/.test(token) && token.length > 0) {
+            renderableElements.push({ type: 'space', text: token, style: { ...currentStyle } });
+        } else if (token.length > 0) { // Word
+            renderableElements.push({ type: 'text', text: token, style: { ...currentStyle } });
+        }
+    });
 
-    function renderWord(ctx, word, x, y) {
-        if (!(word instanceof global.text.Word)) {
-            global.util.showError("renderWord called with non-Word element");
+    const lines = [];
+    let currentLine = [];
+    let currentLineWidth = 0;
+
+    ctx.save();
+    renderableElements.forEach(element => {
+        let elWidth = 0;
+        let elHeight = element.style ? element.style.size : lineHeight;
+
+        if (element.type === 'text' || element.type === 'space') {
+            ctx.font = buildFontString(element.style);
+            elWidth = ctx.measureText(element.text).width;
+        } else if (element.type === 'icon') {
+            const iconScaleFactor = element.isSuperior ? 1.25 : 1.0;
+            elHeight = (element.style.size || lineHeight) * iconScaleFactor; // Overall size based on text height
+            elWidth = elHeight; // Assume icons are roughly square after scaling
+        } else if (element.type === 'newline') {
+            lines.push(currentLine);
+            currentLine = [];
+            currentLineWidth = 0;
             return;
         }
-        ctx.save();
-        ctx.textAlign = "left";  
-        ctx.textBaseline = "alphabetic";    
 
-        ctx.fillStyle = word.fontColor;
-        let fontStyle = "";
-        if (word.bold) fontStyle += "bold ";
-        if (word.italic) fontStyle += "italic ";
-        fontStyle += `${word.fontSize}px ${word.font}`;
-        ctx.font = fontStyle;
+        element.width = elWidth;
+        element.height = elHeight; // Store effective height for icons
 
-        console.log(word.effect);
-        if (word.effect >   0     )       { ctx.lineWidth     = word.effect;        }
-        if (word.effect >   1     )       { ctx.shadowOffsetX = 0;                  }
-        if (word.effect >   1     )       { ctx.shadowOffsetY = 1;                  }
-        if (word.effect >   1     )       { ctx.shadowBlur    = 3;                  }
-        if (word.effect >   1     )       { ctx.shadowColor   = "#000000EE";        }
-        if (word.effect >   0     )       { ctx.strokeText(word.text, x, y);        }
-
-        ctx.fillText(word.text, x, y);
-        ctx.restore();
+        if (maxWidth > 0 && currentLineWidth + elWidth > maxWidth && currentLine.length > 0) {
+            lines.push(currentLine);
+            currentLine = [element];
+            currentLineWidth = elWidth;
+        } else {
+            currentLine.push(element);
+            currentLineWidth += elWidth;
+        }
+    });
+    if (currentLine.length > 0) {
+        lines.push(currentLine);
     }
+    ctx.restore();
 
-    function renderIcon(ctx, iconSrc, x, y, size) {
-        const img = new Image();
-        img.src = iconSrc;
-        img.onload = () => {
-        ctx.save();
-        ctx.drawImage(img, x, y - 0.75 * size - 1, size * 1.1, size * 1.1); // Adjust vertical alignment
-        ctx.restore();
-        };
-    };
+    let currentY = y;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
 
-    // splits text like "car[b] is[n]a"" to an array like ["car", "[b]", "is", "[n]", "a"]
-    function initialParse (text) {
-        const wordStrings   = text.split(" ");
-        const segments      = wordStrings.flatMap(word => word.split(/(?=\[.*?\])|(?<=\])/));
-        return segments;
-    };
-
-    function effectSwitch(effect)       { 
-                                            if (effect === "none") { return 0; }
-                                            if (effect === "aa1")  { return 1; }
-                                            if (effect === "aa2")  { return 2; }
-                                            if (effect === "aa3")  { return 3; }
-                                            return 0;
-                                        };
-
-    function isToken(string)            { return (typeof string === "string") && string.startsWith("[") && string.endsWith("]");    };
-    function isWord(element)            { return (element instanceof global.text.Word);             };
-
-    function isNewline(x)               { return (x === "[n]");                                     };
-
-    function isBold(w)                  { return (w === "[b]");                                     };
-    function isBoldClose(w)             { return (w === "[/b]");                                    };
-
-    function isItalic(w)                { return (w === "[i]" );                                    };
-    function isItalicClose(w)           { return (w === "[/i]");                                    };      
-
-    // Nightmare reduce method 
-    function reducer(f, arr)            { return arr.reduce(f,{ is : false, indices : [], });       };
-
-    function helpBoldReduce(w,e,i)      {
-                                          if (isBold(e))        { w.is = true;  return w;       };                      
-                                          if (isBoldClose(e))   { w.is = false; return w;       };                      
-                                          if (isToken(e))       { return w;                                             }
-                                          if (w.is === true)    { w.is = true; w.indices.push(i); return w;             } 
-                                          if (w.is === false)   { return w;                                             }
-                                        };
-
-    function helpItalicReduce(w,e,i)    {
-                                          if (isItalic(e))      { w.is = true;  return w;       };                      
-                                          if (isItalicClose(e)) { w.is = false; return w;       };                      
-                                          if (isToken(e))       { return w;                                             }
-                                          if (w.is === true)    { w.is = true; w.indices.push(i); return w;             } 
-                                          if (w.is === false)   { return w;                                             }
-                                        };                                                                    
-
-    function boldWords  (arr, segment)  { const r = [...segment]; arr.forEach(e => r[e].bold   = true); return r;   };
-    function italicWords(arr, segment)  { const r = [...segment]; arr.forEach(e => r[e].italic = true); return r;   };
-    // End of nightmare reduce method
-
-    function processText(segments, font, fontColor, effect) {       
-        return segments.flatMap(segment => isToken(segment) ? segment : new global.text.Word(segment, font, fontColor, effect));
-    };
-
-    function notBoldOrItalic(x)           { return !isBold(x) && !isItalic(x) && !isBoldClose(x) && !isItalicClose(x); }
-
-    function arraySplit(arr, fDelimiter ) {
-
-
-        let returnValue     = [];
-        let indices         = arr.map( (x,i) => fDelimiter(x) ? i : -1).filter(x=>(x !== -1)); 
-        indices             = indices.concat(arr.length);
-
-        if (indices[0] !== 0) { indices  = [0].concat(indices); }
-
-        // Filter pair => pair , removes any `null` values
-        const overlappingPairs = indices.map((_, i) => i < indices.length - 1 ? [indices[i], indices[i + 1]] : null).filter(pair => pair); 
-
-        overlappingPairs.forEach(pair => { returnValue.push(arr.slice(pair[0], pair[1])); });
-        returnValue = returnValue.filter(x => !fDelimiter(x));
-
-        return returnValue;
-
-    };
-
-    function isIconToken(str) {
-        return typeof str === 'string' && global.data.markdownIconMap && global.data.markdownIconMap[str];
-    };
-
-    function getElementWidth(element, context, lHeight) {
-        if (element instanceof global.text.Word) {
-            if (!element.measured) {
-                context.save();
-                let fontStyle = "";
-                if (element.bold) fontStyle += "bold ";
-                if (element.italic) fontStyle += "italic ";
-                fontStyle += `${element.fontSize}px ${element.font}`; // Word constructor parses styleArg to these
-                context.font = fontStyle;
-                element.width = context.measureText(element.text).width;
-                element.measured = true;
-                context.restore();
+    lines.forEach(line => {
+        let currentX = x;
+        line.forEach(element => {
+            if (!element.style && (element.type === 'text' || element.type === 'space' || element.type === 'icon')) {
+                // Fallback if style somehow didn't get attached (should not happen with current logic)
+                element.style = currentStyle;
             }
-            return element.width;
-        } else if (isIconToken(element)) {
-            return lHeight * 1.25; // Assume icon width is lineHeight
-        }
-        return 0;
-    };    
 
-    function measureAndBreakLines(potentialLines, context, mWidth, lHeight) {
-        const allRenderableLines = [];
-        for (const pLine of potentialLines) {
-            if (pLine.length === 0) { // Handle empty lines from [n][n] etc.
-                allRenderableLines.push([]);
-                continue;
-            }
-            let currentLineElements = [];
-            let currentLineWidth = 0;
-            for (const element of pLine) {
-                const elementWidth = getElementWidth(element, context, lHeight);
-                if (elementWidth === 0 && !(element instanceof global.text.Word && element.text.trim() === '')) continue; // Skip zero-width non-space elements
+            ctx.save();
+            ctx.fillStyle = element.style.color;
+            ctx.font = buildFontString(element.style);
 
-                if (currentLineWidth + elementWidth > mWidth && currentLineElements.length > 0) {
-                    allRenderableLines.push(currentLineElements);
-                    currentLineElements = [element];
-                    currentLineWidth = elementWidth;
-                } else {
-                    currentLineElements.push(element);
-                    currentLineWidth += elementWidth;
+            if (element.type === 'text' || element.type === 'space') {
+                const effectToApply = element.style.effect;
+                if (effectToApply === 1) { // Outline
+                    ctx.lineWidth = 1.0;
+                    ctx.lineJoin = "round";
+                    ctx.strokeStyle = "black";
+                    ctx.strokeText(element.text, currentX, currentY);
+                } else if (effectToApply === 2) { // Shadow
+                    ctx.shadowColor = "rgba(0,0,0,0.5)";
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+                    ctx.shadowBlur = 2;
+                } else if (effectToApply === 3) { // Stronger Shadow
+                    ctx.shadowColor = "rgba(0,0,0,0.75)";
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 2;
+                    ctx.shadowBlur = 3;
+                } else if (effectToApply === 4) { // Soft Colored Glow (e.g., soft blue)
+                    ctx.shadowColor = "rgba(100, 100, 255, 0.6)";
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 8;
+                } else if (effectToApply === 5) { // Hard Offset Shadow
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+                    ctx.shadowOffsetX = 2; // Adjust for desired offset
+                    ctx.shadowOffsetY = 2; // Adjust for desired offset
+                    ctx.shadowBlur = 0; // No blur for a hard edge
+                } else if (effectToApply === 6) { // Fancy: White Outline + Soft Dark Drop Shadow
+                    // Draw the white outline first
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 1.5; // Adjust thickness as needed
+                    ctx.lineJoin = "round"; // For smoother stroke corners
+                    ctx.strokeText(element.text, currentX, currentY);
+
+                    // Then set up the shadow for the main fillText
+                    ctx.shadowColor = "rgba(0,0,0,0.5)";
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+                    ctx.shadowBlur = 3;
                 }
+                // The fillText is always called, applying any shadow set above,
+                // and drawing the main text color (potentially over a stroke if effect 1 or 6 was used).
+                ctx.fillText(element.text, currentX, currentY);
+            } else if (element.type === 'icon') {
+                const img = new Image();
+                img.src = element.src;
+
+                const drawX = currentX;
+                const iconRenderSize = element.height; // element.height already has superiority scaling
+                
+                // Align icon top with roughly the top of lowercase letters, or slightly above.
+                // textBaseline "alphabetic" means y is the baseline.
+                // Icon top: y - ascender_height. A common ascender ratio is ~0.75-0.8 of fontSize.
+                // So, icon top = y - (fontSize * 0.75)
+                // To center icon vertically with cap height: y - cap_height + (cap_height - icon_height)/2
+                // Simpler: align bottom of icon with text baseline, then shift up slightly.
+                // Or, align icon center with (y - fontSize/2)
+                // From relic.js: yBaseline - 0.75 * iconHeight - 1 (for icon top)
+                const drawYIconTop = currentY - (iconRenderSize * 0.75) - (element.style.size * 0.1); // Adjusting this for better alignment
+
+                img.onload = () => {
+                    // Create a closure for ctx to ensure it's the correct one if multiple wrapText calls interleave
+                    (function(context, image, xPos, yPos, w, h) {
+                        context.drawImage(image, xPos, yPos, w, h);
+                    })(ctx, img, drawX, drawYIconTop, iconRenderSize, iconRenderSize);
+                };
+                img.onerror = () => {
+                    global.util.showError(`wrapText: Failed to load icon ${element.originalToken} (${element.src})`);
+                    const placeholderStyle = element.style;
+                    // Create a closure for ctx for the error case too
+                    (function(context, tokenText, xPos, yPos, style) {
+                        context.font = buildFontString(style);
+                        context.fillStyle = style.color;
+                        context.fillText(tokenText, xPos, yPos);
+                    })(ctx, element.originalToken, drawX, currentY, placeholderStyle);
+                };
             }
-            if (currentLineElements.length > 0) {
-                allRenderableLines.push(currentLineElements);
-            }
-        }
-        return allRenderableLines;
-    };
 
-    function renderFinalLines(finalLineSegments, context, startX, startY, lHeight) {
-        const space = context.measureText(' ').width;
-        let currentYPos = startY;
-        for (const lineArray of finalLineSegments) {
-            let currentXPos = startX;
-            if (lineArray.length === 0) { // Handle intentionally blank lines by advancing Y
-                currentYPos += lHeight;
-                continue;
-            }
-            for (const element of lineArray) {
-                if (element instanceof global.text.Word) {
-                    renderWord(context, element, currentXPos, currentYPos);
-                    currentXPos += element.width + space;
-                } else if (isIconToken(element)) {
-                    const iconFileName = global.util.wrapImgPath(global.data.markdownIconMap[element]);
-                    if (iconFileName) { renderIcon(context, iconFileName, currentXPos, currentYPos, lHeight); }
-                    if (iconFileName) { currentXPos += 1.25 * lHeight; } 
-                } else if (typeof element === 'string' && element.trim() === '') { currentXPos += context.measureText(' ').width; } // Handle spaces
-            }
-            currentYPos += lHeight;
-        }
-    };    
-
-
-    // Pipeline
-
-    const parsed                = initialParse(text).filter(x => (x !== ""));
-    const words                 = processText(parsed, font, fontColor, effectSwitch(effect));
-    
-    const boldWordsIndexArray   = reducer(helpBoldReduce, words).indices;
-    const italicWordsIndexArray = reducer(helpItalicReduce, words).indices;
-
-    const bWords                = boldWords(boldWordsIndexArray, words);
-    const iWords                = italicWords(italicWordsIndexArray, bWords);
-
-    const stripTagWords         = iWords.filter(notBoldOrItalic);
-    const lines                 = arraySplit(stripTagWords, isNewline);
-    const lines2                = (isNewline(stripTagWords[0])) ? [].concat(lines) : lines
-    const lines3                = lines2.filter(x => !(isNewline(x)));
-
-    const measureAndSplit       = measureAndBreakLines(lines2, ctx, maxWidth, lineHeight);
-
-    renderFinalLines(measureAndSplit, ctx, x, y, lineHeight);
-
-  };
-
-
+            ctx.restore();
+            currentX += element.width;
+        });
+        currentY += lineHeight;
+    });
+};

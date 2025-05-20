@@ -7,9 +7,9 @@
     // Utility functions
     // -------------------------------
 
-    global.util = {
+    
 
-        showError : function (message) {
+    global.util.showError = function (message) {
             const errorLog = document.getElementById("errorLog");
 
             // Ensure the error log is visible
@@ -22,9 +22,9 @@
 
             // Auto-scroll to the bottom of the log
             errorLog.scrollTop = errorLog.scrollHeight;
-        },
+    };
 
-        showOnloadError : function (message) {
+    global.util.showOnloadError = function (message) {
             const onloadErrorLog = document.getElementById("onloadErrorLog");
 
             // Ensure the onload error log is visible
@@ -37,17 +37,17 @@
 
             // Auto-scroll to the bottom of the log
             onloadErrorLog.scrollTop = onloadErrorLog.scrollHeight;
-        },
+    };
 
-        hexToRgba : function (hex, opacity) {
+    global.util.hexToRgba = function (hex, opacity) {
             hex = hex.replace("#", "");
             const r = parseInt(hex.substring(0, 2), 16);
             const g = parseInt(hex.substring(2, 4), 16);
             const b = parseInt(hex.substring(4, 6), 16);
             return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-        },
+    };
 
-        drawRoundedRect : function (ctx, x, y, width, height, radius, stroke = 0) {
+    global.util.drawRoundedRect = function (ctx, x, y, width, height, radius, stroke = 0) {
             // Ensure all values are treated as numbers
             x = Number(x);
             y = Number(y);
@@ -69,27 +69,27 @@
             ctx.closePath();
             if (stroke > 0) { ctx.lineWidth = stroke; ctx.stroke(); }
             ctx.fill();
-        },
+    };
 
-        createLabel : function (forId, text) {
+    global.util.createLabel = function (forId, text) {
             const label = document.createElement("label");
             label.htmlFor = forId;
             label.innerText = text;
             return label;
-        },
+    };
 
         // Helper function to create a number input
-        createNumberInput : function (id, defaultValue = 0) {
+    global.util.createNumberInput = function (id, defaultValue = 0) {
             const input = document.createElement("input");
             input.type = "number";
             input.id = id;
             input.value = defaultValue;
             input.min = 0;
             return input;
-        },
+    };
 
         // Helper function to create a toggle checkbox
-        createToggle : function (id, input) {
+    global.util.createToggle = function (id, input) {
             const toggleDiv = document.createElement("div");
             toggleDiv.className = "cost-symbol-toggle";
 
@@ -112,9 +112,10 @@
             toggleDiv.appendChild(toggleLabel);
             toggleDiv.appendChild(toggleCheckbox);
             return toggleDiv;
-        },
+    };
 
-        wrapImgPath : function(path) {
+    global.util.wrapImgPath = function(path) {
+            
             const imgPath = "./img/";
             if (!path) return ""; // Handle empty or undefined paths
 
@@ -124,7 +125,5 @@
             }
 
             return imgPath + `${path}`;
-        }
-       
     };
     // END Utility Functions

@@ -78,7 +78,7 @@
         ],
 
         // textFieldBackgroundDefaults: Default values for position, dimensions, color, opacity, and border for each text field panel.
-        textFieldBackgroundDefaults: [
+        textFieldBgDefaults: [
             // id_prefix | x   | y   | width | height | color     | hex       | opacity | border | border_max
             { id_prefix: "title", x: 16,  y: 10,  width: 300, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
             { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },

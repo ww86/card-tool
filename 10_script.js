@@ -110,9 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
       global.data.textFieldConfigs.forEach(panelConfig => { // panelConfig is { id_prefix: "..." }
           const id_prefix = panelConfig.id_prefix;
           // Find the corresponding defaults for this panel
-          const headerDefaults = global.data.textFieldHeaderDefaults.find(d => d.id_prefix === id_prefix) || {};
-          const fontDefaults = global.data.textFieldFontDefaults.find(d => d.id_prefix === id_prefix) || {};
-          const backgroundDefaults = global.data.textFieldBackgroundDefaults.find(d => d.id_prefix === id_prefix) || {};
+          const headerDefaults      = global.data.textFieldHeaderDefaults.find(d => d.id_prefix === id_prefix) || {};
+          const fontDefaults        = global.data.textFieldFontDefaults.find(d => d.id_prefix === id_prefix) || {};
+          const backgroundDefaults  = global.data.textFieldBgDefaults.find(d => d.id_prefix === id_prefix) || {};
 
           // Combine the defaults into the structure expected by global.ui.createFont
           const combinedDefaults = { header: headerDefaults, font: fontDefaults, background: backgroundDefaults };

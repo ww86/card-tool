@@ -26,7 +26,7 @@ body {
 
 .left-panel   { width: 320px; }
 .middle-panel { width: 540px; }
-.art-panel    { width: 282px; 
+.art-panel    { width: 220px; 
                 padding-left: 15px;
                 padding-right: 15px;
 }
@@ -463,6 +463,46 @@ canvas {
     border:           1px solid #ff9900;
     background-color: #fff4e6;
     color:            #ff9900;
+}
+
+/* ========================================
+   Art panel
+   ======================================== */
+
+/* Target common input types and select elements within the .art-panel */
+.art-panel input[type="text"],
+.art-panel input[type="url"],
+.art-panel input[type="number"],
+.art-panel select {
+    width: 180px; /* Adjust this value to your desired consistent width */
+    padding: 6px;
+    margin-bottom: 8px; /* Adds some space below each item */
+    box-sizing: border-box; /* Crucial for predictable sizing with padding/borders */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style buttons in the art panel for consistency */
+.art-panel button {
+    padding: 6px 12px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.art-panel button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Styling input[type="file"] can be tricky and varies by browser.
+   This provides a basic width, but visual consistency is harder. */
+.art-panel input[type="file"] {
+    width: 180px; /* Or try 'auto' for browser default and see */
+    padding: 3px; /* Padding behaves differently on file inputs */
+    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 
 /* ========================================

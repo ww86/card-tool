@@ -18,7 +18,7 @@
 
         data                    : {
             availableFonts      : [],
-            fontSelectorConfigs : [],
+            textFieldConfigs    : [], 
             miscIconData        : {},
             disciplineData      : [],
             clanData            : [],
@@ -40,6 +40,19 @@
             wrapImgPath         : function(){},
 
         },
+
+        ui                      : {
+            new_inl             : function (){}, 
+            new_rad             : function (){},
+            new_pck             : function (){},
+            new_hex             : function (){},
+            new_opt             : function (){},
+            new_lbl             : function (){},
+            new_inp             : function (){},
+            new_btn             : function (){},            
+            createFont          : function (){}, 
+        },
+
 
         text                    : {
             Word                : function (){},

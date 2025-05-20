@@ -10,11 +10,11 @@ body {
 
 .container {
   display:     flex;
-  flex-wrap:   wrap;
+  flex-wrap:   nowrap;
   gap:         12px;
   padding:     12px;
   background:  #ddd;
-  box-sizing: border-box;
+  box-sizing:   border-box;
 }
 
 .left-panel, .middle-panel, .art-panel, .right-panel {
@@ -26,7 +26,10 @@ body {
 
 .left-panel   { width: 320px; }
 .middle-panel { width: 540px; }
-.art-panel    { width: 282px; }
+.art-panel    { width: 282px; 
+                padding-left: 15px;
+                padding-right: 15px;
+}
 
 .right-panel {
   flex:      1;
@@ -53,41 +56,20 @@ body {
 .input-group { margin-bottom: 15px; }
 .h-selector {
   margin-bottom: 5px;
-  font-size:     14px;
+  font-size:     16px;
 }
 
 .input-group label {
   display:       block;
-  font-size:     12px;
   margin-bottom: 5px;
 }
 
 .settings-group { background-color: #EEE; } /* Often used with input groups */
 
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-  width:      100%;
-  padding:    4px;
-  font-size:  12px;
-  box-sizing: border-box;
-}
-
 textarea { /* General textarea styling */
-  resize:      vertical;
-  white-space: normal; /* Ensure default wrapping */
-}
-
-#cardText {
-  height:        auto;
-  min-height:    80px;
-  overflow-wrap: break-word;
-  padding:       4px 8px;
-  box-sizing:    border-box;
-  white-space:   normal;
-  resize:        vertical;
-  align-self:    flex-start;
+  width:        100%;
+  resize:       vertical;
+  white-space:  normal; /* Ensure default wrapping */
 }
 
 /* Inline selectors for font, color, etc. */
@@ -99,11 +81,101 @@ textarea { /* General textarea styling */
   margin-top:  5px;
 }
 
-.radio-selector {
-  gap: 2px;
+.art-panel-number-input { width: auto; padding-left: 10px; padding-right: 10px; }
+
+
+
+/* ========================================
+   FONT CONTROL PANEL 
+   ======================================== */
+
+.font-control-main-input      { width: 100%; }
+.font-control-inline-selector { width: 100%; }
+
+.control-label-inline { font-size: 10px;}
+
+.control-text-input {
+    flex-grow: 1; /* Allow text input to take available space */
+    min-width: 100px; /* Ensure it doesn't get too small */
 }
 
-.bg-color-picker { width: 80px; }
+.control-textarea {
+    flex-grow: 1;
+    min-width: 100px;
+    min-height: 60px; /* Give textareas a default height */
+    resize: vertical; /* Allow vertical resizing */
+}
+
+fieldset .control-fieldset {
+  width: 100%;
+  margin: 2px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  padding: 5px 0px 2px 2px;
+}
+
+.control-legend { 
+  font-size: 12px;
+}
+
+
+/* Both panels */
+
+.opacity-input { width: 50px; }
+.control-input {
+    padding: 5px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+.position-input {       width: 100px; }
+.control-select {
+    height: 26px;
+    padding: 2px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+.control-color-picker {    
+  width:          20px; 
+  height:         28px; 
+  padding:        0px;
+  margin:         0px;
+  font-size:      12px;
+  border:         1px solid #bbb;
+  border-radius:  4px;
+  box-sizing:     border-box;
+}
+.control-input-hex {
+    width: 70px; /* Width for hex color inputs */
+    text-transform: uppercase; /* Display hex in uppercase */
+}
+
+/* Font panel */
+
+.font-family-select   {    width: 100px; }
+.font-family-select   {    flex-grow: 1; /* Allow font select to take more space */}
+.radio-group {
+  margin-left: 0px;
+  padding-left: 0px;
+  gap: 2px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.radio-label {
+    display: flex;
+    align-items: right;
+    cursor: pointer;
+}
+
+
+/* Background Panel*/
+.dimension-input {        width: 100px;     }
+
 
 /* ========================================
    BUTTONS
@@ -201,6 +273,12 @@ canvas {
 /* ========================================
    DISCIPLINE PANEL STYLES
    ======================================== */
+.discipline-inline-selector {
+  display: grid;
+  grid-template-columns:  15px 50px 15px 50px 30px 40px 25px 40px 25px 40px 35px 40px 18px 18px;
+  font-size: 10px;
+}
+
 .toggle-grid-discipline {
   display:                grid;
   grid-template-columns:  1fr 1fr 1fr 1fr;

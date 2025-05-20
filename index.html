@@ -30,460 +30,23 @@
 <body>
   <div class="container">
     <!-- Left Panel: Card details & text styling -->
-    <div class="left-panel">
+    <div class="left-panel" id="left-panel">
       <h2>Details</h2>
       
-      <!-- Card Name with font controls -->
+
+      <!-- Font control panels,
+            structure is like this
+
       <div class="input-group">
         <div class="h-selector">
-          <label for="cardName">Name:</label>
-          <input type="text" id="cardName" placeholder="Card Name">
         </div>
-
         <div class="settings-group">
-          <!-- Text -->                         
-          <div class="inline-selector">
-            <label for="nameFont">Font:</label>
-            <select id="nameFont">         
-            </select>
-            <label for="nameFontSize">Size:</label>
-            <select id="nameFontSize">
-              <option value="6">6</option>
-              <option value="8">8</option>                         
-              <option value="10">10</option>                   
-              <option value="12">12</option>                   
-              <option value="14">14</option>                   
-              <option value="16">16</option>                            
-              <option value="18">18</option>              
-              <option value="20" selected>20</option>
-              <option value="22">22</option>              
-              <option value="24">24</option>
-              <option value="26">26</option>                            
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="34">34</option>
-              <option value="36">36</option>              
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="42">42</option>                            
-              <option value="44">44</option>                                          
-              <option value="46">46</option>                                                        
-              <option value="48">48</option>                                                        
-              <option value="60">60</option>                    
-              <option value="72">72</option>                                                        
-            </select>
-          </div>
-          <div class="inline-selector">
-            <label for="nameColor">Color:</label>
-            <input type="color" id="nameColor" value="#FFFFFF">
-            <label for="nameHex">#:</label>
-            <input type="text" id="nameHex" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF">
-            <label for="nameOpacity">α:</label>
-            <input type="number" id="nameOpacity" value="100" min="0" max="100">               
-          </div>
-          <div class="inline-selector radio-selector">
-            <label>FX:</label>
-            <label><input type="radio" id="nameEffectNone" name="nameEffect" value="0"> None</label>
-            <label><input type="radio" id="nameEffect1" name="nameEffect" value="1"> 1</label>
-            <label><input type="radio" id="nameEffect2" name="nameEffect" value="2" checked> 2</label>
-            <label><input type="radio" id="nameEffect3" name="nameEffect" value="3"> 3</label>
-            <label><input type="radio" id="nameEffect4" name="nameEffect" value="4"> 4</label>
-            <label><input type="radio" id="nameEffect5" name="nameEffect" value="5"> 5</label>
-            <label><input type="radio" id="nameEffect6" name="nameEffect" value="6"> 6</label>            
-
-          </div>          
-
-          
-          <!-- Background -->
-          <div class="input-group">     
-            <div class="inline-selector">
-              <label for="nameBoxX">X:</label>
-              <input type="number" id="nameBoxX" value="16">
-              <label for="nameBoxY">Y:</label>
-              <input type="number" id="nameBoxY" value="10">
-            </div>
-            <div class="inline-selector">
-              <label for="nameBoxWidth">W:</label>
-              <input type="number" id="nameBoxWidth" value="300">
-              <label for="nameBoxHeight">H:</label>
-              <input type="number" id="nameBoxHeight" value="28">
-            </div>
-            <div class="inline-selector">
-              <label for="nameBgColor">C:</label>
-              <input type="color" id="nameBgColor" class="bg-color-picker" value="#ffffff">
-              <label for="nameBgHex">#:</label>
-              <input type="text" id="nameBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-              <label for="nameBgOpacity">α:</label>
-              <input type="number" id="nameBgOpacity" value="0" min="0" max="100">
-              <label for="nameBgBorder">B:</label>
-              <input type="number" id="nameBgBorder" class="bg-border-input" value="0" min="0" max="4">                  
-            </div>
-          </div>  
-        </div>    
-      </div>              
-      
-
-      
-      <!-- Card Text with font controls -->
-      <div class="input-group">
-        <div class="h-selector">
-          <label for="cardText">Card Text:</label>
-          <textarea id="cardText" placeholder="Card Text"></textarea>
         </div>
+      </div>       
 
-        <div class="settings-group">
-          <!-- Text -->                    
-          <div class="inline-selector">
-            <label for="textFont">Font:</label>
-            <select id="textFont">      
-            </select>
-            <label for="textFontSize">Size:</label>
-            <select id="textFontSize">
-              <option value="6">6</option>
-              <option value="8">8</option>                         
-              <option value="10">10</option>                   
-              <option value="12">12</option>                   
-              <option value="14" selected>14</option>                   
-              <option value="16">16</option>                            
-              <option value="18">18</option>              
-              <option value="20">20</option>
-              <option value="22">22</option>              
-              <option value="24">24</option>
-              <option value="26">26</option>                            
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="34">34</option>
-              <option value="36">36</option>              
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="42">42</option>                            
-              <option value="44">44</option>                                          
-              <option value="46">46</option>                                                        
-              <option value="48">48</option>                                                        
-              <option value="60">60</option>                    
-              <option value="72">72</option>                        
-            </select>
-          </div>
-          <div class="inline-selector">
-            <label for="textColor">Color:</label>
-            <input type="color" id="textColor" value="#000000">
-            <label for="textHex">#:</label>
-            <input type="text" id="textHex" value="#000000" maxlength="7" placeholder="#000000">
-            <label for="textOpacity">α:</label>
-            <input type="number" id="textOpacity" value="100" min="0" max="100">               
-          </div>
-          <div class="inline-selector">
-            <label>FX:</label>
-            <label><input type="radio" id="textEffectNone" name="textEffect" value="0"> None</label>
-            <label><input type="radio" id="textEffect1" name="textEffect" value="1"> 1</label>
-            <label><input type="radio" id="textEffect2" name="textEffect" value="2" checked> 2</label>
-            <label><input type="radio" id="textEffect3" name="textEffect" value="3"> 3</label>
-            <label><input type="radio" id="textEffect4" name="textEffect" value="4"> 4</label>
-            <label><input type="radio" id="textEffect5" name="textEffect" value="5"> 5</label>
-            <label><input type="radio" id="textEffect6" name="textEffect" value="6"> 6</label>   
-          </div>          
+      -->
 
-        
-          <!-- Background -->
-          <div class="input-group">     
-            <div class="inline-selector">
-              <label for="textBoxX">X:</label>
-              <input type="number" id="textBoxX" value="74">
-              <label for="textBoxY">Y:</label>
-              <input type="number" id="textBoxY" value="315">
-            </div>
-            <div class="inline-selector">
-              <label for="textBoxWidth">W:</label>
-              <input type="number" id="textBoxWidth" value="264">
-              <label for="textBoxHeight">H:</label>
-              <input type="number" id="textBoxHeight" value="160">
-            </div>
-            <div class="inline-selector">
-              <label for="textBgColor">C:</label>
-              <input type="color" id="textBgColor" class="bg-color-picker" value="#ffffff">
-              <label for="textBgHex">#:</label>
-              <input type="text" id="textBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-              <label for="textBgOpacity">α:</label>
-              <input type="number" id="textBgOpacity" value="0" min="0" max="100">      
-              <label for="textBgBorder">B:</label>                  
-              <input type="number" id="textBgBorder" class="bg-border-input" value="0" min="0" max="4">                     
-            </div>
-          </div>  
-        </div>
-      </div>            
-      
-      <!-- Flavour Text with font controls -->    
-      <div class="input-group">
-        <div class="h-selector">
-          <label for="cardFlavour">Flavour:</label>
-          <input type="text" id="cardFlavour" placeholder="Card Flavour">
-        </div>
-
-        <div class="settings-group">     
-          <!-- Text -->        
-          <div class="inline-selector">        
-            <label for="flavourFont">Font:</label>
-            <select id="flavourFont">         
-            </select>
-            <label for="flavourFontSize">Size:</label>
-            <select id="flavourFontSize">
-              <option value="6">6</option>
-              <option value="8">8</option>                         
-              <option value="10">10</option>                   
-              <option value="12">12</option>                   
-              <option value="14" selected>14</option>                   
-              <option value="16">16</option>                            
-              <option value="18">18</option>              
-              <option value="20">20</option>
-              <option value="22">22</option>              
-              <option value="24">24</option>
-              <option value="26">26</option>                            
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="34">34</option>
-              <option value="36">36</option>              
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="42">42</option>                            
-              <option value="44">44</option>                                          
-              <option value="46">46</option>                                                        
-              <option value="48">48</option>                                                        
-              <option value="60">60</option>                    
-              <option value="72">72</option>                     
-            </select>
-          </div>
-          <div class="inline-selector">
-            <label for="flavourColor">Color:</label>
-            <input type="color" id="flavourColor" value="#000000">
-            <label for="flavourHex">#:</label>
-            <input type="text" id="flavourHex" value="#000000" maxlength="7" placeholder="#000000">
-            <label for="flavourOpacity">α:</label>
-            <input type="number" id="flavourOpacity" value="100" min="0" max="100">               
-          </div>
-          <div class="inline-selector">
-            <label>FX:</label>
-            <label><input type="radio" id="flavourEffectNone" name="flavourEffect" value="0"> None</label>
-            <label><input type="radio" id="flavourEffect1" name="flavourEffect" value="1"> 1</label>
-            <label><input type="radio" id="flavourEffect2" name="flavourEffect" value="2" checked> 2</label>
-            <label><input type="radio" id="flavourEffect3" name="flavourEffect" value="3"> 3</label>
-            <label><input type="radio" id="flavourEffect4" name="flavourEffect" value="4"> 4</label>
-            <label><input type="radio" id="flavourEffect5" name="flavourEffect" value="5"> 5</label>
-            <label><input type="radio" id="flavourEffect6" name="flavourEffect" value="6"> 6</label>   
-          </div>          
-
-        
-          <!-- Background -->
-          <div class="input-group">   
-            <div class="inline-selector">
-              <label for="flavourBoxX">X:</label>
-              <input type="number" id="flavourBoxX" value="80">
-              <label for="flavourBoxY">Y:</label>
-              <input type="number" id="flavourBoxY" value="446">
-            </div>
-            <div class="inline-selector">
-              <label for="flavourBoxWidth">W:</label>
-              <input type="number" id="flavourBoxWidth" value="240">
-              <label for="flavourBoxHeight">H:</label>
-              <input type="number" id="flavourBoxHeight" value="24">
-            </div>
-            <div class="inline-selector">
-              <label for="flavourBgColor">C:</label>
-              <input type="color" id="flavourBgColor" class="bg-color-picker" value="#ffffff">
-              <label for="flavourBgHex">#:</label>
-              <input type="text" id="flavourBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-              <label for="flavourBgOpacity">α:</label>
-              <input type="number" id="flavourBgOpacity" value="0" min="0" max="100">
-              <label for="flavourBgBorder">B:</label>                  
-              <input type="number" id="flavourBgBorder" class="bg-border-input" value="0" min="0" max="4">                              
-            </div>
-          </div>  
-        </div>
-      </div>            
-      
-      <!-- Artist with font controls -->
-      <div class="input-group">
-        <div class="h-selector">
-          <label for="cardArtist">Artist:</label>
-          <input type="text" id="cardArtist" placeholder="Card artist">
-        </div>
-
-        <div class="settings-group">
-          <!-- Text -->        
-          <div class="inline-selector">
-            <label for="artistFont">Font:</label>
-            <select id="artistFont">         
-            </select>
-            <label for="artistFontSize">Size:</label>
-            <select id="artistFontSize">
-              <option value="6">6</option>
-              <option value="8">8</option>                         
-              <option value="10">10</option>                   
-              <option value="12" selected>12</option>                   
-              <option value="14">14</option>                   
-              <option value="16">16</option>                            
-              <option value="18">18</option>              
-              <option value="20">20</option>
-              <option value="22">22</option>              
-              <option value="24">24</option>
-              <option value="26">26</option>                            
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="34">34</option>
-              <option value="36">36</option>              
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="42">42</option>                            
-              <option value="44">44</option>                                          
-              <option value="46">46</option>                                                        
-              <option value="48">48</option>                                                        
-              <option value="60">60</option>                    
-              <option value="72">72</option>                     
-            </select>
-          </div>
-          <div class="inline-selector">
-            <label for="artistColor">C:</label>
-            <input type="color" id="artistColor" class="bg-color-picker" value="#FFFFFF">
-            <label for="artistHex">#:</label>
-            <input type="text" id="artistHex" value="#FFFFFF" maxlength="7" placeholder="#FFFFFF">
-            <label for="artistOpacity">α:</label>
-            <input type="number" id="artistOpacity" value="100" min="0" max="100">               
-          </div>
-          <div class="inline-selector">
-            <label>FX:</label>
-            <label><input type="radio" id="artistEffectNone" name="artistEffect" value="0"> None</label>
-            <label><input type="radio" id="artistEffect1" name="artistEffect" value="1"> 1</label>
-            <label><input type="radio" id="artistEffect2" name="artistEffect" value="2" checked> 2</label>
-            <label><input type="radio" id="artistEffect3" name="artistEffect" value="3"> 3</label>
-            <label><input type="radio" id="artistEffect4" name="artistEffect" value="4"> 4</label>
-            <label><input type="radio" id="artistEffect5" name="artistEffect" value="5"> 5</label>
-            <label><input type="radio" id="artistEffect6" name="artistEffect" value="6"> 6</label>   
-          </div>          
   
-          
-          <!-- Background -->
-          <div class="input-group">     
-            <div class="inline-selector">
-              <label for="artistBoxX">X:</label>
-              <input type="number" id="artistBoxX" value="60">
-              <label for="artistBoxY">Y:</label>
-              <input type="number" id="artistBoxY" value="475">
-            </div>
-            <div class="inline-selector">
-              <label for="artistBoxWidth">W:</label>
-              <input type="number" id="artistBoxWidth" value="160">
-              <label for="artistBoxHeight">H:</label>
-              <input type="number" id="artistBoxHeight" value="20">
-            </div>
-            <div class="inline-selector">
-              <label for="artistBgColor">C:</label>
-              <input type="color" id="artistBgColor" class="bg-color-picker" value="#ffffff">
-              <label for="artistBgHex">#:</label>
-              <input type="text" id="artistBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-              <label for="artistBgOpacity">α:</label>
-              <input type="number" id="artistBgOpacity" value="0" min="0" max="100">          
-              <label for="artistBgBorder">B:</label>                  
-              <input type="number" id="artistBgBorder" class="bg-border-input" value="0" min="0" max="4">                    
-            </div>
-          </div>  
-        </div>   
-      </div>  
-
-      <!-- Mini card type text with font controls -->
-      <div class="input-group">
-        <div class="h-selector">
-          <label for="cardMini">Mini:</label>
-          <input type="text" id="cardMini" placeholder="Mini type text">
-        </div>
-
-        <div class="settings-group">
-          <!-- Text -->        
-          <div class="inline-selector">
-            <label for="miniFont">Font:</label>
-            <select id="miniFont">     
-            </select>
-            <label for="miniFontSize">Size:</label>
-            <select id="miniFontSize">
-              <option value="5" selected>5</option>              
-              <option value="6">6</option>
-              <option value="7">7</option>              
-              <option value="8">8</option>                         
-              <option value="8">9</option>                                       
-              <option value="10">10</option>                   
-              <option value="12">12</option>                   
-              <option value="14">14</option>                   
-              <option value="16">16</option>                            
-              <option value="18">18</option>              
-              <option value="20">20</option>
-              <option value="22">22</option>              
-              <option value="24">24</option>
-              <option value="26">26</option>                            
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="34">34</option>
-              <option value="36">36</option>              
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="42">42</option>                            
-              <option value="44">44</option>                                          
-              <option value="46">46</option>                                                        
-              <option value="48">48</option>                                                        
-              <option value="60">60</option>                    
-              <option value="72">72</option>                     
-            </select>
-          </div>
-          <div class="inline-selector">
-            <label for="miniColor">C:</label>
-            <input type="color" id="miniColor" class="bg-color-picker" value="#000000">
-            <label for="miniHex">#:</label>
-            <input type="text" id="miniHex" value="#000000" maxlength="7" placeholder="#000000">
-            <label for="miniOpacity">α:</label>
-            <input type="number" id="miniOpacity" value="100" min="0" max="100">               
-          </div>
-          <div class="inline-selector">
-            <label>FX:</label>
-            <label><input type="radio" id="miniEffectNone" name="miniEffect" value="0"> None</label>
-            <label><input type="radio" id="miniEffect1" name="miniEffect" value="1"> 1</label>
-            <label><input type="radio" id="miniEffect2" name="miniEffect" value="2" checked> 2</label>
-            <label><input type="radio" id="miniEffect3" name="miniEffect" value="3"> 3</label>
-            <label><input type="radio" id="miniEffect4" name="miniEffect" value="4"> 4</label>
-            <label><input type="radio" id="miniEffect5" name="miniEffect" value="5"> 5</label>
-            <label><input type="radio" id="miniEffect6" name="miniEffect" value="6"> 6</label>   
-          </div>          
-  
-          
-          <!-- Background -->
-          <div class="input-group">     
-            <div class="inline-selector">
-              <label for="miniBoxX">X:</label>
-              <input type="number" id="miniBoxX" value="13">
-              <label for="miniBoxY">Y:</label>
-              <input type="number" id="miniBoxY" value="113">
-            </div>
-            <div class="inline-selector">
-              <label for="miniBoxWidth">W:</label>
-              <input type="number" id="miniBoxWidth" value="160">
-              <label for="miniBoxHeight">H:</label>
-              <input type="number" id="miniBoxHeight" value="20">
-            </div>
-            <div class="inline-selector">
-              <label for="miniBgColor">C:</label>
-              <input type="color" id="miniBgColor" class="bg-color-picker" value="#ffffff">
-              <label for="miniBgHex">#:</label>
-              <input type="text" id="miniBgHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
-              <label for="miniBgOpacity">α:</label>
-              <input type="number" id="miniBgOpacity" value="0" min="0" max="100">          
-              <label for="miniBgBorder">B:</label>                  
-              <input type="number" id="miniBgBorder" class="bg-border-input" value="0" min="0" max="4">                    
-            </div>
-          </div>  
-        </div>   
-      </div>  
-
     </div>          
     
     <!-- Middle Panel: Toggle selectors -->
@@ -670,27 +233,27 @@
       </div>
       <div class="input-group">
         <label for="offsetX">Offset X (px):</label>
-        <input type="number" id="offsetX" value="0">
+        <input type="number" id="offsetX" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="offsetY">Offset Y (px):</label>
-        <input type="number" id="offsetY" value="0">
+        <input type="number" id="offsetY" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="cropTop">Crop Top (px):</label>
-        <input type="number" id="cropTop" value="0">
+        <input type="number" id="cropTop" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="cropRight">Crop Right (px):</label>
-        <input type="number" id="cropRight" value="0">
+        <input type="number" id="cropRight" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="cropBottom">Crop Bottom (px):</label>
-        <input type="number" id="cropBottom" value="0">
+        <input type="number" id="cropBottom" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="cropLeft">Crop Left (px):</label>
-        <input type="number" id="cropLeft" value="0">
+        <input type="number" id="cropLeft" value="0" class="art-panel-number-input">
       </div>
       <div class="input-group">
         <label for="scalePercent">Scale (%):</label>
@@ -698,7 +261,7 @@
       </div>
       <div class="input-group">
         <label for="borderRadius">Border:</label>
-        <input type="number" id="borderRadius" value="6">
+        <input type="number" id="borderRadius" value="6" class="art-panel-number-input">
       </div>      
     
     </div>
@@ -722,14 +285,16 @@
     </div>
   </div>
   
-  <script src="01_global_variables.js"></script>
-  <script src="02_datatables.js"></script> 
-  <script src="03_utility_functions.js"></script>
-  <script src="04_darkpack_license.js"></script>  
-  <script src="05_json_import_export.js"></script>
-  <script src="06_tests.js"></script>
-  <script src="07_word_wraptext.js"></script>
-  <script src="08_script.js"></script>
+  <script src="01_global_variables.js">       </script>
+  <script src="02_datatables.js">             </script> 
+  <script src="03_utility_functions.js">      </script>
+  <script src="04_ui_functions.js">           </script>
+  <script src="05_darkpack_license.js">       </script>  
+  <script src="06_json_import_export.js">     </script>
+  <script src="07_tests.js">                  </script>
+  <script src="08_font_controls.js">          </script>
+  <script src="09_word_wraptext.js">          </script>
+  <script src="10_script.js">                 </script>
 
   <div id="licensePopup" class="popup-overlay" style="display: none;">
     <div class="popup-content">

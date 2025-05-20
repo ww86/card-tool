@@ -32,13 +32,71 @@
             { name: "Crimson Text",         displayName: "Crimson Text" }
         ],
 
-        fontSelectorConfigs : [
-            { id: "nameFont",       default: "Vollkorn SC"  },
-            { id: "textFont",       default: "Verdana"      },
-            { id: "flavourFont",    default: "Verdana"      },
-            { id: "artistFont",     default: "Verdana"      },
-            { id: "miniFont",       default: "Verdana"      }
+        // textFieldPanelStructure defines the generic layout and control types for a single text customization panel.
+        // This structure will be used for each of the 5 text field instances.
+        textFieldPanelStructure: [
+            // Main text input (name, rules, flavour, etc.)
+            { name: "input",                label: "Text:",         type: "text_or_textarea", placeholder_suffix: " Text" }, 
+
+            { name: "font_select",          label: "Font:",         type: "select",           options_source: "availableFonts" },
+            { name: "font_size_select",     label: "Size:",         type: "select",           options_values: [5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 60, 72] },
+            { name: "text_color_picker",    label: "",              type: "color" },
+            { name: "text_color_hex",       label: "#:",            type: "hex" },
+            { name: "text_opacity_input",   label: "α:",            type: "number",           min: 0,    max: 100 },
+            { name: "effect_radio",         label: "FX:",           type: "radio_group",      options_count: 7, radio_name_suffix: "_effect_radio" }, // 0-6
+
+            { name: "box_x_input",          label: "X:",            type: "number" },
+            { name: "box_y_input",          label: "Y:",            type: "number" },
+            { name: "box_width_input",      label: "W:",            type: "number" },
+            { name: "box_height_input",     label: "H:",            type: "number" },
+            { name: "bg_color_picker",      label: "",              type: "color" },
+            { name: "bg_color_hex",         label: "#:",            type: "hex" },
+            { name: "bg_opacity_input",     label: "α:",            type: "number",           min: 0,    max: 100 },
+            { name: "bg_border_input",      label: "B:",            type: "number",           min: 0 } // max will be per-instance
         ],
+
+
+        // The 'id_prefix' corresponds to the panel, and other keys match 'name' from textFieldPanelStructure,
+
+        textFieldHeaderDefaults: [
+            // id_prefix | label        | type     | placeholder      | value
+            { id_prefix: "title", label: "Name:",        type: "text",     placeholder: "Card Name",      value: "" },
+            { id_prefix: "specs", label: "Card Text:",   type: "textarea", placeholder: "Card Text",      value: "" },
+            { id_prefix: "story", label: "Flavour:",     type: "text",     placeholder: "Card Flavour",   value: "" },
+            { id_prefix: "illus", label: "Artist:",      type: "text",     placeholder: "Card Artist",    value: "" },
+            { id_prefix: "small", label: "Mini:",        type: "text",     placeholder: "Mini type text", value: "" }
+        ],
+
+        // textFieldFontDefaults: Default values for font, size, color, opacity, and effect for each text field panel.
+        textFieldFontDefaults: [
+            // id_prefix        | family                  | size      | color           | hex           | opacity     | effect
+            { id_prefix: "title", family: "Vollkorn SC",    size: "20", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "specs", family: "Verdana",        size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
+            { id_prefix: "story", family: "Verdana",        size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
+            { id_prefix: "illus", family: "Verdana",        size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "small", family: "Verdana",        size: "5",  color: "#000000", hex: "#000000", opacity: 100, effect: "2" }
+        ],
+
+        // textFieldBackgroundDefaults: Default values for position, dimensions, color, opacity, and border for each text field panel.
+        textFieldBackgroundDefaults: [
+            // id_prefix | x   | y   | width | height | color     | hex       | opacity | border | border_max
+            { id_prefix: "title", x: 16,  y: 10,  width: 300, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "story", x: 80,  y: 446, width: 240, height: 24,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "illus", x: 60,  y: 475, width: 160, height: 20,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "small", x: 13,  y: 113, width: 160, height: 20,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
+        ],
+
+        // textFieldConfigs is now just a list of the prefixes, used to iterate through panels.
+        // The actual structure and defaults are in the separate tables above.
+        textFieldConfigs: [
+            { id_prefix: "title" },
+            { id_prefix: "specs" },
+            { id_prefix: "story" },
+            { id_prefix: "illus" },
+            { id_prefix: "small" }
+        ],
+
 
         miscIconData   : {
 

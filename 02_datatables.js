@@ -20,7 +20,9 @@
 
             // Fonts imported via files (as per @font-face in index.html)
             { name: "Manuskript Gothisch",  displayName: "Manuskript Gothisch" },
-            { name: "Aquiline 2",           displayName: "Aquiline 2" },
+            { name: "Gill Sans MT",         displayName: "Gill Sans MT" },
+            { name: "Malkavian Font",       displayName: "Malkavian Font" },                 
+            { name: "GF Ordner Normal",     displayName: "GF Ordner" },                          
 
             // Imported Google Fonts (as per <link> tags in index.html)
             { name: "Tangerine",            displayName: "Tangerine" },
@@ -29,7 +31,7 @@
             { name: "Cormorant Garamond",   displayName: "Cormorant Garamond" },
             { name: "UnifrakturMaguntia",   displayName: "UnifrakturMaguntia" },
             { name: "Dai Banna SIL",        displayName: "Dai Banna SIL" },
-            { name: "Crimson Text",         displayName: "Crimson Text" }
+            { name: "Crimson Text",         displayName: "Crimson Text" },
         ],
 
         // textFieldPanelStructure defines the generic layout and control types for a single text customization panel.
@@ -239,6 +241,7 @@
             "library_generic_03"      : "frame_library_generic_03.png",
             "library_generic_04"      : "frame_library_generic_04.png",
             "frame_black_marble_01"   : "frame_black_marble_01.png",        
+            "frame_green_marble_01"   : "frame_green_marble_01.png",        
 
             // Clan Frame Options
             "clan_assamite"           : "frame_clan_assamite.png",

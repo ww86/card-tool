@@ -231,6 +231,7 @@
             "vampire_generic_02"      : "frame_vampire_generic_02.png",
             "vampire_generic_03"      : "frame_vampire_generic_03.png",
             "vampire_generic_04"      : "frame_vampire_generic_04.png",
+            "vampire_cut_01"          : "frame_vampire_cut_01.png",
 
             // Imbued frame
             "imbued_generic_01"       : "frame_imbued_generic_01.png",
@@ -240,6 +241,8 @@
             "library_generic_02"      : "frame_library_generic_02.png",  
             "library_generic_03"      : "frame_library_generic_03.png",
             "library_generic_04"      : "frame_library_generic_04.png",
+            "library_generic_05"      : "frame_library_generic_05.png",
+            "library_generic_06"      : "frame_library_generic_06.png",            
             "frame_black_marble_01"   : "frame_black_marble_01.png",        
             "frame_green_marble_01"   : "frame_green_marble_01.png",        
 
@@ -279,6 +282,10 @@
             "equipment_card"          : "frame_equipment.png",
             "ally_card"               : "frame_ally.png",
 
+            // Generic Side Panel Options
+            "generic_narrow_01"             : "sidepanel_generic_narrow_01.png",
+            "generic_narrow_02"             : "sidepanel_generic_narrow_02.png",            
+            
             // Side Panel Options
             "none"                          : null,
             "generic_green_marble"          : "sidepanel_generic_green_marble.png",

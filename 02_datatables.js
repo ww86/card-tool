@@ -135,7 +135,7 @@
                     },
                     {
                         id_suffix: "ValueFontSize",
-                        label: "Val Font:",
+                        label: "Font:",
                         type: "number",
                         defaultValue: 18, // Default font size for the number on the symbol
                         min: 8, max: 48,
@@ -164,7 +164,7 @@
                         ], defaultValue: "symbol_blood"
                     },
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
-                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
                 ]
             },
             {
@@ -188,7 +188,7 @@
                         ], defaultValue: "symbol_capacity"
                     },
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
-                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
                 ]
             },
             {
@@ -212,7 +212,7 @@
                         ], defaultValue: "symbol_life"
                     },
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
-                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
                 ]
             }
         ],

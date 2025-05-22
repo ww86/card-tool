@@ -13,7 +13,9 @@
             mainImage               : new Image (),
             mainSrc                 : "",
             frameBgImage            : new Image (),
-            sidePanelImage          : new Image (),
+            sidePanelImage          : new Image (),            
+            loadedSymbolImages      : {}, // New property to store pre-defined symbol Image objects
+            uploadedSymbolImages    : {}, 
         },
 
         data                        : {
@@ -53,7 +55,8 @@
             new_opt                 : function (){},
             new_lbl                 : function (){},
             new_inp                 : function (){},
-            new_btn                 : function (){},            
+            new_btn                 : function (){},
+            new_sel                 : function (){},           
             createFont              : function (){}, 
         },
 

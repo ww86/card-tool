@@ -363,12 +363,51 @@ canvas {
 /* Specific layout for inline symbol controls */
 .symbol-inline {
   font-size:             12px;
-  height:                26px;
-  display:               grid;
-  /* Very specific column setup for symbol controls */
-  grid-template-columns: 54px 16px 48px 16px 48px 28px 44px 40px 40px 44px 40px 20px auto;
-  gap:                   4px;
-  align-items:           center; /* Vertically align items in the row */
+  /* height:                84px; */ /* REMOVE fixed height to allow content to define height */
+  display:               flex; /* Will lay out title and all-rows-container horizontally */
+  /* flex-direction:     row; /* Default for flex, so not strictly needed */
+  align-items:           flex-start; /* Align title and row container to their top */
+  background-color:      #eee;
+  margin-top:            2px;
+  margin-bottom:         2px;
+  border-bottom:         1px solid #cccccc55;
+  padding:               2px; /* Uniform padding around */
+  /* grid-template-columns: 54px 16px 48px 16px 48px 28px 44px 40px 40px 44px 40px 20px auto; */ /* Remove outdated grid columns */
+  gap:                   10px; /* Horizontal gap between title and the all-rows-container */
+  /* align-items:           center; */ /* Flex align-items defaults to stretch, which is often fine for full-width rows */
+}
+
+.symbol-group-title {
+  width: 50px;
+  /* margin-bottom: 4px; */ /* No longer needed as parent gap handles spacing */
+  white-space: nowrap; /* Prevent title from wrapping */
+  margin-top: 5px;
+  flex-shrink: 0; /* Prevent title from shrinking if row container is wide */
+  padding-top: 2px; /* Minor adjustment to align text baseline if needed */
+}
+
+/* New container for all the setting rows, sits next to the title */
+.symbol-all-rows-container {
+  display: flex;  
+  flex-direction: column; /* Stacks .symbol-settings-row children vertically */
+  gap: 3px; /* Vertical gap between individual setting rows */
+  flex-grow: 1; /* Allows this container to take up remaining horizontal space */
+}
+
+/* .symbol-settings-row has the .inline-selector class */
+/* .inline-selector is already:
+    display: inline-flex;
+    align-items: center; (vertically centers items in the row)
+    gap: 4px; (horizontal gap between items in the row)
+   This should correctly lay out .symbol-setting-item-container children horizontally.
+*/
+
+.symbol-settings-row {
+  /* background-color: #fdfdfd; */ /* Optional: slight visual distinction for rows */
+  /* padding: 2px 0; */
+  padding-bottom: 0px;
+  padding-top: 0px;
+  margin: 0px;
 }
 
 .symbol-checkbox {
@@ -438,6 +477,25 @@ canvas {
   height:  1px; /* Invisible but ensures alignment */
 }
 
+/* Styles for the container of a single label and its input/select */
+.symbol-setting-item-container {
+  display: flex;
+  flex-direction: column; /* Stack label above input */
+  align-items: flex-start; /* Align children (label, input) to the left */
+  /* margin-right: 8px; */ /* Add if horizontal spacing between items needs adjustment */
+}
+
+.symbol-setting-label {
+  font-size: 10px;      /* Smaller font for labels */
+  margin-bottom: 2px;   /* Space between label and input below it */
+}
+
+.symbol-setting-input {
+  /* Controls like select, input[type=number] might need width adjustments */
+  box-sizing: border-box;
+  font-size: 11px; /* Slightly smaller for compact layout */
+  padding: 3px 4px; /* Compact padding */
+}
 /* ========================================
    ERROR LOGGING STYLES
    ======================================== */
@@ -465,6 +523,17 @@ canvas {
     color:            #ff9900;
 }
 
+/* Specific input widths within symbol settings for better control */
+.symbol-setting-item-container input[type="number"].symbol-setting-input {
+  width: 55px;
+}
+.symbol-setting-item-container select.symbol-setting-input {
+  min-width: 90px;
+}
+.symbol-setting-item-container input[type="file"].symbol-setting-input {
+  max-width: 130px; /* File inputs can be wide */
+  font-size: 10px; /* Often helps with file input button text */
+}
 /* ========================================
    Art panel
    ======================================== */

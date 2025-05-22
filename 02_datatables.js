@@ -100,45 +100,122 @@
         ],
 
 
-        miscIconData   : {
+        symbolIconConfigs: [
+            {
+                id_prefix: "pool",
+                displayName: "Pool",
+                settings: [
+                    // --- Row 1: Position, Size, Value, Toggle ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 18,  min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 380, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 38,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 0,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
 
-            poolSettings : [
-                { id: "poolX",              type : "number" ,     label: "X:",              defaultValue: 18, min: 0,   max: 358 },
-                { id: "poolY",              type : "number" ,     label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
-                { id: "poolSize",           type : "number" ,     label: "Size:",           defaultValue: 38, min: 10,  max: 100 },
-                { id: "poolTextOffset",     type : "number" ,     label: "Offset:",         defaultValue: 0,  min: -10, max: 40  },
-                { id: "poolAmount",         type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
-                { id: "poolEnable",         type : "checkbox",    label: "Sh:",             defaultValue: false }
-            ],
-
-            bloodSettings : [
-                { id: "bloodX",             type : "number" ,     label: "X:",              defaultValue: 12, min: 0,   max: 358 },
-                { id: "bloodY",             type : "number" ,     label: "Y:",              defaultValue: 380,min: 0,   max: 500 },
-                { id: "bloodSize",          type : "number" ,     label: "Size:",           defaultValue: 50, min: 10,  max: 100 },
-                { id: "bloodTextOffset",    type : "number" ,     label: "Offset:",         defaultValue: 8,  min: -10, max: 40  },
-                { id: "bloodAmount",        type : "number" ,     label: "Amount:",         defaultValue: 0,   min: 0,   max: 20 },
-                { id: "bloodEnable",        type : "checkbox",    label: "Sh:",             defaultValue: false }
-            ],
-
-            capacitySettings : [
-                { id: "capacityX",          type : "number" ,     label: "X:",              defaultValue: 300, min: 0,   max: 358 },
-                { id: "capacityY",          type : "number" ,     label: "Y:",              defaultValue: 420, min: 0,   max: 500 },
-                { id: "capacitySize",       type : "number" ,     label: "Size:",           defaultValue: 33, min: 10,  max: 100 },
-                { id: "capacityTextOffset", type : "number" ,     label: "Offset:",         defaultValue: 2,  min: -10, max: 40  },
-                { id: "capacityAmount",     type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
-                { id: "capacityEnable",     type : "checkbox",    label: "Sh:",             defaultValue: true }
-            ],
-
-            lifeSettings : [
-                { id: "lifeX",              type : "number" ,     label: "X:",              defaultValue: 12, min: 0,   max: 358 },
-                { id: "lifeY",              type : "number" ,     label: "Y:",              defaultValue: 300,min: 0,   max: 500 },
-                { id: "lifeSize",           type : "number" ,     label: "Size:",           defaultValue: 60, min: 10,  max: 100 },
-                { id: "lifeTextOffset",     type : "number" ,     label: "Offset:",         defaultValue: 8,  min: -10, max: 40  },
-                { id: "lifeAmount",         type : "number" ,     label: "Amount:",         defaultValue: 0,  min: 0,   max: 20 },
-                { id: "lifeEnable",         type : "checkbox",    label: "Sh:",             defaultValue: true }
-            ]  
-
-        },
+                    // --- Row 2: Icon Select, Icon Upload, Value Font Size ---
+                    {
+                        id_suffix: "IconSelect",
+                        label: "Icon:",
+                        type: "select",
+                        uiRow: 2,
+                        options: [ // Values should match keys in global.data.symbolMap or be special
+                            { value: "symbol_pool",             text: "Pool (Default)" },
+                            { value: "symbol_pool_alt_01",      text: "Alternative Icon" },
+                            { value: "custom_upload", text: "Custom (Upload)" } // Special value for uploaded
+                        ],
+                        defaultValue: "symbol_pool"
+                    },
+                    {
+                        id_suffix: "IconUpload",
+                        label: "Upload:",
+                        type: "file",
+                        uiRow: 2
+                        // No defaultValue for file inputs
+                    },
+                    {
+                        id_suffix: "ValueFontSize",
+                        label: "Val Font:",
+                        type: "number",
+                        defaultValue: 18, // Default font size for the number on the symbol
+                        min: 8, max: 48,
+                        uiRow: 2
+                    }
+                ]
+            },
+            {
+                id_prefix: "blood",
+                displayName: "Blood",
+                settings: [
+                    // --- Row 1 ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 12,  min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 380, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 50,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    // --- Row 2 ---
+                    {
+                        id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
+                        options: [
+                            { value: "symbol_blood",            text: "Blood (Default)" },
+                            { value: "symbol_blood_alt_01",     text: "Alternative Icon" },
+                            { value: "custom_upload",           text: "Custom (Upload)" }
+                        ], defaultValue: "symbol_blood"
+                    },
+                    { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
+                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                ]
+            },
+            {
+                id_prefix: "capacity",
+                displayName: "Capacity",
+                settings: [
+                    // --- Row 1 ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 300, min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 420, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 33,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 2,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: true,                    uiRow: 1 },
+                    // --- Row 2 ---
+                    {
+                        id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
+                        options: [
+                            { value: "symbol_capacity",         text: "Capacity (Default)" },
+                            { value: "symbol_capacity_alt_01",  text: "Alternative Icon" },
+                            { value: "custom_upload",           text: "Custom (Upload)" }
+                        ], defaultValue: "symbol_capacity"
+                    },
+                    { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
+                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                ]
+            },
+            {
+                id_prefix: "life",
+                displayName: "Life",
+                settings: [
+                    // --- Row 1 ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 12,  min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 300, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 60,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: true,                    uiRow: 1 },
+                    // --- Row 2 ---
+                    {
+                        id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
+                        options: [
+                            { value: "symbol_life",             text: "Life (Default)" },
+                            { value: "symbol_life_alt_01",      text: "Alternative Icon" },
+                            { value: "custom_upload",           text: "Custom (Upload)" }
+                        ], defaultValue: "symbol_life"
+                    },
+                    { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
+                    { id_suffix: "ValueFontSize", label: "Val Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                ]
+            }
+        ],
 
         disciplineData : [
             { id: "disciplineAbombwe",      label: "Abombwe",      img_1_src: "icon_discipline_abombwe_inferior.png",      img_2_src: "icon_discipline_abombwe_superior.png",      img_3_src: "icon_discipline_abombwe_other.png",      img_4_src: "icon_discipline_abombwe_inferior_innate.png",      img_5_src: "icon_discipline_abombwe_superior_innate.png",      img_6_src: "icon_discipline_abombwe_other_innate.png" },
@@ -231,6 +308,7 @@
             "vampire_generic_02"      : "frame_vampire_generic_02.png",
             "vampire_generic_03"      : "frame_vampire_generic_03.png",
             "vampire_generic_04"      : "frame_vampire_generic_04.png",
+            "vampire_generic_05"      : "frame_vampire_generic_05.png",            
             "vampire_cut_01"          : "frame_vampire_cut_01.png",
 
             // Imbued frame
@@ -343,6 +421,11 @@
             "symbol_blood"             : "symbol_blood.png",
             "symbol_capacity"          : "symbol_capacity.png",
             "symbol_life"              : "symbol_life.png",
+
+            "symbol_pool_alt_01"        : "symbol_pool_alt_01.png",
+            "symbol_blood_alt_01"       : "symbol_blood_alt_01.png",
+            "symbol_capacity_alt_01"    : "symbol_capacity_alt_01.png",
+            "symbol_life_alt_01"        : "symbol_life_alt_01.png",
 
             // Other Useful Symbols
             "symbol_vote"              : "symbol_vote.png",

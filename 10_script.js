@@ -165,61 +165,155 @@ document.addEventListener("DOMContentLoaded", function () {
   const costSymbolSection     = document.getElementById("symbolHeader");
   const costSymbolGrid        = document.getElementById("symbolGrid");
 
-  function createSymbolSettings (setting) {
-    const label     = document.createElement("div");
-    const input     = document.createElement("input");
+  /**
+   * Creates a label and an input element for a single symbol setting.
+   * @param {string} id_prefix - The prefix for the element IDs (e.g., "pool").
+   * @param {object} setting_config - The configuration object for this specific setting.
+   * @returns {[HTMLLabelElement, HTMLInputElement]} An array containing the created label and input elements.
+   */
+  function createSymbolSettings (id_prefix, setting_config) {
+    const full_id = `${id_prefix}${setting_config.id_suffix}`;
+    let inputElement; // Will hold the created input/select/file element
 
-    label.htmlFor   = setting.id;
-    label.innerText = setting.label;
+    // Arguments for global.ui.new_lbl
+    const labelId         = null; // Labels often don't need an ID themselves
+    const labelClasses    = ["symbol-setting-label"];
+    const labelDefaults   = {
+      forId:       full_id,
+      textContent: setting_config.label
+    };
+    const label = global.ui.new_lbl(labelId, labelClasses, labelDefaults);
 
-    if (setting.type == "number") {
-      input.type      = "number";
-      input.id        = setting.id;
-      input.value     = setting.defaultValue;
-      input.min       = setting.min;
-      input.max       = setting.max;
+    // Common classes for all input types in this context
+    const commonInputClasses = ["symbol-setting-input"];
+
+    if (setting_config.type === "number" || setting_config.type === "checkbox") {
+      const inputDefaults   = { type: setting_config.type };
+      let currentClasses    = [...commonInputClasses]; // Clone for potential modification
+
+      if (setting_config.type === "number") {
+        inputDefaults.value   = setting_config.defaultValue;
+        if (setting_config.min !== undefined) inputDefaults.min = setting_config.min;
+        if (setting_config.max !== undefined) inputDefaults.max = setting_config.max;
+      } else { // checkbox
+        inputDefaults.checked = setting_config.defaultValue;
+        currentClasses.push("symbol-checkbox");
+      }
+      inputElement = global.ui.new_txt(full_id, currentClasses, inputDefaults);
+    } else if (setting_config.type === "select") {
+      const selectId          = full_id;
+      const selectClasses     = commonInputClasses;
+      const selectDefaults    = { name: selectId }; // e.g., name attribute
+      inputElement = global.ui.new_sel(selectId, selectClasses, selectDefaults);
+
+      // Create and append options
+      (setting_config.options || []).forEach(optionConfig => {
+        const optionId          = null;
+        const optionClasses     = [];
+        const optionDefaults    = optionConfig; // { value: "...", text: "..." }
+        const optionElement     = global.ui.new_opt(optionId, optionClasses, optionDefaults);
+        inputElement.appendChild(optionElement);
+      });
+
+      if (setting_config.defaultValue !== undefined) {
+        inputElement.value = setting_config.defaultValue;
+      }
+    } else if (setting_config.type === "file") {
+      const inputDefaults   = {
+        type: "file",
+        accept: "image/*" // Suggest image files
+      };
+      inputElement = global.ui.new_txt(full_id, commonInputClasses, inputDefaults);
+    } else {
+      console.warn(`Unknown setting type: ${setting_config.type} for ${full_id}`);
+      inputElement = document.createElement("span"); // Fallback
+      inputElement.textContent = `[Unsupported type: ${setting_config.type}]`;
     }
+    return [label, inputElement];
+  }
 
-    if (setting.type == "checkbox") {
-      input.type      = "checkbox";
-      input.class     = "symbol-checkbox";
-      input.id        = setting.id;
-      input.checked   = setting.defaultValue;
-    }
+  /**
+   * Creates a div containing all settings for a particular symbol type (e.g., Pool, Blood).
+   * @param {object} symbol_config - The configuration object for the symbol type from global.data.symbolIconConfigs.
+   * @returns {HTMLDivElement} The created div element containing the settings UI.
+   */
+  function createSettingsDiv (symbol_config) {
+    // Arguments for settingsGroupDiv
+    const settingsGroupId       = `${symbol_config.id_prefix}_settings_group`;
+    const settingsGroupClasses  = ["symbol-inline"];
+    const settingsGroupDefaults = {}; // No specific defaults needed here beyond id and class
+    const settingsGroupDiv      = global.ui.new_inl(settingsGroupId, settingsGroupClasses, settingsGroupDefaults);
 
-    return [input, label];
+    // Arguments for titleDiv
+    const titleId         = null;
+    const titleClasses    = ["symbol-group-title"];
+    const titleDefaults   = { textContent: `${symbol_config.displayName}:` };
+    const titleDiv        = global.ui.new_inl(titleId, titleClasses, titleDefaults);
+    settingsGroupDiv.appendChild(titleDiv);
 
-  };
+    // Create a new container that will hold all the setting rows
+    const allRowsContainerId        = `${symbol_config.id_prefix}_all_rows_wrapper`;
+    const allRowsContainerClasses   = ["symbol-all-rows-container"]; // New class for this wrapper
+    const allRowsContainerDefaults  = {};
+    const allRowsContainer          = global.ui.new_inl(allRowsContainerId, allRowsContainerClasses, allRowsContainerDefaults);
+    settingsGroupDiv.appendChild(allRowsContainer); // This wrapper is the second direct child    
 
-  function createSettingsDiv (settings, name) {
-    const setDiv = document.createElement("div");
-    const title = document.createElement("div");
-    title.innerHTML = name + ":";
-    setDiv.className = "symbol-inline";
-    setDiv.appendChild(title);
-
-    settings.forEach(set => {
-      const [input,label] = createSymbolSettings(set);
-      setDiv.appendChild(label);
-      setDiv.appendChild(input);
+    // Group settings by uiRow
+    const settingsByRow = {};
+    symbol_config.settings.forEach(setting_item => {
+        const rowNum = setting_item.uiRow || 1; // Default to row 1 if not specified
+        if (!settingsByRow[rowNum]) {
+            settingsByRow[rowNum] = [];
+        }
+        settingsByRow[rowNum].push(setting_item);
     });
 
-    return setDiv;
+    // Create and append elements for each row
+    Object.keys(settingsByRow).sort((a, b) => a - b).forEach(rowNum => {
+        // Arguments for rowDiv
+      const rowId         = null;
+      const rowClasses    = ["symbol-settings-row", "inline-selector"]; // Added "inline-selector"
+      const rowDefaults   = {};
+      const rowDiv        = global.ui.new_inl(rowId, rowClasses, rowDefaults);
 
-  };
 
-  let poolDiv       = createSettingsDiv(global.data.miscIconData.poolSettings     , "Pool");
-  let bloodDiv      = createSettingsDiv(global.data.miscIconData.bloodSettings    , "Blood");
-  let capacityDiv   = createSettingsDiv(global.data.miscIconData.capacitySettings , "Capacity");
-  let lifeDiv       = createSettingsDiv(global.data.miscIconData.lifeSettings     , "Life");
+
+        settingsByRow[rowNum].forEach(setting_item => {
+            const [label, input] = createSymbolSettings(symbol_config.id_prefix, setting_item);
+            // Arguments for settingContainer
+        const containerId           = null;
+        const containerClasses      = ["symbol-setting-item-container"];
+        const containerDefaults     = {};
+            const settingContainer = global.ui.new_inl(containerId, containerClasses, containerDefaults);
+            settingContainer.appendChild(label);
+            settingContainer.appendChild(input);
+            rowDiv.appendChild(settingContainer);
+        });
+
+        allRowsContainer.appendChild(rowDiv); // Append each settings row to the new allRowsContainer
+    });
+    
+    return settingsGroupDiv;
+  }
+
+  // Generate and append settings UI for each symbol type defined in symbolIconConfigs
+  if (global.data.symbolIconConfigs && Array.isArray(global.data.symbolIconConfigs)) {
+      global.data.symbolIconConfigs.forEach(config => {
+          const settingsElement = createSettingsDiv(config);
+          if (settingsElement) {
+              costSymbolGrid.appendChild(settingsElement);
+          } else {
+              console.error(`Failed to create settings group for ${config.displayName}`);
+              logError(`Failed to create symbol settings UI for ${config.displayName}.`);
+          }
+      });
+  } else {
+      console.error("global.data.symbolIconConfigs is not defined or not an array.");
+      logError("Error: Symbol icon configurations (global.data.symbolIconConfigs) are missing or invalid.");
+  }
+
+
   
-  costSymbolGrid.appendChild(poolDiv);
-  costSymbolGrid.appendChild(bloodDiv);
-  costSymbolGrid.appendChild(capacityDiv);
-  costSymbolGrid.appendChild(lifeDiv);
-  
-
-
   // -------------------------------
   //  Generate card type settings
   // -------------------------------
@@ -575,8 +669,83 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
   
-  
+  // ------------------------------------
+  // Pre-load Symbol Images
+  // ------------------------------------
 
+  function loadSymbolImages(symbolMap, imageCache, onAllProcessedCallback) {
+      const imageKeys = Object.keys(symbolMap);
+      const numImagesToProcess = imageKeys.length;
+      let processedCount = 0;
+
+      if (numImagesToProcess === 0) {
+          // No symbols to process, call the callback immediately if it's a function
+          if (typeof onAllProcessedCallback === 'function') {
+              onAllProcessedCallback();
+          }
+          return;
+      }
+
+      function itemProcessed() {
+          processedCount++;
+          if (processedCount === numImagesToProcess) {
+              if (typeof onAllProcessedCallback === 'function') {
+                  onAllProcessedCallback();
+              }
+          }
+      }
+
+      imageKeys.forEach(key => {
+          const imageShortPath = symbolMap[key];
+
+          if (!imageShortPath) { // Check for undefined, null, or empty string paths
+              console.warn(`Symbol key "${key}" has an empty or null path in symbolMap.`);
+              global.util.showOnloadError(`Symbol image path not defined for: ${key}`);
+              itemProcessed(); // Consider it processed to not hang the loading
+              return; // Skip to the next key
+          }
+
+          const fullImagePath = global.util.wrapImgPath(imageShortPath);
+          let img = imageCache[key];
+
+          if (img && img.src === fullImagePath && img.complete) {
+              // Image is already loaded and src matches, count as processed
+              itemProcessed();
+              return;
+          }
+
+          if (!img) {
+              img = new Image();
+              imageCache[key] = img;
+          }
+
+          // (Re-)assign handlers
+          img.onload = () => {
+              itemProcessed();
+          };
+          img.onerror = () => {
+              console.error(`Failed to load symbol image: ${key} (Path: ${fullImagePath})`);
+              global.util.showOnloadError(`Symbol image failed to load: ${key} (Path: ${fullImagePath})`);
+              itemProcessed();
+          };
+
+          // Set or reset the src to trigger loading.
+          // If src is the same and it previously failed, browser behavior for retrying varies.
+          // This ensures that if the src is different or the image isn't complete, a load is attempted.
+          if (img.src !== fullImagePath || !img.complete) {
+              img.src = fullImagePath;
+          } else {
+            // This case (src is same and complete) should have been caught by the early return.
+            // If somehow reached, consider it processed to be safe.
+            itemProcessed();
+          }
+      });
+  };
+
+  // Call loadSymbolImages with updateCard as the callback
+  loadSymbolImages(global.data.symbolMap, global.art.loadedSymbolImages, updateCard);
+  
+  
   // -------------------------------
   // updateCard(): Renders the complete card.
   // -------------------------------
@@ -909,7 +1078,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ---------------------------------------------
 
     // Helper function to render a cost or capacity symbol
-    function renderCostSymbol(ctx, image, x, y, sizeW, sizeH, textOffset, value, color, toggle) {
+    function renderCostSymbol(ctx, image, x, y, sizeW, sizeH, textOffset, value, color, toggle, valueFontSize) {
     
       ctx.save();  
 
@@ -919,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (toggle)       { ctx.shadowOffsetY   = 2;            }
 
       ctx.drawImage(image, x, y, sizeW, sizeH);
-      ctx.font          = "bold 18px Arial";
+      ctx.font          = `bold ${valueFontSize}px Arial`; // Use dynamic font size
       ctx.textAlign     = "center";
       ctx.textBaseline  = "middle";
       ctx.fillStyle     = color;
@@ -929,81 +1098,100 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
-    function renderCostAndCapacitySymbols(ctx, symbolMap) {
+    function renderCostAndCapacitySymbols(ctx, symbolMap, configs) {
 
-        // Get user selections
-        const poolAmount            = parseInt(document.getElementById("poolAmount").value);
-        const bloodAmount           = parseInt(document.getElementById("bloodAmount").value);
-        const capacityAmount        = parseInt(document.getElementById("capacityAmount").value);
-        const lifeAmount            = parseInt(document.getElementById("lifeAmount").value);
-
-        const poolX                 = parseFloat(document.getElementById("poolX").value);
-        const poolY                 = parseFloat(document.getElementById("poolY").value);
-        const poolSize              = parseFloat(document.getElementById("poolSize").value);
-        const poolTextOffset        = parseFloat(document.getElementById("poolTextOffset").value);
-        const poolEnable            =            document.getElementById("poolEnable").checked;
-
-        const bloodX                = parseFloat(document.getElementById("bloodX").value);
-        const bloodY                = parseFloat(document.getElementById("bloodY").value);
-        const bloodSize             = parseFloat(document.getElementById("bloodSize").value);
-        const bloodTextOffset       = parseFloat(document.getElementById("bloodTextOffset").value);
-        const bloodEnable           =            document.getElementById("bloodEnable").checked;
-
-        const capacityX             = parseFloat(document.getElementById("capacityX").value);
-        const capacityY             = parseFloat(document.getElementById("capacityY").value);
-        const capacitySize          = parseFloat(document.getElementById("capacitySize").value);
-        const capacityTextOffset    = parseFloat(document.getElementById("capacityTextOffset").value);
-        const capacityEnable        =            document.getElementById("capacityEnable").checked;
-
-        const lifeX                 = parseFloat(document.getElementById("lifeX").value);
-        const lifeY                 = parseFloat(document.getElementById("lifeY").value);
-        const lifeSize              = parseFloat(document.getElementById("lifeSize").value);
-        const lifeTextOffset        = parseFloat(document.getElementById("lifeTextOffset").value);
-        const lifeEnable            =            document.getElementById("lifeEnable").checked;
+        if (configs === undefined) { global.util.showError('Missing configs, global.data.symbolIconconfigs'); return; }
         
-        
-        function newW (img, size) {
-            let scalar              = img.naturalWidth / img.naturalHeight;          
-            let w                   = size / scalar;
-            return w;
+        function newH (img, size) {
+            let scalar              = img.naturalHeight / img.naturalWidth;          
+            let h                   = size * scalar;
+            return h;
         };
 
-        if (poolAmount > 0 ) {
-          const poolImage             = new Image ();
-          poolImage.src               = global.util.wrapImgPath(symbolMap["symbol_pool"]);
-          poolImage.onload = function () { 
-            let w = newW(poolImage, poolSize);
-            renderCostSymbol(ctx, poolImage, poolX, poolY, poolSize, w, poolTextOffset, poolAmount, "black",poolEnable);
-          }          
-        }
-        if (bloodAmount > 0) {
-          const bloodImage            = new Image ();
-          bloodImage.src              = global.util.wrapImgPath(symbolMap["symbol_blood"]);
-          bloodImage.onload = function () { 
-            let w = newW(bloodImage, bloodSize);
-            renderCostSymbol(ctx, bloodImage, bloodX, bloodY, bloodSize, w, bloodTextOffset, bloodAmount, "white",bloodEnable);
-          }
-        }        
-        if (capacityAmount > 0 ) { 
-          const capacityImage         = new Image ();
-          capacityImage.src           = global.util.wrapImgPath(symbolMap["symbol_capacity"]);
-          capacityImage.onload = function () { 
-            let w = newW(capacityImage, capacitySize);      
-            renderCostSymbol(ctx, capacityImage, capacityX, capacityY, capacitySize, w, capacityTextOffset, capacityAmount, "white",capacityEnable);
-          }           
-        }
-        if (lifeAmount > 0) {
-          const lifeImage             = new Image ();
-          lifeImage.src               = global.util.wrapImgPath(symbolMap["symbol_life"]);
-          lifeImage.onload = function () {
-            let w = newW(lifeImage, lifeSize);      
-            renderCostSymbol(ctx, lifeImage, lifeX, lifeY, lifeSize, w, lifeTextOffset, lifeAmount, "white",lifeEnable);
-          }           
-        }        
+        configs.forEach(config => {
+            const prefix = config.id_prefix;
+            const amount = parseInt(document.getElementById(prefix + "Amount").value);
+
+            if (amount > 0) {
+                const xPos              = parseFloat(document.getElementById(prefix + "X").value);
+                const yPos              = parseFloat(document.getElementById(prefix + "Y").value);
+                const iconSize          = parseFloat(document.getElementById(prefix + "Size").value); // This is height
+                const textOffset        = parseFloat(document.getElementById(prefix + "TextOffset").value);
+                const shadowEnabled     = document.getElementById(prefix + "Enable").checked;
+                const valueFontSizeElement = document.getElementById(prefix + "ValueFontSize");
+                let valueFontSize;
+
+                if (valueFontSizeElement) {
+                    valueFontSize = parseFloat(valueFontSizeElement.value) || 18; // Default to 18 if parsing fails
+                } else {
+                    // Fallback to datatable default if DOM element is missing
+                    const settingConfig = config.settings.find(s => s.id_suffix === "ValueFontSize");
+                    valueFontSize = settingConfig ? (settingConfig.defaultValue || 18) : 18;
+                }
+                const iconSelectElement = document.getElementById(prefix + "IconSelect");
+                const selectedIconValue = iconSelectElement ? iconSelectElement.value : `symbol_${prefix}`;
+
+                // Determine text color based on symbol type (could be added to config later)
+                let textColor = "white";
+                if (prefix === "pool") { textColor = "black"; }
+
+                let imageToRender = null;
+                let imageKeyForError = selectedIconValue;
+
+                if (selectedIconValue === "custom_upload") {
+
+                    const customImageKey  = `${prefix}IconUpload`; // Key for global.art.uploadedSymbolImages
+                    imageToRender         = global.art.uploadedSymbolImages[customImageKey];
+                    imageKeyForError      = `custom ${prefix} (${customImageKey})`;
+                    if (!imageToRender) {  return; }
+                } 
+
+                if (selectedIconValue !== "custom_upload") {
+
+                  imageToRender = global.art.loadedSymbolImages[selectedIconValue];
+                  if (!imageToRender) {
+                        console.error(`Pre-loaded image for key "${selectedIconValue}" not found in global.art.loadedSymbolImages.`);
+                        global.util.showError(`Symbol image for ${selectedIconValue} not pre-loaded. Check console.`);
+                        return; // Skip rendering this symbol
+                  }
+                }
+
+                if (imageToRender.complete && imageToRender.naturalWidth > 0) {
+                  const renderHeight = newH(imageToRender, iconSize);
+                  renderCostSymbol(ctx, imageToRender, xPos, yPos, iconSize, renderHeight, textOffset, amount, textColor, shadowEnabled, valueFontSize);
+
+                } else if (imageToRender) { 
+                    // Image object exists but is not complete.
+                    // This should ideally be handled by the initial loading or custom upload handling.
+                    // console.warn(`Image for ${imageKeyForError} was not complete during render. Path: ${imageToRender.src}. Attaching onload.`);
+                    // Fallback: if not already handled, attach an onload to trigger redraw.
+                  if (!imageToRender.onload && (!imageToRender.dataset || !imageToRender.dataset.onloadAttachedRender)) {
+                        imageToRender.onload = function() {
+                            // console.log(`Deferred load complete for ${imageKeyForError} during render, triggering updateCard.`);
+                            if(imageToRender.dataset) delete imageToRender.dataset.onloadAttachedRender;
+                            imageToRender.onload = null; // Clear to avoid multiple calls
+                            imageToRender.onerror = null; // Clear error handler too
+                            updateCard(); 
+                  };
+                  
+                  imageToRender.onerror = function() {
+                            console.error(`Deferred load FAILED for ${imageKeyForError} during render. Path: ${imageToRender.src}`);
+                            if(imageToRender.dataset) delete imageToRender.dataset.onloadAttachedRender;
+                            imageToRender.onload = null; 
+                            imageToRender.onerror = null;
+                            // Optionally, you might want to show an error or skip future attempts for this image
+                  };
+                        
+                  if(imageToRender.dataset) { imageToRender.dataset.onloadAttachedRender = 'true'; }
+                  } // Closes the inner if (!imageToRender.onload && ...)
+              
+                } 
+            }     
+        });
 
     };
 
-    renderCostAndCapacitySymbols(ctx, global.data.symbolMap);
+    renderCostAndCapacitySymbols(ctx, global.data.symbolMap, global.data.symbolIconConfigs);
 
     // END of Render capacity symbol, life symbol (logic)
 

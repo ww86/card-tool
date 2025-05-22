@@ -2,25 +2,48 @@
 
 
 
+  // Helper function to convert an Image object to Base64
+  function imageToBase64(imgElement) {
+    if (!imgElement || !imgElement.complete || imgElement.naturalWidth === 0 || imgElement.naturalHeight === 0) {
+        // console.warn("imageToBase64: Image not loaded or no dimensions.", imgElement ? imgElement.src : 'No image element');
+        return null;
+    }
+    // If the image source is already a data URL, just return it.
+    if (imgElement.src && imgElement.src.startsWith('data:image')) {
+        // console.warn("imageToBase64: Image not loaded or no dimensions.", imgElement ? imgElement.src : 'No image element');
+        return null;
+    }
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = imgElement.naturalWidth;
+        canvas.height = imgElement.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imgElement, 0, 0);
+        // Prefer PNG for lossless, but check for very small dataURLs which might indicate an issue
+        let dataURL = canvas.toDataURL('image/png');
+        if (dataURL.length < 200) { // Arbitrary small length, might indicate empty canvas from CORS issue
+            // Fallback to JPEG with quality, might be better for photos if PNG was problematic
+            dataURL = canvas.toDataURL('image/jpeg', 0.90);
+        }
+        return dataURL;
+    } catch (e) {
+        console.error("Error converting image to Base64:", e, imgElement.src);
+        global.util.showError(`Error converting image to Base64 (src: ${imgElement.src}). Check console for details. Image might be cross-origin restricted.`);
+        return null;
+    }
+  }
 
   // -------------------------------
   // JSON Export/Import functions.
   // -------------------------------
   
   global.json.exportJson = function () {
-
       const template = {
 
           // General card properties
           mainSrc:                     global.art.mainSrc, // Store the original source
-          cardName:                    document.getElementById("cardName").value,
-          cardText:                    document.getElementById("cardText").value,
-          cardFlavour:                 document.getElementById("cardFlavour").value,
-          cardArtist:                  document.getElementById("cardArtist").value,
-          cardMini:                    document.getElementById("cardMini").value,
-
           // Art positioning and framing
-          offsetX:                     document.getElementById("offsetX").value,
+          offsetX:                     document.getElementById("offsetX").value, // Assuming these are still direct IDs
           offsetY:                     document.getElementById("offsetY").value,
           cropTop:                     document.getElementById("cropTop").value,
           cropRight:                   document.getElementById("cropRight").value,
@@ -30,76 +53,12 @@
           mainFrameValue:              document.getElementById("mainFrame").value,
           sidePanelValue:              document.getElementById("sidePanel").value,
           borderRadius:                document.getElementById("borderRadius").value,
-
-          // Name Text Properties
-          nameFont:                    document.getElementById("nameFont").value,
-          nameFontSize:                document.getElementById("nameFontSize").value,
-          nameHex:                     document.getElementById("nameHex").value,
-          nameOpacity:                 document.getElementById("nameOpacity").value,
-          nameEffect:                  document.querySelector('input[name="nameEffect"]:checked').value,
-          nameBoxX:                    document.getElementById("nameBoxX").value,
-          nameBoxY:                    document.getElementById("nameBoxY").value,
-          nameBoxWidth:                document.getElementById("nameBoxWidth").value,
-          nameBoxHeight:               document.getElementById("nameBoxHeight").value,
-          nameBgHex:                   document.getElementById("nameBgHex").value,
-          nameBgOpacity:               document.getElementById("nameBgOpacity").value,
-          nameBgBorder:                document.getElementById("nameBgBorder").value,
-
-          // Card Text Properties
-          textFont:                    document.getElementById("textFont").value,
-          textFontSize:                document.getElementById("textFontSize").value,
-          textHex:                     document.getElementById("textHex").value,
-          textOpacity:                 document.getElementById("textOpacity").value,
-          textEffect:                  document.querySelector('input[name="textEffect"]:checked').value,
-          textBoxX:                    document.getElementById("textBoxX").value,
-          textBoxY:                    document.getElementById("textBoxY").value,
-          textBoxWidth:                document.getElementById("textBoxWidth").value,
-          textBoxHeight:               document.getElementById("textBoxHeight").value,
-          textBgHex:                   document.getElementById("textBgHex").value,
-          textBgOpacity:               document.getElementById("textBgOpacity").value,
-          textBgBorder:                document.getElementById("textBgBorder").value,
-
-          // Flavour Text Properties
-          flavourFont:                 document.getElementById("flavourFont").value,
-          flavourFontSize:             document.getElementById("flavourFontSize").value,
-          flavourHex:                  document.getElementById("flavourHex").value,
-          flavourOpacity:              document.getElementById("flavourOpacity").value,
-          flavourEffect:               document.querySelector('input[name="flavourEffect"]:checked').value,
-          flavourBoxX:                 document.getElementById("flavourBoxX").value,
-          flavourBoxY:                 document.getElementById("flavourBoxY").value,
-          flavourBoxWidth:             document.getElementById("flavourBoxWidth").value,
-          flavourBoxHeight:            document.getElementById("flavourBoxHeight").value,
-          flavourBgHex:                document.getElementById("flavourBgHex").value,
-          flavourBgOpacity:            document.getElementById("flavourBgOpacity").value,
-          flavourBgBorder:             document.getElementById("flavourBgBorder").value,
-
-          // Artist Text Properties
-          artistFont:                  document.getElementById("artistFont").value,
-          artistFontSize:              document.getElementById("artistFontSize").value,
-          artistHex:                   document.getElementById("artistHex").value,
-          artistOpacity:               document.getElementById("artistOpacity").value,
-          artistEffect:                document.querySelector('input[name="artistEffect"]:checked').value,
-          artistBoxX:                  document.getElementById("artistBoxX").value,
-          artistBoxY:                  document.getElementById("artistBoxY").value,
-          artistBoxWidth:              document.getElementById("artistBoxWidth").value,
-          artistBoxHeight:             document.getElementById("artistBoxHeight").value,
-          artistBgHex:                 document.getElementById("artistBgHex").value,
-          artistBgOpacity:             document.getElementById("artistBgOpacity").value,
-          artistBgBorder:              document.getElementById("artistBgBorder").value,
-
-          // Mini Text Properties
-          miniFont:                    document.getElementById("miniFont").value,
-          miniFontSize:                document.getElementById("miniFontSize").value,
-          miniHex:                     document.getElementById("miniHex").value,
-          miniOpacity:                 document.getElementById("miniOpacity").value,
-          miniEffect:                  document.querySelector('input[name="miniEffect"]:checked').value,
-          miniBoxX:                    document.getElementById("miniBoxX").value,
-          miniBoxY:                    document.getElementById("miniBoxY").value,
-          miniBoxWidth:                document.getElementById("miniBoxWidth").value,
-          miniBoxHeight:               document.getElementById("miniBoxHeight").value,
-          miniBgHex:                   document.getElementById("miniBgHex").value,
-          miniBgOpacity:               document.getElementById("miniBgOpacity").value,
-          miniBgBorder:                document.getElementById("miniBgBorder").value,
+          // Base64 image data
+          mainImageBase64:             imageToBase64(global.art.mainImage),
+          frameBgImageBase64:          imageToBase64(global.art.frameBgImage),
+          sidePanelImageBase64:        imageToBase64(global.art.sidePanelImage),
+          
+          textFields: {}, // Will be populated dynamically
 
           // Costs and Symbols (Pool, Blood, Capacity, Life)
           poolSettings: {}, bloodSettings: {}, capacitySettings: {}, lifeSettings: {},
@@ -165,7 +124,32 @@
           darkPackH:                      document.getElementById("darkPackH").value,
           darkPackW:                      document.getElementById("darkPackW").value,
       };
+      template.loadedSymbolImagesBase64 = {};
+      template.uploadedSymbolImagesBase64 = {};
 
+      // Populate text field properties dynamically
+      if (global.data.textFieldConfigs && Array.isArray(global.data.textFieldConfigs)) {
+          global.data.textFieldConfigs.forEach(config => {
+              const prefix = config.id_prefix;
+              const effectRadio = document.querySelector(`input[name="${prefix}_effect_radio"]:checked`);
+
+              template.textFields[prefix] = {
+                  text:           document.getElementById(`${prefix}_input`)?.value || "",
+                  fontFamily:     document.getElementById(`${prefix}_font_select`)?.value || "Arial",
+                  fontSize:       document.getElementById(`${prefix}_font_size_select`)?.value || "12",
+                  colorHex:       document.getElementById(`${prefix}_text_color_hex`)?.value || "#000000",
+                  opacity:        document.getElementById(`${prefix}_text_opacity_input`)?.value || "100",
+                  effect:         effectRadio ? effectRadio.value : "0",
+                  boxX:           document.getElementById(`${prefix}_box_x_input`)?.value || "0",
+                  boxY:           document.getElementById(`${prefix}_box_y_input`)?.value || "0",
+                  boxWidth:       document.getElementById(`${prefix}_box_width_input`)?.value || "100",
+                  boxHeight:      document.getElementById(`${prefix}_box_height_input`)?.value || "20",
+                  bgColorHex:     document.getElementById(`${prefix}_bg_color_hex`)?.value || "#FFFFFF",
+                  bgOpacity:      document.getElementById(`${prefix}_bg_opacity_input`)?.value || "0",
+                  bgBorder:       document.getElementById(`${prefix}_bg_border_input`)?.value || "0",
+              };
+          });
+      }
       // Populate cost/capacity settings
       ["pool", "blood", "capacity", "life"].forEach(type => {
           template[`${type}Settings`] = {
@@ -175,8 +159,26 @@
               size:       document.getElementById(`${type}Size`).value,
               textOffset: document.getElementById(`${type}TextOffset`).value,
               enable:     document.getElementById(`${type}Enable`).checked,
+              iconSelect: document.getElementById(`${type}IconSelect`)?.value || `symbol_${type}`,
+              valueFontSize: document.getElementById(`${type}ValueFontSize`)?.value || "18",
           };
       });
+      // Populate loaded symbol images base64
+      if (global.art.loadedSymbolImages) {
+        Object.keys(global.art.loadedSymbolImages).forEach(key => {
+            const img = global.art.loadedSymbolImages[key];
+            const base64 = imageToBase64(img);
+            if (base64) template.loadedSymbolImagesBase64[key] = base64;
+        });
+      }
+      // Populate uploaded symbol images base64
+      if (global.art.uploadedSymbolImages) {
+        Object.keys(global.art.uploadedSymbolImages).forEach(key => {
+            const img = global.art.uploadedSymbolImages[key];
+            const base64 = imageToBase64(img);
+            if (base64) template.uploadedSymbolImagesBase64[key] = base64;
+        });
+      }
 
       // Convert the template to JSON and trigger download
       const jsonStr         = JSON.stringify(template, null, 2);
@@ -215,13 +217,6 @@
                   if (el) el.checked = true;
               };
 
-              // Update general card properties
-              setValue("cardName",      template.cardName);
-              setValue("cardText",      template.cardText);
-              setValue("cardFlavour",   template.cardFlavour);
-              setValue("cardArtist",    template.cardArtist);
-              setValue("cardMini",      template.cardMini);
-
               // Art positioning and framing
               setValue("offsetX",       template.offsetX);
               setValue("offsetY",       template.offsetY);
@@ -234,93 +229,43 @@
               setValue("sidePanel",     template.sidePanelValue);
               setValue("borderRadius",  template.borderRadius);
 
-              // Name Text Properties
-              setValue("nameFont",        template.nameFont);
-              setValue("nameFontSize",    template.nameFontSize);
-              setValue("nameHex",         template.nameHex);
-              if (get("nameColor") &&     template.nameHex) get("nameColor").value = template.nameHex; // Update color picker
-              setValue("nameOpacity",     template.nameOpacity);
-              if (template.nameEffect)    setRadio("nameEffect", template.nameEffect);
-              setValue("nameBoxX",        template.nameBoxX);
-              setValue("nameBoxY",        template.nameBoxY);
-              setValue("nameBoxWidth",    template.nameBoxWidth);
-              setValue("nameBoxHeight",   template.nameBoxHeight);
-              setValue("nameBgHex",       template.nameBgHex);
-              if (get("nameBgColor") &&   template.nameBgHex) get("nameBgColor").value = template.nameBgHex; // Update color picker
-              setValue("nameBgOpacity",   template.nameBgOpacity);
-              setValue("nameBgBorder",    template.nameBgBorder);
+              // Load main art image from Base64 if available, else from src
+              if (template.mainImageBase64) {
+                  global.art.mainImage.src = template.mainImageBase64;
+                  global.art.mainSrc = template.mainImageBase64; // Update mainSrc to the base64 data
+              } else if (template.mainSrc) {
+                  global.art.mainSrc = template.mainSrc;
+                  global.art.mainImage.src = global.art.mainSrc;
+              }
+              // Load frame and side panel from Base64 if available
+              // Note: The dropdowns for mainFrame and sidePanel will still be set,
+              // potentially re-triggering loads from frameMap if base64 isn't used or fails.
+              if (template.frameBgImageBase64) global.art.frameBgImage.src = template.frameBgImageBase64;
+              if (template.sidePanelImageBase64) global.art.sidePanelImage.src = template.sidePanelImageBase64;
 
-              // Card Text Properties
-              setValue("textFont",        template.textFont);
-              setValue("textFontSize",    template.textFontSize);
-              setValue("textHex",         template.textHex);
-              if (get("textColor") &&     template.textHex) get("textColor").value = template.textHex;
-              setValue("textOpacity",     template.textOpacity);
-              if (template.textEffect)    setRadio("textEffect", template.textEffect);
-              setValue("textBoxX",        template.textBoxX);
-              setValue("textBoxY",        template.textBoxY);
-              setValue("textBoxWidth",    template.textBoxWidth);
-              setValue("textBoxHeight",   template.textBoxHeight);
-              setValue("textBgHex",       template.textBgHex);
-              if (get("textBgColor") &&   template.textBgHex) get("textBgColor").value = template.textBgHex;
-              setValue("textBgOpacity",   template.textBgOpacity);
-              setValue("textBgBorder",    template.textBgBorder);
-
-              // Flavour Text Properties
-              setValue("flavourFont",     template.flavourFont);
-              setValue("flavourFontSize", template.flavourFontSize);
-              setValue("flavourHex",      template.flavourHex);
-              if (get("flavourColor") &&  template.flavourHex) get("flavourColor").value = template.flavourHex;
-              setValue("flavourOpacity",  template.flavourOpacity);
-              if (template.flavourEffect) setRadio("flavourEffect", template.flavourEffect);
-              setValue("flavourBoxX",     template.flavourBoxX);
-              setValue("flavourBoxY",     template.flavourBoxY);
-              setValue("flavourBoxWidth", template.flavourBoxWidth);
-              setValue("flavourBoxHeight",template.flavourBoxHeight);
-              setValue("flavourBgHex",    template.flavourBgHex);
-              if (get("flavourBgColor") && template.flavourBgHex) get("flavourBgColor").value = template.flavourBgHex;
-              setValue("flavourBgOpacity",template.flavourBgOpacity);
-              setValue("flavourBgBorder", template.flavourBgBorder);
-
-              // Artist Text Properties
-              setValue("artistFont",      template.artistFont);
-              setValue("artistFontSize",  template.artistFontSize);
-              setValue("artistHex",       template.artistHex);
-              if (get("artistColor") &&   template.artistHex) get("artistColor").value = template.artistHex;
-              setValue("artistOpacity",   template.artistOpacity);
-
-              if (template.artistEffect)  setRadio("artistEffect", template.artistEffect);
-
-              setValue("artistBoxX",      template.artistBoxX);
-              setValue("artistBoxY",      template.artistBoxY);
-              setValue("artistBoxWidth",  template.artistBoxWidth);
-              setValue("artistBoxHeight", template.artistBoxHeight);
-              setValue("artistBgHex",     template.artistBgHex);
-              if (get("artistBgColor") && template.artistBgHex) get("artistBgColor").value = template.artistBgHex;
-              setValue("artistBgOpacity", template.artistBgOpacity);
-              setValue("artistBgBorder",  template.artistBgBorder);
-
-              // Mini Text Properties
-              setValue("miniFont",        template.miniFont);
-              setValue("miniFontSize",    template.miniFontSize);
-              setValue("miniHex",         template.miniHex);
-
-              if (get("miniColor") && template.miniHex) get("miniColor").value = template.miniHex;
-              
-              setValue("miniOpacity",     template.miniOpacity);
-
-              if (template.miniEffect)    setRadio("miniEffect", template.miniEffect);
-
-              setValue("miniBoxX",        template.miniBoxX);
-              setValue("miniBoxY",        template.miniBoxY);
-              setValue("miniBoxWidth",    template.miniBoxWidth);
-              setValue("miniBoxHeight",   template.miniBoxHeight);
-              setValue("miniBgHex",       template.miniBgHex);
-
-              if (get("miniBgColor") && template.miniBgHex) get("miniBgColor").value = template.miniBgHex;
-
-              setValue("miniBgOpacity",   template.miniBgOpacity);
-              setValue("miniBgBorder",    template.miniBgBorder);
+              // Import text field properties
+              if (template.textFields) {
+                  Object.keys(template.textFields).forEach(prefix => {
+                      const props = template.textFields[prefix];
+                      if (props) {
+                          setValue(`${prefix}_input`, props.text);
+                          setValue(`${prefix}_font_select`, props.fontFamily);
+                          setValue(`${prefix}_font_size_select`, props.fontSize);
+                          setValue(`${prefix}_text_color_hex`, props.colorHex);
+                          if (get(`${prefix}_text_color_picker`) && props.colorHex) get(`${prefix}_text_color_picker`).value = props.colorHex;
+                          setValue(`${prefix}_text_opacity_input`, props.opacity);
+                          if (props.effect) setRadio(`${prefix}_effect_radio`, props.effect);
+                          setValue(`${prefix}_box_x_input`, props.boxX);
+                          setValue(`${prefix}_box_y_input`, props.boxY);
+                          setValue(`${prefix}_box_width_input`, props.boxWidth);
+                          setValue(`${prefix}_box_height_input`, props.boxHeight);
+                          setValue(`${prefix}_bg_color_hex`, props.bgColorHex);
+                          if (get(`${prefix}_bg_color_picker`) && props.bgColorHex) get(`${prefix}_bg_color_picker`).value = props.bgColorHex;
+                          setValue(`${prefix}_bg_opacity_input`, props.bgOpacity);
+                          setValue(`${prefix}_bg_border_input`, props.bgBorder);
+                      }
+                  });
+              }
 
               // Costs and Symbols
               ["pool", "blood", "capacity", "life"].forEach(type => {
@@ -332,8 +277,34 @@
                       setValue(`${type}Size`,       settings.size);
                       setValue(`${type}TextOffset`, settings.textOffset);
                       setChecked(`${type}Enable`,   settings.enable);
+                      setValue(`${type}IconSelect`, settings.iconSelect);
+                      setValue(`${type}ValueFontSize`, settings.valueFontSize);
                   }
               });
+
+              // Load pre-defined symbol images from Base64
+              if (template.loadedSymbolImagesBase64) {
+                Object.keys(template.loadedSymbolImagesBase64).forEach(key => {
+                    const base64 = template.loadedSymbolImagesBase64[key];
+                    if (base64) {
+                        if (!global.art.loadedSymbolImages[key]) {
+                            global.art.loadedSymbolImages[key] = new Image();
+                        }
+                        global.art.loadedSymbolImages[key].src = base64;
+                    }
+                });
+              }
+              // Load uploaded symbol images from Base64
+              if (template.uploadedSymbolImagesBase64) {
+                Object.keys(template.uploadedSymbolImagesBase64).forEach(key => {
+                    const base64 = template.uploadedSymbolImagesBase64[key];
+                    if (base64) {
+                        // For uploaded symbols, always create a new Image object or overwrite
+                        global.art.uploadedSymbolImages[key] = new Image();
+                        global.art.uploadedSymbolImages[key].src = base64;
+                    }
+                });
+              }
 
               // Update disciplines
               if (template.disciplines) {
@@ -409,12 +380,6 @@
               setValue("darkPackY",       template.darkPackY);
               setValue("darkPackH",       template.darkPackH);
               setValue("darkPackW",       template.darkPackW);
-
-              // Update the main art image
-              if (template.mainSrc) {
-                  global.art.mainSrc = template.mainSrc; // Use the src as is
-                  global.art.mainImage.src = global.art.mainSrc;
-              }
 
               // Trigger a card update
               updateCard();

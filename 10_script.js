@@ -775,12 +775,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateCard() {
 
-    const mainImage = global.art.mainImage;
-    mainImage.crossOrigin = "anonymous";
-    // Removed local frameImage and frameBgImage variables
-    // We will use global.art.frameBgImage and global.art.sidePanelImage
-    
     const canvas = document.getElementById("cardCanvas");
+    // Aggressively reset canvas state
+    canvas.width = canvas.width; // This can help fully reset the canvas
+
+    const mainImage = global.art.mainImage; // Get the current mainImage object
+
+    // Explicitly manage crossOrigin based on the current src
+    if (mainImage.src && mainImage.src.startsWith("data:")) {
+      mainImage.crossOrigin = null; // Or "", but null is fine
+    } else if (mainImage.src) { // For non-data URLs (external)
+      mainImage.crossOrigin = "anonymous";
+    }
+    // If mainImage.src is empty, crossOrigin doesn't really matter yet.
+
     const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1379,8 +1387,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = function (event) {
+        console.log("artFile reader.onload: File read as dataURL. Length:", event.target.result.length);
+        // --- Modification Start: Re-create Image object for local uploads ---
         global.art.mainSrc = event.target.result;
-        global.art.mainImage.src = global.art.mainSrc;
+
+        const newImg = new Image();
+        // newImg.crossOrigin = null; // Explicitly set for dataURL, though default is fine.
+        // It's crucial that newImg.onload calls updateCard.
+        // global.art.mainImage.onload is already set to updateCard, so we can reuse that.
+        // However, to be absolutely safe and explicit:
+        newImg.onload = updateCard;
+        newImg.onerror = function() {
+            global.util.showError(`Failed to load uploaded image: ${file.name}`);
+            updateCard(); // Still update to reflect the error or cleared state
+        };
+        global.art.mainImage = newImg; // Replace the global reference
+        console.log("artFile reader.onload: Assigning dataURL to new global.art.mainImage.src");
+        global.art.mainImage.src = global.art.mainSrc; // Set src on the NEW image
+        
+        // --- Modification End ---
       };
       reader.readAsDataURL(file);
     }
@@ -1389,23 +1414,42 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("loadArtUrl").addEventListener("click", function () {
     const url = document.getElementById("artUrl").value;
     if (url) {
+      console.log("loadArtUrl: Loading URL:", url);
       global.art.mainSrc = url;
+      // For URL loads, ensure crossOrigin is set on the existing global.art.mainImage
+      // or re-create it if you prefer consistency with the file upload logic.
+      // Sticking to modifying the existing one for URL loads for now:
+      console.log("loadArtUrl: Setting global.art.mainImage.crossOrigin = 'anonymous'");
+      global.art.mainImage.crossOrigin = "anonymous"; // SET BEFORE SRC
+      console.log("loadArtUrl: Assigning URL to global.art.mainImage.src");
       global.art.mainImage.src = url;
+      // The existing global.art.mainImage.onload will handle calling updateCard
     }
   });
   
   global.art.mainImage.onload = updateCard;
+  global.art.mainImage.onerror = function() { // Add a generic onerror for the initial/global mainImage
+    global.util.showError(`Failed to load main art image from: ${global.art.mainImage.src}. It might be a CORS issue or an invalid URL. Exporting may be affected.`);
+    // updateCard(); // Avoid potential infinite loop if placeholder also fails
+  };
   
   // -------------------------------
   // Export the canvas as a PNG (preserving transparency).
   // -------------------------------
   document.getElementById("exportButton").addEventListener("click", function () {
     const canvas = document.getElementById("cardCanvas");
-    const dataURL = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.download = "custom_card.png";
-    link.href = dataURL;
-    link.click();
+    try {
+        console.log("ExportButton: Attempting toDataURL...");
+        const dataURL = canvas.toDataURL("image/png");
+        console.log("ExportButton: toDataURL successful. Data length:", dataURL.length);
+        const link = document.createElement("a");
+        link.download = "custom_card.png";
+        link.href = dataURL;
+        link.click();
+    } catch (e) {
+        console.error("ExportButton: Export PNG failed:", e);
+        global.util.showError("Could not export the card as PNG. This might be due to an image loaded from an external website that restricts access (CORS issue), or an unexpected internal error. Try uploading the image directly. Check console for details.");
+    }
   });
 
   // -------------------------------

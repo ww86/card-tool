@@ -10,8 +10,8 @@
     }
     // If the image source is already a data URL, just return it.
     if (imgElement.src && imgElement.src.startsWith('data:image')) {
-        // console.warn("imageToBase64: Image not loaded or no dimensions.", imgElement ? imgElement.src : 'No image element');
-        return null;
+        // console.log("imageToBase64: Source is already a data URL, returning it directly.", imgElement.src.substring(0, 30) + "...");
+        return imgElement.src;
     }
     try {
         const canvas = document.createElement('canvas');

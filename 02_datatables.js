@@ -218,6 +218,9 @@
         ],
 
         disciplineData : [
+            // Burn is here because of the default location(s) of the burn icon
+            { id: "disciplineBurn",         label: "Burn",         img_1_src: "icon_discipline_Burn_inferior.png",         img_2_src: "icon_discipline_Burn_superior.png",         img_3_src: "icon_discipline_Burn_other.png",         img_4_src: "icon_discipline_Burn_inferior_innate.png",         img_5_src: "icon_discipline_Burn_superior_innate.png",         img_6_src: "icon_discipline_Burn_other_innate.png" },
+
             { id: "disciplineAbombwe",      label: "Abombwe",      img_1_src: "icon_discipline_abombwe_inferior.png",      img_2_src: "icon_discipline_abombwe_superior.png",      img_3_src: "icon_discipline_abombwe_other.png",      img_4_src: "icon_discipline_abombwe_inferior_innate.png",      img_5_src: "icon_discipline_abombwe_superior_innate.png",      img_6_src: "icon_discipline_abombwe_other_innate.png" },
             { id: "disciplineAuspex",       label: "Auspex",       img_1_src: "icon_discipline_auspex_inferior.png",       img_2_src: "icon_discipline_auspex_superior.png",       img_3_src: "icon_discipline_auspex_other.png",       img_4_src: "icon_discipline_auspex_inferior_innate.png",       img_5_src: "icon_discipline_auspex_superior_innate.png",       img_6_src: "icon_discipline_auspex_other_innate.png" },
             { id: "disciplineAnimalism",    label: "Animalism",    img_1_src: "icon_discipline_animalism_inferior.png",    img_2_src: "icon_discipline_animalism_superior.png",    img_3_src: "icon_discipline_animalism_other.png",    img_4_src: "icon_discipline_animalism_inferior_innate.png",    img_5_src: "icon_discipline_animalism_superior_innate.png",    img_6_src: "icon_discipline_animalism_other_innate.png" },
@@ -422,10 +425,10 @@
             "symbol_capacity"          : "symbol_capacity.png",
             "symbol_life"              : "symbol_life.png",
 
-            "symbol_pool_alt_01"        : "symbol_pool_alt_01.png",
-            "symbol_blood_alt_01"       : "symbol_blood_alt_01.png",
-            "symbol_capacity_alt_01"    : "symbol_capacity_alt_01.png",
-            "symbol_life_alt_01"        : "symbol_life_alt_01.png",
+            "symbol_pool_alt_01"       : "symbol_pool_alt_01.png",
+            "symbol_blood_alt_01"      : "symbol_blood_alt_01.png",
+            "symbol_capacity_alt_01"   : "symbol_capacity_alt_01.png",
+            "symbol_life_alt_01"       : "symbol_life_alt_01.png",
 
             // Other Useful Symbols
             "symbol_vote"              : "symbol_vote.png",
@@ -555,6 +558,12 @@
             "[!ven]": "icon_clan_ventrue_antitribu.png",
             "[vol]": "icon_clan_volgirre.png"
         },
+
+        premadeTemplates : [
+            { name: "Placeholder - not a real template", path: "templates/vampire_generic_template.json" },           
+        ],        
+
+
     };
 
     // END datatables & maps

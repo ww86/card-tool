@@ -1368,6 +1368,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  /**
+   * Sets up the premade template selector dropdown.
+   * Populates it with options from the provided templates array and attaches an event listener.
+   * @param {Array<object>} templatesArray - An array of template objects, 
+   *                                         each with 'name' and 'path' properties.
+   */
+  function setupPremadeTemplateSelector(templatesArray) {
+    const templateSelector = document.getElementById('templateSelector');
+
+    if (templateSelector && typeof templatesArray !== 'undefined' && templatesArray.length > 0) {
+      // Populate the dropdown
+      templatesArray.forEach(template => {
+        const option = document.createElement('option');
+        option.value = template.path;
+        option.textContent = template.name;
+        templateSelector.appendChild(option);
+      });
+
+      // Add event listener for template selection
+      templateSelector.addEventListener('change', function() {
+        const selectedPath = this.value;
+        if (!selectedPath) {
+          return; // No actual template selected (e.g., the "Select a Template..." option)
+        }
+
+        const confirmed = confirm("Loading this template will overwrite your current work. Are you sure you want to proceed?");
+
+        if (confirmed) {
+          fetch(selectedPath)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}, while fetching ${selectedPath}`);
+              }
+              return response.text(); // Get the JSON as text first
+            })
+            .then(jsonString => {
+              // Create a Blob from the JSON string, then a File object to pass to importJson
+              const blob = new Blob([jsonString], { type: 'application/json' });
+              const file = new File([blob], selectedPath.split('/').pop() || "template.json", { type: "application/json" });
+              global.json.importJson(file); // Use existing import function
+            })
+            .catch(error => {
+              console.error("Error loading premade template:", error);
+              alert(`Failed to load template: ${selectedPath}.\n${error.message}`);
+              this.value = ""; // Reset dropdown on error
+            });
+        } else {
+          this.value = ""; // Reset dropdown if user cancels
+        }
+      });
+    } else if (templateSelector) {
+      console.warn("Template selector found, but the provided templates array is undefined or empty. Dropdown will not be populated.");
+    }
+  }
+
+  setupPremadeTemplateSelector(global.data.premadeTemplates);
+
+
  
   // -------------------------------
   // Listen for changes on all form elements.

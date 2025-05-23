@@ -16,6 +16,7 @@
             sidePanelImage          : new Image (),            
             loadedSymbolImages      : {}, // New property to store pre-defined symbol Image objects
             uploadedSymbolImages    : {}, 
+            uploadedFrame           : new Image(),
         },
 
         data                        : {
@@ -33,6 +34,7 @@
             symbolMap               : {},
             markdownTextmap         : {},
             markdownIconmap         : {},
+            premadeTemplates        : [],
         },
 
         util                        : {

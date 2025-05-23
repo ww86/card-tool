@@ -41,7 +41,7 @@
   <div class="container">
     <!-- Left Panel: Card details & text styling -->
     <div class="left-panel" id="left-panel">
-      <h2>Details</h2>
+      <h2 class="panel-title-h2">Text and font</h2>
       
 
       <!-- Font control panels,
@@ -61,6 +61,7 @@
     
     <!-- Middle Panel: Toggle selectors -->
     <div class="middle-panel">
+      <h2 class="panel-title-h2">Icons</h2>      
 
       <div class="section cost-symbol-section">
         <h2>Capacity & Cost Icons</h2>
@@ -105,10 +106,11 @@
     
     <!-- Art Panel: Image import & adjustments -->    
     <div class="art-panel">
-      <h2>Art and Frame</h2>      
+      <h2 class="panel-title-h2">Art and Frame</h2>
+
+
+      
       <!-- Type and Subtype -->
-
-
 
      <!-- Main Frame Dropdown -->
     <div class="input-group">
@@ -117,7 +119,8 @@
 
         <!-- Library Card Types -->
         <optgroup label="Library Card Types (Quality currently off)">
-          <option value="none" selected>None</option>                 
+          <option value="none" selected>None</option> 
+          <option value="custom_uploaded_frame">Uploaded Frame</option>                          
           <option value="modifier_card">Modifier</option>
           <option value="action_card">Action</option>
           <option value="political_action_card">Political Action</option>
@@ -240,11 +243,11 @@
     </div>
 
       <div class="input-group">
-        <label for="artFile">Upload Image:</label>
+        <label for="artFile">Upload Main Art Image:</label>
         <input type="file" id="artFile" accept="image/*">
       </div>
       <div class="input-group">
-        <label for="artUrl">Image URL:</label>
+        <label for="artUrl">Main Art Image URL:</label>
         <input type="text" id="artUrl" placeholder="Enter image URL">
         <button id="loadArtUrl">Load Image</button>
       </div>
@@ -280,12 +283,24 @@
         <label for="borderRadius">Border:</label>
         <input type="number" id="borderRadius" value="6" class="art-panel-number-input">
       </div>      
-    
+
+          <!-- Premade Template Dropdown -->
+      <div class="input-group">
+        <label for="templateSelector">Load Premade Template:</label>
+        <select id="templateSelector">
+          <option value="" selected disabled>Select a Template...</option>
+          <!-- Options will be populated by JavaScript from 02_datatables.js -->
+        </select>
+      </div>
+
     </div>
 
     <!-- Right Panel: Card preview and action buttons -->
     <div class="right-panel">
-      <h2>Card Preview</h2>
+      <h2 class="panel-title-h2">Card Preview</h2>
+      <div class="vtm-logo-container">
+        <img id="vtm-logo" src="vtm_logo.png">
+      </div>
       <canvas id="cardCanvas" width="358" height="500"></canvas>
       <div class="button-container">
         <button id="updateCardButton">Update card</button>        

@@ -49,7 +49,7 @@
 
 
 
-  global.tests.testAvailableFonts = function (fonts) {
+  global.tests.testAllFonts = function (fonts) {
 
       function testFont(font) {
         if (!document.fonts.check(`12px "${font.name}"`)) {

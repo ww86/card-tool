@@ -2,12 +2,12 @@
    COLORS
    ======================================== */
 :root {
-  --color-00: #fa149a;
+  --color-00: #470e2f;
   --color-01: #fdfcfe;
-  --color-02: #f3f2f3;
-  --color-03: #d4d3d4;  
-  --color-04: #38313b;
-  --color-05: #18080f;
+  --color-02: #e9e6e9;
+  --color-03: #e0dde0;  
+  --color-04: #ffffff;
+  --color-05: #460f33;
 }
 
 input[type="file"]                                    { background-color: var(--color-01); }
@@ -33,12 +33,12 @@ body                                                  { color: var(--color-05); 
 .panel-title-h2                                       { color: var(--color-00); } 
 
 /* border colors */
-.left-panel, .middle-panel, .art-panel, .right-panel  { border: 2px solid var(--color-04); }
+.left-panel, .middle-panel, .art-panel, .right-panel  { border: 2px solid var(--color-03); }
 .cost-symbol-section h2                               { border-bottom:  1px solid var(--color-05); }
-fieldset .control-fieldset                            { border: 1px solid var(--color-04); }
-.control-input                                        { border: 1px solid var(--color-04); }
-.control-select                                       { border: 1px solid var(--color-04); }
-.control-color-picker                                 { border: 1px solid var(--color-04); }
+fieldset .control-fieldset                            { border: 1px solid var(--color-03); }
+.control-input                                        { border: 1px solid var(--color-03); }
+.control-select                                       { border: 1px solid var(--color-03); }
+.control-color-picker                                 { border: 1px solid var(--color-03); }
 .discipline-item                                      { border: 1px solid var(--color-03); }
 .discipline-slider                                    { border: 1px solid var(--color-05); }
 .discipline-slider                                    { box-shadow: 0 0 2px var(--color-05); } 

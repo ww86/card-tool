@@ -14,16 +14,17 @@
         return imgElement.src;
     }
     try {
-        const canvas = document.createElement('canvas');
-        canvas.width = imgElement.naturalWidth;
-        canvas.height = imgElement.naturalHeight;
-        const ctx = canvas.getContext('2d');
+        const canvas        = document.createElement('canvas');
+        canvas.width        = imgElement.naturalWidth;
+        canvas.height       = imgElement.naturalHeight;
+        const ctx           = canvas.getContext('2d');
         ctx.drawImage(imgElement, 0, 0);
+
         // Prefer PNG for lossless, but check for very small dataURLs which might indicate an issue
-        let dataURL = canvas.toDataURL('image/png');
+        let dataURL         = canvas.toDataURL('image/png');
         if (dataURL.length < 200) { // Arbitrary small length, might indicate empty canvas from CORS issue
             // Fallback to JPEG with quality, might be better for photos if PNG was problematic
-            dataURL = canvas.toDataURL('image/jpeg', 0.90);
+            dataURL         = canvas.toDataURL('image/jpeg', 0.90);
         }
         return dataURL;
     } catch (e) {
@@ -38,158 +39,163 @@
   // -------------------------------
   
   global.json.exportJson = function () {
-      const template = {
+      try {
+          const template = {
 
-          // General card properties
-          mainSrc:                     global.art.mainSrc, // Store the original source
-          // Art positioning and framing
-          offsetX:                     document.getElementById("offsetX").value, // Assuming these are still direct IDs
-          offsetY:                     document.getElementById("offsetY").value,
-          cropTop:                     document.getElementById("cropTop").value,
-          cropRight:                   document.getElementById("cropRight").value,
-          cropBottom:                  document.getElementById("cropBottom").value,
-          cropLeft:                    document.getElementById("cropLeft").value,
-          scalePercent:                document.getElementById("scalePercent").value,
-          mainFrameValue:              document.getElementById("mainFrame").value,
-          sidePanelValue:              document.getElementById("sidePanel").value,
-          borderRadius:                document.getElementById("borderRadius").value,
-          // Base64 image data
-          mainImageBase64:             imageToBase64(global.art.mainImage),
-          frameBgImageBase64:          imageToBase64(global.art.frameBgImage),
-          uploadedFrameBase64:         imageToBase64(global.art.uploadedFrame),
-          sidePanelImageBase64:        imageToBase64(global.art.sidePanelImage),
-          
-          textFields: {}, // Will be populated dynamically
+              // General card properties
+              mainSrc:                     global.art.mainSrc, // Store the original source
+              // Art positioning and framing
+              offsetX:                     document.getElementById("offsetX").value,
+              offsetY:                     document.getElementById("offsetY").value,
+              cropTop:                     document.getElementById("cropTop").value,
+              cropRight:                   document.getElementById("cropRight").value,
+              cropBottom:                  document.getElementById("cropBottom").value,
+              cropLeft:                    document.getElementById("cropLeft").value,
+              scalePercent:                document.getElementById("scalePercent").value,
+              mainFrameValue:              document.getElementById("mainFrame").value,
+              sidePanelValue:              document.getElementById("sidePanel").value,
+              borderRadius:                document.getElementById("borderRadius").value,
+              // Base64 image data
+              mainImageBase64:             imageToBase64(global.art.mainImage),
+              frameBgImageBase64:          imageToBase64(global.art.frameBgImage),
+              uploadedFrameBase64:         imageToBase64(global.art.uploadedFrame),
+              sidePanelImageBase64:        imageToBase64(global.art.sidePanelImage),
+              
+              textFields: {}, // Will be populated dynamically
 
-          // Costs and Symbols (Pool, Blood, Capacity, Life)
-          poolSettings: {}, bloodSettings: {}, capacitySettings: {}, lifeSettings: {},
+              // Costs and Symbols (Pool, Blood, Capacity, Life)
+              poolSettings: {}, bloodSettings: {}, capacitySettings: {}, lifeSettings: {},
 
-          // Disciplines
-          disciplines: global.data.disciplineData.reduce((acc, item) => {
-              acc[item.id] = { // Align the object properties
-                  tier:   parseInt(document.querySelector(`.discipline-slider[data-current-tier][id="${item.id}"]`)?.dataset.currentTier || "0", 10),
-                  innate: document.getElementById(`${item.id}Feature`)?.checked || false
-              };
-              return acc;
-          }, {}),
+              // Disciplines
+              disciplines: global.data.disciplineData.reduce((acc, item) => {
+                  acc[item.id] = {
+                      tier:   parseInt(document.querySelector(`.discipline-slider[data-current-tier][id="${item.id}"]`)?.dataset.currentTier || "0", 10),
+                      innate: document.getElementById(`${item.id}Feature`)?.checked || false
+                  };
+                  return acc;
+              }, {}),
 
-          // Clans
-          clans: global.data.clanData.reduce((acc, item) => {
-              acc[item.id] = { // Align the object properties
-                  checked: document.getElementById(item.id).checked,
-                  display: document.getElementById(`${item.id}-display`)?.checked || false
-              };
-              return acc;
-          }, {}),
+              // Clans
+              clans: global.data.clanData.reduce((acc, item) => {
+                  acc[item.id] = {
+                      checked: document.getElementById(item.id).checked,
+                      display: document.getElementById(`${item.id}-display`)?.checked || false
+                  };
+                  return acc;
+              }, {}),
 
-          // Discipline Global Settings
-          disciplineX:                    document.getElementById("disciplineX").value,
-          disciplineY:                    document.getElementById("disciplineY").value,
-          disciplineSize:                 document.getElementById("disciplineSize").value,
-          disciplineDiff:                 document.getElementById("disciplineDiff").value,
-          disciplineSpacing:              document.getElementById("disciplineSpacing").value,
-          disciplineSuperiorOffset:       document.getElementById("disciplineSuperiorOffset").value,
-          disciplineOrientation:          document.getElementById("disciplineOrientation").checked,
-          disciplineToggle:               document.getElementById("disciplineToggle").checked,
-          disciplineToggleX:              document.getElementById("disciplineToggleX").value,
-          disciplineToggleY:              document.getElementById("disciplineToggleY").value,
-          disciplineToggleSize:           document.getElementById("disciplineToggleSize").value,
-          disciplineToggleDiff:           document.getElementById("disciplineToggleDiff").value,
-          disciplineToggleSpacing:        document.getElementById("disciplineToggleSpacing").value,
-          disciplineToggleSuperiorOffset: document.getElementById("disciplineToggleSuperiorOffset").value,
-          disciplineToggleOrientation:    document.getElementById("disciplineToggleOrientation").checked,
+              // Discipline Global Settings
+              disciplineX:                    document.getElementById("disciplineX").value,
+              disciplineY:                    document.getElementById("disciplineY").value,
+              disciplineSize:                 document.getElementById("disciplineSize").value,
+              disciplineDiff:                 document.getElementById("disciplineDiff").value,
+              disciplineSpacing:              document.getElementById("disciplineSpacing").value,
+              disciplineSuperiorOffset:       document.getElementById("disciplineSuperiorOffset").value,
+              disciplineOrientation:          document.getElementById("disciplineOrientation").checked,
+              disciplineToggle:               document.getElementById("disciplineToggle").checked,
+              disciplineToggleX:              document.getElementById("disciplineToggleX").value,
+              disciplineToggleY:              document.getElementById("disciplineToggleY").value,
+              disciplineToggleSize:           document.getElementById("disciplineToggleSize").value,
+              disciplineToggleDiff:           document.getElementById("disciplineToggleDiff").value,
+              disciplineToggleSpacing:        document.getElementById("disciplineToggleSpacing").value,
+              disciplineToggleSuperiorOffset: document.getElementById("disciplineToggleSuperiorOffset").value,
+              disciplineToggleOrientation:    document.getElementById("disciplineToggleOrientation").checked,
 
-          // Clan Global Settings
-          clanX:                          document.getElementById("clanX").value,
-          clanY:                          document.getElementById("clanY").value,
-          clanSize:                       document.getElementById("clanSize").value,
-          clanSpacing:                    document.getElementById("clanSpacing").value,
-          clanOffset:                     document.getElementById("clanOffset").value,
-          clanOrientation:                document.getElementById("clanOrientation").checked,
+              // Clan Global Settings
+              clanX:                          document.getElementById("clanX").value,
+              clanY:                          document.getElementById("clanY").value,
+              clanSize:                       document.getElementById("clanSize").value,
+              clanSpacing:                    document.getElementById("clanSpacing").value,
+              clanOffset:                     document.getElementById("clanOffset").value,
+              clanOrientation:                document.getElementById("clanOrientation").checked,
 
-          // Card Type Toggles & Global Settings
-          cardTypesToggled: global.data.typeMap.reduce((acc, type) => {
-              acc[type.id] = document.getElementById(`${type.id}Toggle`).checked;
-              return acc;
-          }, {}),
-          typeX: document.getElementById("typeX").value,
-          typeY: document.getElementById("typeY").value,
-          typeSize: document.getElementById("typeSize").value,
-          typeSpacing: document.getElementById("typeSpacing").value,
-          typeOrientation: document.getElementById("typeOrientation").checked,
+              // Card Type Toggles & Global Settings
+              cardTypesToggled: global.data.typeMap.reduce((acc, type) => {
+                  acc[type.id] = document.getElementById(`${type.id}Toggle`).checked;
+                  return acc;
+              }, {}),
+              typeX:                          document.getElementById("typeX").value,
+              typeY:                          document.getElementById("typeY").value,
+              typeSize:                       document.getElementById("typeSize").value,
+              typeSpacing:                    document.getElementById("typeSpacing").value,
+              typeOrientation:                document.getElementById("typeOrientation").checked,
 
-          // Dark Pack Logo Settings
-          darkPackToggle:                 document.getElementById("darkPackToggle").checked,
-          darkPackX:                      document.getElementById("darkPackX").value,
-          darkPackY:                      document.getElementById("darkPackY").value,
-          darkPackH:                      document.getElementById("darkPackH").value,
-          darkPackW:                      document.getElementById("darkPackW").value,
-      };
-      template.loadedSymbolImagesBase64 = {};
-      template.uploadedSymbolImagesBase64 = {};
+              // Dark Pack Logo Settings
+              darkPackToggle:                 document.getElementById("darkPackToggle").checked,
+              darkPackX:                      document.getElementById("darkPackX").value,
+              darkPackY:                      document.getElementById("darkPackY").value,
+              darkPackH:                      document.getElementById("darkPackH").value,
+              darkPackW:                      document.getElementById("darkPackW").value,
+          };
+          template.loadedSymbolImagesBase64 = {};
+          template.uploadedSymbolImagesBase64 = {};
 
-      // Populate text field properties dynamically
-      if (global.data.textFieldConfigs && Array.isArray(global.data.textFieldConfigs)) {
-          global.data.textFieldConfigs.forEach(config => {
-              const prefix = config.id_prefix;
-              const effectRadio = document.querySelector(`input[name="${prefix}_effect_radio"]:checked`);
+          // Populate text field properties dynamically
+          if (global.data.textFieldConfigs && Array.isArray(global.data.textFieldConfigs)) {
+              global.data.textFieldConfigs.forEach(config => {
+                  const prefix = config.id_prefix;
+                  const effectRadio = document.querySelector(`input[name="${prefix}_effect_radio"]:checked`);
 
-              template.textFields[prefix] = {
-                  text:           document.getElementById(`${prefix}_input`)?.value || "",
-                  fontFamily:     document.getElementById(`${prefix}_font_select`)?.value || "Arial",
-                  fontSize:       document.getElementById(`${prefix}_font_size_select`)?.value || "12",
-                  colorHex:       document.getElementById(`${prefix}_text_color_hex`)?.value || "#000000",
-                  opacity:        document.getElementById(`${prefix}_text_opacity_input`)?.value || "100",
-                  effect:         effectRadio ? effectRadio.value : "0",
-                  boxX:           document.getElementById(`${prefix}_box_x_input`)?.value || "0",
-                  boxY:           document.getElementById(`${prefix}_box_y_input`)?.value || "0",
-                  boxWidth:       document.getElementById(`${prefix}_box_width_input`)?.value || "100",
-                  boxHeight:      document.getElementById(`${prefix}_box_height_input`)?.value || "20",
-                  bgColorHex:     document.getElementById(`${prefix}_bg_color_hex`)?.value || "#FFFFFF",
-                  bgOpacity:      document.getElementById(`${prefix}_bg_opacity_input`)?.value || "0",
-                  bgBorder:       document.getElementById(`${prefix}_bg_border_input`)?.value || "0",
+                  template.textFields[prefix] = {
+                      text:           document.getElementById(`${prefix}_input`)?.value || "",
+                      fontFamily:     document.getElementById(`${prefix}_font_select`)?.value || "Arial",
+                      fontSize:       document.getElementById(`${prefix}_font_size_select`)?.value || "12",
+                      colorHex:       document.getElementById(`${prefix}_text_color_hex`)?.value || "#000000",
+                      opacity:        document.getElementById(`${prefix}_text_opacity_input`)?.value || "100",
+                      effect:         effectRadio ? effectRadio.value : "0",
+                      boxX:           document.getElementById(`${prefix}_box_x_input`)?.value || "0",
+                      boxY:           document.getElementById(`${prefix}_box_y_input`)?.value || "0",
+                      boxWidth:       document.getElementById(`${prefix}_box_width_input`)?.value || "100",
+                      boxHeight:      document.getElementById(`${prefix}_box_height_input`)?.value || "20",
+                      bgColorHex:     document.getElementById(`${prefix}_bg_color_hex`)?.value || "#FFFFFF",
+                      bgOpacity:      document.getElementById(`${prefix}_bg_opacity_input`)?.value || "0",
+                      bgBorder:       document.getElementById(`${prefix}_bg_border_input`)?.value || "0",
+                  };
+              });
+          }
+          // Populate cost/capacity settings
+          ["pool", "blood", "capacity", "life"].forEach(type => {
+              template[`${type}Settings`] = {
+                  amount:     document.getElementById(`${type}Amount`).value,
+                  x:          document.getElementById(`${type}X`).value,
+                  y:          document.getElementById(`${type}Y`).value,
+                  size:       document.getElementById(`${type}Size`).value,
+                  textOffset: document.getElementById(`${type}TextOffset`).value,
+                  enable:     document.getElementById(`${type}Enable`).checked,
+                  iconSelect: document.getElementById(`${type}IconSelect`)?.value || `symbol_${type}`,
+                  valueFontSize: document.getElementById(`${type}ValueFontSize`)?.value || "18",
               };
           });
-      }
-      // Populate cost/capacity settings
-      ["pool", "blood", "capacity", "life"].forEach(type => {
-          template[`${type}Settings`] = {
-              amount:     document.getElementById(`${type}Amount`).value,
-              x:          document.getElementById(`${type}X`).value,
-              y:          document.getElementById(`${type}Y`).value,
-              size:       document.getElementById(`${type}Size`).value,
-              textOffset: document.getElementById(`${type}TextOffset`).value,
-              enable:     document.getElementById(`${type}Enable`).checked,
-              iconSelect: document.getElementById(`${type}IconSelect`)?.value || `symbol_${type}`,
-              valueFontSize: document.getElementById(`${type}ValueFontSize`)?.value || "18",
-          };
-      });
-      // Populate loaded symbol images base64
-      if (global.art.loadedSymbolImages) {
-        Object.keys(global.art.loadedSymbolImages).forEach(key => {
-            const img = global.art.loadedSymbolImages[key];
-            const base64 = imageToBase64(img);
-            if (base64) template.loadedSymbolImagesBase64[key] = base64;
-        });
-      }
-      // Populate uploaded symbol images base64
-      if (global.art.uploadedSymbolImages) {
-        Object.keys(global.art.uploadedSymbolImages).forEach(key => {
-            const img = global.art.uploadedSymbolImages[key];
-            const base64 = imageToBase64(img);
-            if (base64) template.uploadedSymbolImagesBase64[key] = base64;
-        });
-      }
+          // Populate loaded symbol images base64
+          if (global.art.loadedSymbolImages) {
+            Object.keys(global.art.loadedSymbolImages).forEach(key => {
+                const img = global.art.loadedSymbolImages[key];
+                const base64 = imageToBase64(img);
+                if (base64) template.loadedSymbolImagesBase64[key] = base64;
+            });
+          }
+          // Populate uploaded symbol images base64
+          if (global.art.uploadedSymbolImages) {
+            Object.keys(global.art.uploadedSymbolImages).forEach(key => {
+                const img = global.art.uploadedSymbolImages[key];
+                const base64 = imageToBase64(img);
+                if (base64) template.uploadedSymbolImagesBase64[key] = base64;
+            });
+          }
 
-      // Convert the template to JSON and trigger download
-      const jsonStr         = JSON.stringify(template, null, 2);
-      const blob            = new Blob([jsonStr], { type: "application/json" });
-      const url             = URL.createObjectURL(blob);
-      const link            = document.createElement("a");
-      link.download         = "card_template.json";
-      link.href             = url;
-      link.click();
-      URL.revokeObjectURL(url);
+          // Convert the template to JSON and trigger download
+          const jsonStr         = JSON.stringify(template, null, 2);
+          const blob            = new Blob([jsonStr], { type: "application/json" });
+          const url             = URL.createObjectURL(blob);
+          const link            = document.createElement("a");
+          link.download         = "card_template.json";
+          link.href             = url;
+          link.click();
+          URL.revokeObjectURL(url);
+      } catch (error) {
+          console.error("Error exporting JSON:", error);
+          global.util.showError("Failed to export card data to JSON. " + error.message);
+      }
   };
 
 
@@ -292,21 +298,45 @@
                         if (!global.art.loadedSymbolImages[key]) {
                             global.art.loadedSymbolImages[key] = new Image();
                         }
-                        global.art.loadedSymbolImages[key].src = base64;
+                        const img = global.art.loadedSymbolImages[key];
+                        // Ensure onload/onerror are set for updateCard and error reporting
+                        img.onload = () => {
+                            // console.log(`Symbol image "${key}" loaded from Base64 during import.`);
+                            if (typeof updateCard === 'function') updateCard();
+                        };
+                        img.onerror = () => {
+                            global.util.showError(`Failed to load symbol image "${key}" from Base64 data during import.`);
+                            img.src = ""; // Clear src to prevent broken image icon
+                        };
+                        img.src = base64;
                     }
                 });
               }
               // Load uploaded symbol images from Base64
               if (template.uploadedSymbolImagesBase64) {
                 Object.keys(template.uploadedSymbolImagesBase64).forEach(key => {
+                    // For uploaded symbols, always create a new Image object or overwrite
                     const base64 = template.uploadedSymbolImagesBase64[key];
                     if (base64) {
-                        // For uploaded symbols, always create a new Image object or overwrite
                         global.art.uploadedSymbolImages[key] = new Image();
-                        global.art.uploadedSymbolImages[key].src = base64;
+                        const img = global.art.uploadedSymbolImages[key];
+                        img.onload = () => {
+                            // console.log(`Custom uploaded symbol image "${key}" loaded from Base64 during import.`);
+                            if (typeof updateCard === 'function') updateCard();
+                        };
+                        img.onerror = () => {
+                            global.util.showError(`Failed to load custom uploaded symbol image "${key}" from Base64 data during import.`);
+                            img.src = ""; // Clear src
+                        };
+                        img.src = base64;
                     }
                 });
               }
+
+              // Note: For global.art.mainImage, frameBgImage, uploadedFrame, sidePanelImage:
+              // Their .onload and .onerror handlers should be set globally in 10_script.js.
+              // When their .src is assigned a Base64 string here, those global handlers
+              // will manage calling updateCard() or showing errors.
 
               // Update disciplines
               if (template.disciplines) {

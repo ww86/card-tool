@@ -14,7 +14,7 @@
             mainSrc                 : "",
             frameBgImage            : new Image (),
             sidePanelImage          : new Image (),            
-            loadedSymbolImages      : {}, // New property to store pre-defined symbol Image objects
+            loadedSymbolImages      : {}, 
             uploadedSymbolImages    : {}, 
             uploadedFrame           : new Image(),
         },
@@ -42,6 +42,7 @@
             showOnloadError         : function(){},
             hexToRgba               : function(){},
             drawRoundedRect         : function(){},
+            drawBorders             : function(){},
             createLabel             : function(){},
             createNumberInput       : function(){},
             createToggle            : function(){},

@@ -71,6 +71,38 @@
             ctx.fill();
     };
 
+    // Draw black border 
+    global.util.drawBorders = function (ctx, canvas, margin) {
+      let r = margin;
+      let w = canvas.width - 2 * margin;
+      let h = canvas.height - 2 * margin;
+      let p = Math.PI;
+
+      ctx.clearRect(0, 0, canvas.width, r);
+      ctx.clearRect(0, 0, r, canvas.height);    
+      ctx.clearRect(r + w, 0,r + w, canvas.height);
+      ctx.clearRect(0, h + r, canvas.width, canvas.height);    
+      
+      ctx.save();
+      ctx.lineWidth = margin * 2;
+      ctx.strokeStyle = "black";
+      
+      ctx.beginPath();
+      ctx.moveTo(r * 2, r);
+      ctx.lineTo(w, r);
+      ctx.arc(w, r * 2, r, 1.5 * p, 2 * p), 
+      ctx.lineTo(1 * r + w, h);
+      ctx.arc(w, h, r, 0 * p, 0.5 * p);
+      ctx.lineTo(r * 2, 1 * r + h);
+      ctx.arc(r * 2, h, r, 0.5 * p, 1 * p);
+      ctx.lineTo(r, r * 2);
+      ctx.arc(r * 2, r * 2, r, 1 * p, 1.5 * p);    
+      ctx.closePath();
+    
+      ctx.stroke();
+      ctx.restore();
+    };    
+
     global.util.createLabel = function (forId, text) {
             const label = document.createElement("label");
             label.htmlFor = forId;

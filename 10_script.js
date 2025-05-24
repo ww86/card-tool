@@ -801,26 +801,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // -------------------------------
   // updateCard(): Renders the complete card.
   // -------------------------------
- 
-
-  // Helper to get numeric value from an element
-  function getNumericValue(id, defaultValue = 0) {
-    const el = document.getElementById(id);
-    return el ? (parseFloat(el.value) || defaultValue) : defaultValue;
-  }
-
-  // Helper to get string value from an element
-  function getStringValue(id, defaultValue = "") {
-    const el = document.getElementById(id);
-    return el ? el.value : defaultValue;
-  }
-
-  // Helper to get boolean value (checked state) from an element
-  function getCheckedValue(id, defaultValue = false) {
-    const el = document.getElementById(id);
-    return el ? el.checked : defaultValue;
-  }
-
 
   let lastProcessedSidePanelKey = null; // Track the last processed key for the side panel
   let lastProcessedMainFrameKey = null; // Track the last processed key for the main frame
@@ -836,9 +816,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.imageSmoothingQuality = "high";   
 
     const mainImage   = global.art.mainImage; 
-    const framePnt    = global.art.frameBgImage;
-    const frameCus    = global.art.uploadedFrame;
-
     const margin      = parseInt(document.getElementById("borderRadius").value);
 
 
@@ -848,10 +825,24 @@ document.addEventListener("DOMContentLoaded", function () {
       mainImage.crossOrigin = "anonymous";
     }
 
-  
+    // Helper to get numeric value from an element
+    function getNumericValue(id, defaultValue = 0) {
+      const el = document.getElementById(id);
+      return el ? (parseFloat(el.value) || defaultValue) : defaultValue;
+    }
+
+    // Helper to get string value from an element
+    function getStringValue(id, defaultValue = "") {
+      const el = document.getElementById(id);
+      return el ? el.value : defaultValue;
+    }
+
    
   
-    // --- Draw main art image within the inner rounded area.
+    // ------------------------------------
+    // Render main art image
+    // ------------------------------------
+
     if (mainImage.complete && mainImage.naturalWidth > 0) {
         const offsetX       = parseFloat(document.getElementById("offsetX").value) || 0;
         const offsetY       = parseFloat(document.getElementById("offsetY").value) || 0;
@@ -876,7 +867,10 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
 
-    // --- Vampire or Other Frame
+    // ------------------------------------
+    // Render main frame image
+    // ------------------------------------
+
     const currentMainFrameKey     = document.getElementById("mainFrame").value;
     
     if (lastProcessedMainFrameKey !== currentMainFrameKey) {
@@ -903,7 +897,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     
-    // --- Frame Overlay: Draw the side panel overlay
+    // ------------------------------------
+    // Render Sidepanel image
+    // ------------------------------------
     const currentSidePanelKey = document.getElementById("sidePanel").value;
     if (lastProcessedSidePanelKey !== currentSidePanelKey) {
         lastProcessedSidePanelKey = currentSidePanelKey; // Update tracker
@@ -916,39 +912,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     ctx.restore();
 
-    // Draw black border 
-    function drawBorders (ctx,margin) {
-      let r = margin;
-      let w = canvas.width - 2 * margin;
-      let h = canvas.height - 2 * margin;
-      let p = Math.PI;
 
-      ctx.clearRect(0, 0, canvas.width, r);
-      ctx.clearRect(0, 0, r, canvas.height);    
-      ctx.clearRect(r + w, 0,r + w, canvas.height);
-      ctx.clearRect(0, h + r, canvas.width, canvas.height);    
-      
-      ctx.save();
-      ctx.lineWidth = margin * 2;
-      ctx.strokeStyle = "black";
-      
-      ctx.beginPath();
-      ctx.moveTo(r * 2, r);
-      ctx.lineTo(w, r);
-      ctx.arc(w, r * 2, r, 1.5 * p, 2 * p), 
-      ctx.lineTo(1 * r + w, h);
-      ctx.arc(w, h, r, 0 * p, 0.5 * p);
-      ctx.lineTo(r * 2, 1 * r + h);
-      ctx.arc(r * 2, h, r, 0.5 * p, 1 * p);
-      ctx.lineTo(r, r * 2);
-      ctx.arc(r * 2, r * 2, r, 1 * p, 1.5 * p);    
-      ctx.closePath();
-    
-      ctx.stroke();
-      ctx.restore();
-    };
 
-    drawBorders(ctx,margin);
+    // ------------------------------------
+    // Draw black border around card
+    // ------------------------------------
+
+    global.util.drawBorders(ctx, canvas, margin);
 
 
 
@@ -1321,6 +1291,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderTypeIcons(ctx, global.data.typeMap);
 
+    // END of render type icons
 
 
     // ---------------------------
@@ -1411,7 +1382,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
   // -------------------------------
-  // END of updateCard() 
+  // NOTE: END of updateCard() 
   // -------------------------------  
 
 

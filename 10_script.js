@@ -1232,7 +1232,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
-    renderCostAndCapacitySymbols(ctx, global.data.symbolMap, global.data.symbolIconConfigs);
+    // Function called after render background 
+    // renderCostAndCapacitySymbols(ctx, global.data.symbolMap, global.data.symbolIconConfigs);
 
     // END of Render capacity symbol, life symbol (logic)
 
@@ -1371,6 +1372,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     allTextFieldsProps.forEach(props => { drawTextFieldBackground(ctx, props);  });
     allTextFieldsProps.forEach(props => { drawTextFieldText      (ctx, props);  });
+
+    renderCostAndCapacitySymbols(ctx, global.data.symbolMap, global.data.symbolIconConfigs);
     
 
 

@@ -32,6 +32,10 @@
             { name: "UnifrakturMaguntia",   displayName: "UnifrakturMaguntia" },
             { name: "Dai Banna SIL",        displayName: "Dai Banna SIL" },
             { name: "Crimson Text",         displayName: "Crimson Text" },
+            { name: "My Soul",              displayName: "My Soul" },
+            { name: "Ballet",               displayName: "Ballet" },
+            { name: "Beau Rivage",          displayName: "Beau Rivage" },
+            { name: "Imperial Script",      displayName: "Imperial Script" },
         ],
 
         // textFieldPanelStructure defines the generic layout and control types for a single text customization panel.
@@ -313,6 +317,10 @@
             "vampire_generic_04"      : "frame_vampire_generic_04.png",
             "vampire_generic_05"      : "frame_vampire_generic_05.png",            
             "vampire_cut_01"          : "frame_vampire_cut_01.png",
+            "vampire_cut_02"          : "frame_vampire_cut_02.png",
+            "vampire_cut_03"          : "frame_vampire_cut_03.png",
+            "vampire_cut_04"          : "frame_vampire_cut_04.png",
+            "vampire_cut_05"          : "frame_vampire_cut_05.png",
 
             // Imbued frame
             "imbued_generic_01"       : "frame_imbued_generic_01.png",

@@ -56,6 +56,7 @@
           // Base64 image data
           mainImageBase64:             imageToBase64(global.art.mainImage),
           frameBgImageBase64:          imageToBase64(global.art.frameBgImage),
+          uploadedFrameBase64:         imageToBase64(global.art.uploadedFrame),
           sidePanelImageBase64:        imageToBase64(global.art.sidePanelImage),
           
           textFields: {}, // Will be populated dynamically
@@ -240,8 +241,9 @@
               // Load frame and side panel from Base64 if available
               // Note: The dropdowns for mainFrame and sidePanel will still be set,
               // potentially re-triggering loads from frameMap if base64 isn't used or fails.
-              if (template.frameBgImageBase64) global.art.frameBgImage.src = template.frameBgImageBase64;
-              if (template.sidePanelImageBase64) global.art.sidePanelImage.src = template.sidePanelImageBase64;
+              if (template.frameBgImageBase64)   {     global.art.frameBgImage.src     = template.frameBgImageBase64;   }
+              if (template.uploadedFrameBase64)  {     global.art.uploadedFrame.src    = template.uploadedFrameBase64;  }
+              if (template.sidePanelImageBase64) {     global.art.sidePanelImage.src   = template.sidePanelImageBase64; }
 
               // Import text field properties
               if (template.textFields) {

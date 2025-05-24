@@ -43,6 +43,7 @@ fieldset .control-fieldset                            { border: 1px solid var(--
 .discipline-slider                                    { border: 1px solid var(--color-05); }
 .discipline-slider                                    { box-shadow: 0 0 2px var(--color-05); } 
 .symbol-inline                                        { border-bottom: 1px solid var(--color-03); }
+.section h2                                           { border-bottom: 1px solid var(--color-03); }
 .art-panel select                                     { border: 1px solid #ccc; }
 .art-panel button                                     { border: 1px solid var(--color-03); }
 

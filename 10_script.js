@@ -745,12 +745,63 @@ document.addEventListener("DOMContentLoaded", function () {
   // Call loadSymbolImages with updateCard as the callback
   loadSymbolImages(global.data.symbolMap, global.art.loadedSymbolImages, updateCard);
   
+
+
+  // --------------------------------------------------
+  // Helper Function to Determine Frame Image for Render
+  // --------------------------------------------------
+
+  // This function would be called within your main DOMContentLoaded listener
+  function setupFrameUploadListener() {
+      const frameFileInput = document.getElementById('frameFile');
+      if (!frameFileInput) {
+          console.error("Element with ID 'frameFile' not found for frame uploads.");
+          return;
+      }
+
+      frameFileInput.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file && file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              
+              reader.onload = function(e) {
+                  // global.art.uploadedFrame is an Image object, set its src and handlers
+                  global.art.uploadedFrame.onload = function() {
+                      console.log("Custom frame image loaded and stored in global.art.uploadedFrame.");
+                  };
+                  global.art.uploadedFrame.onerror = function() {
+                      console.error("Error loading the uploaded frame file into an Image object.");
+                      global.util.showError("Failed to load the uploaded frame. Ensure it's a valid image file.");
+                      global.art.uploadedFrame.src = ""; // Clear src on error
+                  };
+                  global.art.uploadedFrame.src = e.target.result; // Set src to data URL to trigger load
+              };
+              
+              reader.onerror = function() {
+                  console.error("Error reading the uploaded frame file.");
+                  global.util.showError("Error reading the selected file for the frame.");
+                  global.art.uploadedFrame.src = ""; // Clear src on error
+              };
+              
+              reader.readAsDataURL(file);
+          } else if (file) {
+              global.util.showError("Please select a valid image file for the frame (e.g., PNG, JPG).");
+              global.art.uploadedFrame.src = ""; // Clear src if invalid file type
+              event.target.value = null; // Reset file input
+              if (document.getElementById('mainFrame').value === 'custom_uploaded_frame') {
+              }
+          }
+      });
+  }
+
+  setupFrameUploadListener();
+  
+
   
   // -------------------------------
   // updateCard(): Renders the complete card.
   // -------------------------------
-  let lastProcessedMainFrameKey = null; // Track the last processed key for the main frame
-  let lastProcessedSidePanelKey = null; // Track the last processed key for the side panel
+ 
 
   // Helper to get numeric value from an element
   function getNumericValue(id, defaultValue = 0) {
@@ -771,37 +822,34 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
+  let lastProcessedSidePanelKey = null; // Track the last processed key for the side panel
+  let lastProcessedMainFrameKey = null; // Track the last processed key for the main frame
 
   function updateCard() {
 
-    const canvas = document.getElementById("cardCanvas");
-    // Aggressively reset canvas state
-    canvas.width = canvas.width; // This can help fully reset the canvas
-
-    const mainImage = global.art.mainImage; // Get the current mainImage object
-
-    // Explicitly manage crossOrigin based on the current src
-    if (mainImage.src && mainImage.src.startsWith("data:")) {
-      mainImage.crossOrigin = null; // Or "", but null is fine
-    } else if (mainImage.src) { // For non-data URLs (external)
-      mainImage.crossOrigin = "anonymous";
-    }
-    // If mainImage.src is empty, crossOrigin doesn't really matter yet.
-
-    const ctx = canvas.getContext("2d");
+    const canvas      = document.getElementById("cardCanvas");
+    canvas.width      = canvas.width; 
+    const ctx         = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";            
+    ctx.imageSmoothingQuality = "high";   
+
+    const mainImage   = global.art.mainImage; 
+    const framePnt    = global.art.frameBgImage;
+    const frameCus    = global.art.uploadedFrame;
+
+    const margin      = parseInt(document.getElementById("borderRadius").value);
 
 
-    // Reserve margin
-    const margin          = parseInt(document.getElementById("borderRadius").value);
-    const innerX          = margin;
-    const innerY          = margin;
-    const innerWidth      = canvas.width - (margin * 2);
-    const innerHeight     = canvas.height - (margin * 2);
+    if (mainImage.src && mainImage.src.startsWith("data:")) {
+      mainImage.crossOrigin = null; 
+    } else if (mainImage.src) { 
+      mainImage.crossOrigin = "anonymous";
+    }
+
+  
+   
   
     // --- Draw main art image within the inner rounded area.
     if (mainImage.complete && mainImage.naturalWidth > 0) {
@@ -826,21 +874,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
     
+    
+
     // --- Vampire or Other Frame
-    const currentMainFrameKey = document.getElementById("mainFrame").value;
+    const currentMainFrameKey     = document.getElementById("mainFrame").value;
+    
     if (lastProcessedMainFrameKey !== currentMainFrameKey) {
-        lastProcessedMainFrameKey = currentMainFrameKey; // Update tracker
-        const mainFrameNewSrc = currentMainFrameKey === "none" ? "" : global.util.wrapImgPath(global.data.frameMap[currentMainFrameKey]);
-        global.art.frameBgImage.src = mainFrameNewSrc; // Set src on the global Image object
-        // Image will load asynchronously. No onload here to call updateCard.
+      lastProcessedMainFrameKey       = currentMainFrameKey; // Update tracker
+      const mainFrameNewSrc           = currentMainFrameKey === "none" ? "" : global.util.wrapImgPath(global.data.frameMap[currentMainFrameKey]);
+      global.art.frameBgImage.src     = mainFrameNewSrc; // Set src on the global Image object
+      // Image will load asynchronously. No onload here to call updateCard.
     }
     
-    ctx.save();
-    // Draw if the key is not "none" and the global image object is loaded
-    if (currentMainFrameKey !== "none" && global.art.frameBgImage.complete && global.art.frameBgImage.naturalWidth > 0) {
-      ctx.drawImage(global.art.frameBgImage, 0, 0, canvas.width, canvas.height);
-    }
+    if (currentMainFrameKey !== "custom_uploaded_frame") {
+      ctx.save();
+      if (currentMainFrameKey !== "none" && global.art.frameBgImage.complete && global.art.frameBgImage.naturalWidth > 0) {
+        ctx.drawImage(global.art.frameBgImage, 0, 0, canvas.width, canvas.height);
+      }
     ctx.restore();
+    }
+
+    if (currentMainFrameKey === "custom_uploaded_frame") {
+      ctx.save();
+      if (currentMainFrameKey !== "none" && global.art.uploadedFrame.complete && global.art.uploadedFrame.naturalWidth > 0) {
+        ctx.drawImage(global.art.uploadedFrame, 0, 0, canvas.width, canvas.height);
+      }
+    ctx.restore();
+    }
+    
     
     // --- Frame Overlay: Draw the side panel overlay
     const currentSidePanelKey = document.getElementById("sidePanel").value;
@@ -888,6 +949,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     drawBorders(ctx,margin);
+
+
 
     // ------------------------------------
     // Render icons & symbols

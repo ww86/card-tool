@@ -116,11 +116,13 @@
     <div class="input-group">
       <label for="mainFrame">Main Frame:</label>
       <select id="mainFrame">
-
-        <!-- Library Card Types -->
-        <optgroup label="Library Card Types (Quality currently off)">
+        
+        <optgroup label="No image, custom image"></optgroup>   
           <option value="none" selected>None</option> 
-          <option value="custom_uploaded_frame">Uploaded Frame</option>                          
+          <option value="custom_uploaded_frame">Uploaded Custom Frame</option>  
+       </optgroup>     
+        <!-- Library Card Types -->            
+        <optgroup label="Library Card Types (Quality currently off)"></optgroup>                                  
           <option value="modifier_card">Modifier</option>
           <option value="action_card">Action</option>
           <option value="political_action_card">Political Action</option>
@@ -251,6 +253,10 @@
         <input type="text" id="artUrl" placeholder="Enter image URL">
         <button id="loadArtUrl">Load Image</button>
       </div>
+      <div class="input-group">
+        <label for="frameFile">Upload Frame Image:</label>
+        <input type="file" id="frameFile" accept="image/*">
+      </div>      
       <div class="input-group">
         <label for="offsetX">Offset X (px):</label>
         <input type="number" id="offsetX" value="0" class="art-panel-number-input">

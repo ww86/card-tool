@@ -193,26 +193,58 @@ global.text.wrapText = function(ctx, text, x, y, maxWidth, lineHeight, effect, f
             if (element.type === 'text' || element.type === 'space') {
                 const effectToApply = element.style.effect;
                 if (effectToApply === 1) { // Outline
-                    ctx.lineWidth = 1.0;
+
                     ctx.lineJoin = "round";
-                    ctx.strokeStyle = "black";
+                    ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+                    ctx.lineWidth = 3.0;
                     ctx.strokeText(element.text, currentX, currentY);
+                    ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+                    ctx.lineWidth = 2.5;
+                    ctx.strokeText(element.text, currentX, currentY);   
+                    ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+                    ctx.lineWidth = 2.2;
+                    ctx.strokeText(element.text, currentX, currentY);                                       
+                    ctx.fillText(element.text, currentX, currentY); 
+
                 } else if (effectToApply === 2) { // Shadow
+
                     ctx.shadowColor = "rgba(0,0,0,0.5)";
                     ctx.shadowOffsetX = 1;
                     ctx.shadowOffsetY = 1;
                     ctx.shadowBlur = 2;
+                    ctx.fillText(element.text, currentX, currentY);
+
                 } else if (effectToApply === 3) { // Stronger Shadow
-                    ctx.shadowColor = "rgba(0,0,0,0.75)";
+
+                    ctx.shadowColor = "rgba(0,0,0,0.50)";
                     ctx.shadowOffsetX = 1;
-                    ctx.shadowOffsetY = 2;
-                    ctx.shadowBlur = 3;
+                    ctx.shadowOffsetY = 1;
+                    ctx.shadowBlur = 4;
+                    ctx.fillText(element.text, currentX, currentY);   
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.70)";
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+                    ctx.shadowBlur = 2;
+                    ctx.fillText(element.text, currentX, currentY);                       
+
                 } else if (effectToApply === 4) { // Soft Colored Glow (e.g., soft blue)
+
+                    ctx.shadowColor = "rgba(100, 100, 255, 0.6)";
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 8;                    
+                    ctx.strokeStyle = "rgba(100, 100, 255, 0.25)";
+                    ctx.lineWidth = 3.0;
+                    ctx.strokeText(element.text, currentX, currentY);  
+
                     ctx.shadowColor = "rgba(100, 100, 255, 0.6)";
                     ctx.shadowOffsetX = 0;
                     ctx.shadowOffsetY = 0;
                     ctx.shadowBlur = 8;
+                    ctx.fillText(element.text, currentX, currentY);          
+
                 } else if (effectToApply === 5) { // Drop shadow and outline
+
                     ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
                     ctx.shadowOffsetX = 0; // Adjust for desired offset
                     ctx.shadowOffsetY = 1; // Adjust for desired offset
@@ -220,24 +252,43 @@ global.text.wrapText = function(ctx, text, x, y, maxWidth, lineHeight, effect, f
                     ctx.lineWidth = 2.0;
                     ctx.lineJoin = "round";
                     ctx.strokeStyle = "black";
-                    ctx.strokeText(element.text, currentX, currentY);                    
+                    ctx.strokeText(element.text, currentX, currentY);  
+                    ctx.fillText(element.text, currentX, currentY);        
+
                 } else if (effectToApply === 6) { // Fancy: White Outline + Soft Dark Drop Shadow
+
                     // Draw the white outline first
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+                    ctx.lineWidth = 3.0; // Adjust thickness as needed
+                    ctx.lineJoin = "round"; // For smoother stroke corners
+                    ctx.strokeText(element.text, currentX, currentY);
+
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+                    ctx.shadowOffsetX = 0; // Adjust for desired offset
+                    ctx.shadowOffsetY = 0; // Adjust for desired offset
+                    ctx.shadowBlur = 2; // No blur for a hard edge
+
                     ctx.strokeStyle = "white";
                     ctx.lineWidth = 1.5; // Adjust thickness as needed
                     ctx.lineJoin = "round"; // For smoother stroke corners
-                    ctx.strokeText(element.text, currentX, currentY);
+                    ctx.strokeText(element.text, currentX, currentY);  
 
                     // Then set up the shadow for the main fillText
                     ctx.shadowColor = "rgba(0,0,0,0.5)";
                     ctx.shadowOffsetX = 1;
                     ctx.shadowOffsetY = 1;
                     ctx.shadowBlur = 3;
+                    ctx.fillText(element.text, currentX, currentY);
+
+                } else { 
+                    ctx.fillText(element.text, currentX, currentY); 
                 }
+
+            }
                 // The fillText is always called, applying any shadow set above,
                 // and drawing the main text color (potentially over a stroke if effect 1 or 6 was used).
-                ctx.fillText(element.text, currentX, currentY);
-            } else if (element.type === 'icon') {
+                
+            if (element.type === 'icon') {
                 const img = new Image();
                 img.src = element.src;
 
@@ -274,6 +325,7 @@ global.text.wrapText = function(ctx, text, x, y, maxWidth, lineHeight, effect, f
 
             ctx.restore();
             currentX += element.width;
+
         });
         currentY += lineHeight;
     });

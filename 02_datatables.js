@@ -76,21 +76,21 @@
         // textFieldFontDefaults: Default values for font, size, color, opacity, and effect for each text field panel.
         textFieldFontDefaults: [
             // id_prefix        | family                  | size      | color           | hex           | opacity     | effect
-            { id_prefix: "title", family: "Vollkorn SC",    size: "20", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
-            { id_prefix: "specs", family: "Verdana",        size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
-            { id_prefix: "story", family: "Verdana",        size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
-            { id_prefix: "illus", family: "Verdana",        size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
-            { id_prefix: "small", family: "Verdana",        size: "5",  color: "#000000", hex: "#000000", opacity: 100, effect: "2" }
+            { id_prefix: "title", family: "Vollkorn SC",    size: "20", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "specs", family: "Gill Sans MT",   size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
+            { id_prefix: "story", family: "Tangerine",      size: "18", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
+            { id_prefix: "illus", family: "Vollkorn SC",    size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "small", family: "Verdana",        size: "8",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" }
         ],
 
         // textFieldBackgroundDefaults: Default values for position, dimensions, color, opacity, and border for each text field panel.
         textFieldBgDefaults: [
             // id_prefix | x   | y   | width | height | color     | hex       | opacity | border | border_max
-            { id_prefix: "title", x: 16,  y: 10,  width: 300, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "story", x: 80,  y: 446, width: 240, height: 24,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "illus", x: 60,  y: 475, width: 160, height: 20,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "small", x: 13,  y: 113, width: 160, height: 20,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
+            { id_prefix: "title", x: 22,  y: 15,  width: 296, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 50,  border: 0, border_max: 4 },
+            { id_prefix: "story", x: 185, y: 432, width: 150, height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "illus", x: 53,  y: 474, width: 296, height: 17,  color: "#000000", hex: "#000000", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "small", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
         ],
 
         // textFieldConfigs is now just a list of the prefixes, used to iterate through panels.
@@ -115,7 +115,8 @@
                     { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 38,  min: 10,  max: 100, uiRow: 1 },
                     { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 0,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
-                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
 
                     // --- Row 2: Icon Select, Icon Upload, Value Font Size ---
                     {
@@ -124,9 +125,9 @@
                         type: "select",
                         uiRow: 2,
                         options: [ // Values should match keys in global.data.symbolMap or be special
-                            { value: "symbol_pool",             text: "Pool (Default)" },
-                            { value: "symbol_pool_alt_01",      text: "Alternative Icon" },
-                            { value: "custom_upload", text: "Custom (Upload)" } // Special value for uploaded
+                            { value: "symbol_pool",             text: "Pool (Default)"      },
+                            { value: "symbol_pool_alt_01",      text: "Alternative Icon"    },
+                            { value: "custom_upload",           text: "Custom (Upload)"     } 
                         ],
                         defaultValue: "symbol_pool"
                     },
@@ -157,7 +158,8 @@
                     { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 50,  min: 10,  max: 100, uiRow: 1 },
                     { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
-                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
                     // --- Row 2 ---
                     {
                         id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
@@ -181,7 +183,8 @@
                     { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 33,  min: 10,  max: 100, uiRow: 1 },
                     { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 2,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
-                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: true,                    uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
                     // --- Row 2 ---
                     {
                         id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
@@ -205,7 +208,8 @@
                     { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 60,  min: 10,  max: 100, uiRow: 1 },
                     { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
-                    { id_suffix: "Enable",     type: "checkbox", label: "Sh:",     defaultValue: true,                    uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
                     // --- Row 2 ---
                     {
                         id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
@@ -218,7 +222,34 @@
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
                     { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
                 ]
-            }
+            },
+            {
+                id_prefix: "path",
+                displayName: "Path",
+                settings: [
+                    // --- Row 1 ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 12,  min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 300, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 60,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
+                    // --- Row 2 ---
+                    {
+                        id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
+                        options: [
+                            { value: "symbol_path_01",          text: "Path of Caine"                           },
+                            { value: "symbol_path_02",          text: "Path of Power and the Inner Voice"       },
+                            { value: "symbol_path_03",          text: "Path of Cathari"                         },
+                            { value: "symbol_path_04",          text: "Path of Death and the Soul"              },                                                        
+                            { value: "custom_upload",           text: "Custom (Upload)"                         }
+                        ], defaultValue: "symbol_path_01"
+                    },
+                    { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                ]
+            }            
         ],
 
         disciplineData : [
@@ -373,7 +404,10 @@
 
             // Generic Side Panel Options
             "generic_narrow_01"             : "sidepanel_generic_narrow_01.png",
-            "generic_narrow_02"             : "sidepanel_generic_narrow_02.png",            
+            "generic_narrow_02"             : "sidepanel_generic_narrow_02.png",
+            "generic_narrow_03"             : "sidepanel_generic_narrow_03.png",
+            "generic_narrow_04"             : "sidepanel_generic_narrow_04.png",
+            "generic_narrow_05"             : "sidepanel_generic_narrow_05.png",            
             
             // Side Panel Options
             "none"                          : null,
@@ -438,6 +472,11 @@
             "symbol_capacity_alt_01"   : "symbol_capacity_alt_01.png",
             "symbol_life_alt_01"       : "symbol_life_alt_01.png",
 
+            "symbol_path_01"           : "symbol_path_of_caine.png",
+            "symbol_path_02"           : "symbol_path_of_power_and_the_inner_voice.png",
+            "symbol_path_03"           : "symbol_path_of_cathari.png",
+            "symbol_path_04"           : "symbol_path_of_death_and_the_soul.png",
+            
             // Other Useful Symbols
             "symbol_vote"              : "symbol_vote.png",
 

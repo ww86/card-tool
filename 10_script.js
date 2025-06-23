@@ -426,12 +426,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add global settings for X, Y, Size, Spacing, and Orientation
     const disciplineSettings = [
-        { id: "disciplineX",              label: "X:",        defaultValue: 18,   min: 0,   max: 358 },
-        { id: "disciplineY",              label: "Y:",        defaultValue: 400,  min: 0,   max: 500 },
-        { id: "disciplineSize",           label: "Size:",     defaultValue: 30,   min: 10,  max: 100 },
-        { id: "disciplineDiff",           label: "Diff:",     defaultValue: 8,    min: 0,   max: 20  },
-        { id: "disciplineSpacing",        label: "Gap:",      defaultValue: 0,    min: 0,   max: 20  },
-        { id: "disciplineSuperiorOffset", label: "Adjust:",   defaultValue: 3,    min: 0,   max: 20  }        
+        { id: "disciplineX",                    label: "X:",        defaultValue: 18,   min: 0,   max: 358 },
+        { id: "disciplineY",                    label: "Y:",        defaultValue: 400,  min: 0,   max: 500 },
+        { id: "disciplineSize",                 label: "Size:",     defaultValue: 30,   min: 10,  max: 100 },
+        { id: "disciplineDiff",                 label: "Diff:",     defaultValue: 8,    min: 0,   max: 20  },
+        { id: "disciplineSpacing",              label: "Gap:",      defaultValue: 0,    min: 0,   max: 20  },
+        { id: "disciplineSuperiorOffset",       label: "Adjust:",   defaultValue: 0,    min: -10, max: 20  }        
     ];
     const disciplineSettings2 = [
         { id: "disciplineToggleX",              label: "X:",        defaultValue: 18,   min: 0,   max: 358 },
@@ -439,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { id: "disciplineToggleSize",           label: "Size:",     defaultValue: 34,   min: 10,  max: 100 },
         { id: "disciplineToggleDiff",           label: "Diff:",     defaultValue: 8,    min: 0,   max: 20  },
         { id: "disciplineToggleSpacing",        label: "Gap:",      defaultValue: 2,    min: 0,   max: 20  },
-        { id: "disciplineToggleSuperiorOffset", label: "Adjust:",   defaultValue: 4,    min: 0,   max: 20  }                
+        { id: "disciplineToggleSuperiorOffset", label: "Adjust:",   defaultValue: 0,    min: -10, max: 20  }                
     ];    
 
     function createDiscSettings (setting, div) {
@@ -996,6 +996,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // ------------------------------------
     // Render Discipline symbols
     // ------------------------------------
+    //
+    // Note current code does not properly handle innate checkbox
+    // and the current handling of tier 3 images is temporary creation of placeholders
+    // which should be removed once they have their own images.
 
     function renderDisciplineIcons(ctx, disciplineData) {
 
@@ -1031,6 +1035,10 @@ document.addEventListener("DOMContentLoaded", function () {
             ? document.getElementById("disciplineToggleOrientation").checked
             : document.getElementById("disciplineOrientation").checked;
 
+        const diff = displayToggled
+            ? (parseFloat(document.getElementById("disciplineToggleDiff").value) || 0)
+            : (parseFloat(document.getElementById("disciplineDiff").value) || 0);            
+
 
 
         // Collect active disciplines with their tier and other properties
@@ -1043,15 +1051,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 const tier = parseInt(slider.dataset.currentTier, 10);
 
                 if (tier > 0) {
-                    const imgSrc = innateCheckbox && innateCheckbox.checked
-                        ? symbol[`img_${tier + 3}_src`]
-                        : symbol[`img_${tier}_src`];
+                    const imgSrc        = symbol[`img_${tier}_src`];
+                    const imgInnSrc     = symbol[`img_${tier + 3}_src`];                    
 
                     activeDisciplines.push({
-                        id: symbol.id,
-                        label: symbol.label,
-                        tier: tier,
-                        imgSrc: global.util.wrapImgPath(imgSrc),
+                        id:           symbol.id,
+                        label:        symbol.label,
+                        tier:         tier,
+                        inn:          innateCheckbox && innateCheckbox.checked,
+                        imgSrc:       global.util.wrapImgPath(imgSrc),
+                        imgInnSrc:    global.util.wrapImgPath(imgInnSrc),
+                        // temporary code for enabling tier 3 placeholder images
+                        img_obf_src: "./img/icon_discipline_obfuscate_inferior.png",
+                        img_t2_src: global.util.wrapImgPath(symbol[`img_2_src`]),
+                        // above should be removed once tier3 images have icons
                     });
                 }
             }
@@ -1075,11 +1088,15 @@ document.addEventListener("DOMContentLoaded", function () {
             let current   = parseInt(symbol.tier);
             let previous  = index == 0 ? current : activeDisciplines[index - 1].tier;
             let step      = (current == 1 && previous == 2);
+            let step3     = (current == 3 && previous !== 3);
+            let a         = diff * 0.5;            
       
             // Load and render the icon
             const img = new Image();
             img.src = symbol.imgSrc;
             img.onload = () => {
+
+              if (symbol.inn) { return; }
 
               ctx.save();
 
@@ -1088,13 +1105,16 @@ document.addEventListener("DOMContentLoaded", function () {
               ctx.shadowOffsetX = 0;
               ctx.shadowOffsetY = 0;  
 
-                // Currently doesn't support other tiers than 1 & 2 
-                if        (step               && (isHorizontal))   { x2 -= (iconSize2 - iconSize) - 1; }
-                if        (step               && (!isHorizontal))  { y2 += (iconSize2 - iconSize) - 1; }
+                // Currently doesn't support other tiers than 1 & 2 (Note step3 part of placeholder code)
+                if        (step     &&  (isHorizontal))  { x2 -= a; }
+                if        (step     && (!isHorizontal))  { y2 += a; }
 
-                if         (symbol.tier == 1)                      { ctx.drawImage(img, x + x2         , y + y2          , iconSize, iconSize);   }
-                if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img, x + x2         , y + y2 - adjust , iconSize2, iconSize2); }                
-                if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(img, x + x2 - adjust, y + y2          , iconSize2, iconSize2); }                        
+                if        (step3    &&  (isHorizontal))  { x2 -= a; }
+                if        (step3    && (!isHorizontal))  { y2 += a; }                
+
+                if         (symbol.tier == 1)                      { ctx.drawImage(img, x + x2                 , y + y2                 , iconSize, iconSize);   }
+                if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img, (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }                
+                if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(img, (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }                        
 
                 if        ((symbol.tier == 2) && (isHorizontal))   { x2 += iconSize2 + spacing;     } 
                 if        ((symbol.tier == 2) && (!isHorizontal))  { y2 -= iconSize2 + spacing;     }
@@ -1102,9 +1122,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 if        ((symbol.tier == 1) && (isHorizontal))   { x2 += iconSize + spacing;      } 
                 if        ((symbol.tier == 1) && (!isHorizontal))  { y2 -= iconSize + spacing;      }
 
+
+
               ctx.restore();
 
             }
+
+              // Temporary code to display tier 3 as a composite of tier 2 and tier 1 obfuscate
+              if (symbol.tier == 3) {
+
+                const placeholder1 = new Image();
+                const placeholder2 = new Image();
+
+
+                placeholder1.src = symbol.img_obf_src;
+                placeholder2.src = symbol.img_t2_src;
+
+                placeholder2.onload = () => {
+
+                  ctx.save();
+                  ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+                  ctx.shadowBlur = 3;
+                  ctx.shadowOffsetX = 0;
+                  ctx.shadowOffsetY = 0;     
+
+
+                  if         (isHorizontal)     { ctx.drawImage(placeholder1, x + x2              , y + y2 - adjust      , iconSize, iconSize); }                
+                  if        (!isHorizontal)     { ctx.drawImage(placeholder1, x + x2 - adjust     , y + y2               , iconSize, iconSize); }
+                  
+                  if         (isHorizontal)     { ctx.drawImage(placeholder2, x + x2 - a          , y + y2 - a - adjust  , iconSize2, iconSize2); }                
+                  if        (!isHorizontal)     { ctx.drawImage(placeholder2, x + x2 - a - adjust , y + y2 - a           , iconSize2, iconSize2); }                  
+
+                  if         (isHorizontal)     { x2 += iconSize2 + spacing;     } 
+                  if        (!isHorizontal)     { y2 -= iconSize2 + spacing;     }                  
+
+                  ctx.restore();
+              
+                }
+
+              }
+              // end of temporary code
+
         });
     }
 
@@ -1129,11 +1187,12 @@ document.addEventListener("DOMContentLoaded", function () {
       if (toggle)       { ctx.shadowOffsetY   = 2;            }
 
       ctx.drawImage(image, x, y, sizeW, sizeH);
-      ctx.font          = `bold ${valueFontSize}px Arial`; // Use dynamic font size
-      ctx.textAlign     = "center";
-      ctx.textBaseline  = "middle";
-      ctx.fillStyle     = color;
-      ctx.fillText(value, x + sizeW / 2, textOffset + y + sizeH / 2);
+      
+      if (value > 0) { ctx.font          = `bold ${valueFontSize}px Arial`;               }
+      if (value > 0) { ctx.textAlign     = "center";                                      }
+      if (value > 0) { ctx.textBaseline  = "middle";                                      }
+      if (value > 0) { ctx.fillStyle     = color;                                         }
+      if (value > 0) { ctx.fillText(value, x + sizeW / 2, textOffset + y + sizeH / 2);    }
 
       ctx.restore();
 
@@ -1150,16 +1209,18 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         configs.forEach(config => {
-            const prefix = config.id_prefix;
-            const amount = parseInt(document.getElementById(prefix + "Amount").value);
+            const prefix                    = config.id_prefix;
+            const amount                    = parseInt(document.getElementById(prefix + "Amount").value);
+            const enabled                   = document.getElementById(prefix + "Enable").checked;                
 
-            if (amount > 0) {
-                const xPos              = parseFloat(document.getElementById(prefix + "X").value);
-                const yPos              = parseFloat(document.getElementById(prefix + "Y").value);
-                const iconSize          = parseFloat(document.getElementById(prefix + "Size").value); // This is height
-                const textOffset        = parseFloat(document.getElementById(prefix + "TextOffset").value);
-                const shadowEnabled     = document.getElementById(prefix + "Enable").checked;
-                const valueFontSizeElement = document.getElementById(prefix + "ValueFontSize");
+            if (enabled) {
+                const xPos                  = parseFloat(document.getElementById(prefix + "X").value);
+                const yPos                  = parseFloat(document.getElementById(prefix + "Y").value);
+                const iconSize              = parseFloat(document.getElementById(prefix + "Size").value); // This is height
+                const textOffset            = parseFloat(document.getElementById(prefix + "TextOffset").value);
+                const shadowEnabled         = document.getElementById(prefix + "Shadow").checked;
+
+                const valueFontSizeElement  = document.getElementById(prefix + "ValueFontSize");
                 let valueFontSize;
 
                 if (valueFontSizeElement) {

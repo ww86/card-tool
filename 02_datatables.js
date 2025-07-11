@@ -66,11 +66,14 @@
 
         textFieldHeaderDefaults: [
             // id_prefix | label        | type     | placeholder      | value
-            { id_prefix: "title", label: "Name:",        type: "text",     placeholder: "Card Name",      value: "" },
-            { id_prefix: "specs", label: "Card Text:",   type: "textarea", placeholder: "Card Text",      value: "" },
-            { id_prefix: "story", label: "Flavour:",     type: "text",     placeholder: "Card Flavour",   value: "" },
-            { id_prefix: "illus", label: "Artist:",      type: "text",     placeholder: "Card Artist",    value: "" },
-            { id_prefix: "small", label: "Mini:",        type: "text",     placeholder: "Mini type text", value: "" }
+            { id_prefix: "title", label: "Name:",        type: "textarea",      placeholder: "Card Name",      value: "" },
+            { id_prefix: "specs", label: "Card Text:",   type: "textarea",      placeholder: "Card Text",      value: "" },
+            { id_prefix: "story", label: "Flavour:",     type: "textarea",      placeholder: "Card Flavour",   value: "" },
+            { id_prefix: "illus", label: "Artist:",      type: "textarea",      placeholder: "Card Artist",    value: "" },
+            { id_prefix: "small", label: "Mini:",        type: "textarea",      placeholder: "Mini type text", value: "" },
+            { id_prefix: "subhd", label: "Subheader:",   type: "textarea",      placeholder: "Subheader text", value: "" },
+            { id_prefix: "misc1", label: "Misc 1:",      type: "textarea",      placeholder: "Misc text",      value: "" },
+            { id_prefix: "misc2", label: "Misc 2:",      type: "textarea",      placeholder: "Misc text",      value: "" }
         ],
 
         // textFieldFontDefaults: Default values for font, size, color, opacity, and effect for each text field panel.
@@ -80,7 +83,10 @@
             { id_prefix: "specs", family: "Gill Sans MT",   size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
             { id_prefix: "story", family: "Tangerine",      size: "18", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
             { id_prefix: "illus", family: "Vollkorn SC",    size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
-            { id_prefix: "small", family: "Verdana",        size: "8",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" }
+            { id_prefix: "small", family: "Verdana",        size: "8",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "subhd", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "misc1", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "misc2", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" }
         ],
 
         // textFieldBackgroundDefaults: Default values for position, dimensions, color, opacity, and border for each text field panel.
@@ -90,7 +96,10 @@
             { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 50,  border: 0, border_max: 4 },
             { id_prefix: "story", x: 185, y: 432, width: 150, height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
             { id_prefix: "illus", x: 53,  y: 474, width: 296, height: 17,  color: "#000000", hex: "#000000", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "small", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
+            { id_prefix: "small", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "subhd", x: 22,  y: 40,  width: 296, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
+            { id_prefix: "misc1", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },            
+            { id_prefix: "misc2", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
         ],
 
         // textFieldConfigs is now just a list of the prefixes, used to iterate through panels.
@@ -100,7 +109,10 @@
             { id_prefix: "specs" },
             { id_prefix: "story" },
             { id_prefix: "illus" },
-            { id_prefix: "small" }
+            { id_prefix: "small" },
+            { id_prefix: "subhd" },
+            { id_prefix: "misc1" },
+            { id_prefix: "misc2" }
         ],
 
 
@@ -267,6 +279,7 @@
             { id: "disciplineFortitude",    label: "Fortitude",    img_1_src: "icon_discipline_fortitude_inferior.png",    img_2_src: "icon_discipline_fortitude_superior.png",    img_3_src: "icon_discipline_fortitude_other.png",    img_4_src: "icon_discipline_fortitude_inferior_innate.png",    img_5_src: "icon_discipline_fortitude_superior_innate.png",    img_6_src: "icon_discipline_fortitude_other_innate.png" },
             { id: "disciplineMaleficia",    label: "Maleficia",    img_1_src: "icon_discipline_maleficia_inferior.png",    img_2_src: "icon_discipline_maleficia_superior.png",    img_3_src: "icon_discipline_maleficia_other.png",    img_4_src: "icon_discipline_maleficia_inferior_innate.png",    img_5_src: "icon_discipline_maleficia_superior_innate.png",    img_6_src: "icon_discipline_maleficia_other_innate.png" },
             { id: "disciplineMelpominee",   label: "Melpominee",   img_1_src: "icon_discipline_melpominee_inferior.png",   img_2_src: "icon_discipline_melpominee_superior.png",   img_3_src: "icon_discipline_melpominee_other.png",   img_4_src: "icon_discipline_melpominee_inferior_innate.png",   img_5_src: "icon_discipline_melpominee_superior_innate.png",   img_6_src: "icon_discipline_melpominee_other_innate.png" },
+            { id: "disciplineMortis",       label: "Mortis",       img_1_src: "icon_discipline_mortis_inferior.png",       img_2_src: "icon_discipline_mortis_superior.png",       img_3_src: "icon_discipline_mortis_other.png",       img_4_src: "icon_discipline_mortis_inferior_innate.png",       img_5_src: "icon_discipline_mortis_superior_innate.png",       img_6_src: "icon_discipline_mortis_other_innate.png" },            
             { id: "disciplineMytherceria",  label: "Mytherceria",  img_1_src: "icon_discipline_mytherceria_inferior.png",  img_2_src: "icon_discipline_mytherceria_superior.png",  img_3_src: "icon_discipline_mytherceria_other.png",  img_4_src: "icon_discipline_mytherceria_inferior_innate.png",  img_5_src: "icon_discipline_mytherceria_superior_innate.png",  img_6_src: "icon_discipline_mytherceria_other_innate.png" },
             { id: "disciplineNecromancy",   label: "Necromancy",   img_1_src: "icon_discipline_necromancy_inferior.png",   img_2_src: "icon_discipline_necromancy_superior.png",   img_3_src: "icon_discipline_necromancy_other.png",   img_4_src: "icon_discipline_necromancy_inferior_innate.png",   img_5_src: "icon_discipline_necromancy_superior_innate.png",   img_6_src: "icon_discipline_necromancy_other_innate.png" },
             { id: "disciplineObeah",        label: "Obeah",        img_1_src: "icon_discipline_obeah_inferior.png",        img_2_src: "icon_discipline_obeah_superior.png",        img_3_src: "icon_discipline_obeah_other.png",        img_4_src: "icon_discipline_obeah_inferior_innate.png",        img_5_src: "icon_discipline_obeah_superior_innate.png",        img_6_src: "icon_discipline_obeah_other_innate.png" },

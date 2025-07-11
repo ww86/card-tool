@@ -43,291 +43,281 @@
 </head>
 <body>
   <div class="container">
-    <!-- Left Panel: Card details & text styling -->
-    <div class="left-panel" id="left-panel">
-      <h2 class="panel-title-h2">Text and font</h2>
+    <div class="inner-left-container">
+      <!-- Left Panel: Card details & text styling -->
+      <div class="left-panel" id="left-panel">
+        <h2 class="panel-title-h2">Text and font</h2>    
+      </div>          
       
+      <!-- Middle Panel: Toggle selectors -->
+      <div class="middle-panel">
+        <h2 class="panel-title-h2">Icons</h2>      
 
-      <!-- Font control panels,
-            structure is like this
+        <div class="section cost-symbol-section">
+          <h2>Capacity & Cost Icons</h2>
+          <div id="symbolHeader" class="section">
+            <!-- Settings header is injected via script.js -->          
+          </div>        
+          <div class="toggle-grid-symbol" id="symbolGrid">
+            <!-- Card type toggles are injected via script.js -->
+          </div>
+        </div>      
 
-      <div class="input-group">
-        <div class="h-selector">
+        <div class="section">
+          <h2>Card type icons</h2>
+          <div id="typeHeader" class="section">
+            <!-- Settings header is injected via script.js -->          
+          </div>        
+          <div class="toggle-grid-type" id="typeGrid">
+            <!-- Card type toggles are injected via script.js -->
+          </div>
+        </div>      
+
+        <div class="section">
+          <h2>Disciplines</h2>
+          <div id="disciplineHeader" class="section">
+            <!-- Settings header is injected via script.js -->
+          </div>
+          <div class="toggle-grid-discipline" id="disciplinesGrid">
+            <!-- Discipline toggles are injected via script.js -->
+          </div>
         </div>
-        <div class="settings-group">
-        </div>
-      </div>       
 
-      -->
-
-  
-    </div>          
-    
-    <!-- Middle Panel: Toggle selectors -->
-    <div class="middle-panel">
-      <h2 class="panel-title-h2">Icons</h2>      
-
-      <div class="section cost-symbol-section">
-        <h2>Capacity & Cost Icons</h2>
-        <div id="symbolHeader" class="section">
-          <!-- Settings header is injected via script.js -->          
-        </div>        
-        <div class="toggle-grid-symbol" id="symbolGrid">
-          <!-- Card type toggles are injected via script.js -->
-        </div>
-      </div>      
-
-      <div class="section">
-        <h2>Card type icons</h2>
-        <div id="typeHeader" class="section">
-          <!-- Settings header is injected via script.js -->          
-        </div>        
-        <div class="toggle-grid-type" id="typeGrid">
-          <!-- Card type toggles are injected via script.js -->
-        </div>
-      </div>      
-
-      <div class="section">
-        <h2>Disciplines</h2>
-        <div id="disciplineHeader" class="section">
+        <div class="section">
+          <h2>Clan Symbols</h2>
+          <div id="clanHeader" class = "section">
           <!-- Settings header is injected via script.js -->
+          </div>        
+          <div class="toggle-grid" id="clansGrid">       
+          </div>
         </div>
-        <div class="toggle-grid-discipline" id="disciplinesGrid">
-          <!-- Discipline toggles are injected via script.js -->
-        </div>
-      </div>
-
-      <div class="section">
-        <h2>Clan Symbols</h2>
-        <div id="clanHeader" class = "section">
-        <!-- Settings header is injected via script.js -->
-        </div>        
-        <div class="toggle-grid" id="clansGrid">       
-        </div>
-      </div>
-       
-    </div>
-    
-    <!-- Art Panel: Image import & adjustments -->    
-    <div class="art-panel">
-      <h2 class="panel-title-h2">Art and Frame</h2>
-
-
-      
-      <!-- Type and Subtype -->
-
-     <!-- Main Frame Dropdown -->
-    <div class="input-group">
-      <label for="mainFrame">Main Frame:</label>
-      <select id="mainFrame">
         
-        <optgroup label="No image, custom image"></optgroup>   
-          <option value="none" selected>None</option> 
-          <option value="custom_uploaded_frame">Uploaded Custom Frame</option>  
-       </optgroup>     
-        <!-- Library Card Types -->            
-        <optgroup label="Library Card Types (Quality currently off)"></optgroup>                                  
-          <option value="modifier_card">Modifier</option>
-          <option value="action_card">Action</option>
-          <option value="political_action_card">Political Action</option>
-          <option value="event_card">Event</option>
-          <option value="master_card">Master</option>
-          <option value="reaction_card">Reaction</option>
-          <option value="combat_card">Combat</option>
-          <option value="equipment_card">Equipment</option>
-          <option value="ally_card">Ally</option>
-        </optgroup>        
-
-        <!-- Generic Vampire Frames -->
-        <optgroup label="Generic Custom Vampire Frames"> 
-          <option value="vampire_generic_01">Generic 1</option>
-          <option value="vampire_generic_02">Generic 2</option>
-          <option value="vampire_generic_03">Generic 3</option>
-          <option value="vampire_generic_04">Generic 4</option>
-          <option value="vampire_generic_05">Generic 5</option>          
-          <option value="vampire_cut_01">Cut 1</option>                    
-          <option value="vampire_cut_02">Cut 2</option>             
-          <option value="vampire_cut_03">Cut 3</option>              
-        </optgroup>
-
-        <!-- Custom library frames -->
-        <optgroup label="Library (Custom)">
-          <option value="library_generic_01">Generic Library Frame 1</option>
-          <option value="library_generic_02">Generic Library Frame 2</option>   
-          <option value="library_generic_03">Generic Library Frame 3</option>
-          <option value="library_generic_04">Generic Library Frame 4</option>      
-          <option value="library_generic_05">Generic Library Frame 5</option>
-          <option value="library_generic_06">Generic Library Frame 6</option>                 
-          <option value="frame_black_marble_01">Black Marble 1</option>          
-          <option value="frame_green_marble_01">Green Marble 1</option>
-        </optgroup>
-
-        <!-- Clan-Specific Frames -->
-        <optgroup label="Imbued (custom)">
-          <option value="imbued_generic_01">Generic Imbued Frame 1</option>          
-        </optgroup>          
-
-        <!-- Clan-Specific Frames -->
-        <optgroup label="Vampire Clans (currently missing)">
-          <option value="clan_assamite">Assamite</option>
-          <option value="clan_brujah">Brujah</option>
-          <option value="clan_brujah_antitribu">Brujah Antitribu</option>
-          <option value="clan_cappadocian">Cappadocian</option>
-          <option value="clan_gangrel">Gangrel</option>
-          <option value="clan_gangrel_antitribu">Gangrel Antitribu</option>
-          <option value="clan_giovanni">Giovanni</option>
-          <option value="clan_lamia">Lamia</option>
-          <option value="clan_lasombra">Lasombra</option>
-          <option value="clan_malkavian">Malkavian</option>
-          <option value="clan_malkavian_antitribu">Malkavian Antitribu</option>
-          <option value="clan_nosferatu">Nosferatu</option>
-          <option value="clan_nosferatu_antitribu">Nosferatu Antitribu</option>
-          <option value="clan_ravnos">Ravnos</option>
-          <option value="clan_salubri">Salubri</option>
-          <option value="clan_salubri_antitribu">Salubri Antitribu</option>
-          <option value="clan_toreador">Toreador</option>
-          <option value="clan_toreador_antitribu">Toreador Antitribu</option>
-          <option value="clan_tremere">Tremere</option>
-          <option value="clan_tremere_antitribu">Tremere Antitribu</option>
-          <option value="clan_tzimisce">Tzimisce</option>
-          <option value="clan_ventrue">Ventrue</option>
-          <option value="clan_ventrue_antitribu">Ventrue Antitribu</option>
-        </optgroup>        
-      </select>
-    </div>
-
-    <!-- Side Panel Dropdown -->
-    <div class="input-group">
-      <label for="sidePanel">Side Panel Overlay:</label>
-      <select id="sidePanel">
-        <!-- Generic Side Panels -->
-        <optgroup label="Generic Side Panels">
-          <option value="none" selected>None</option>
-          <option value="generic_green_marble">Generic (Green Marble)</option>
-          <option value="generic_black_marble">Generic (Black Marble)</option>
-          <option value="generic_narrow_01">Generic Narrow 1</option>
-          <option value="generic_narrow_02">Generic Narrow 2</option>          
-          <option value="generic_narrow_03">Generic Narrow 3</option>           
-        </optgroup>
-
-        <!-- Library Card Types -->
-        <optgroup label="Library Card Types">
-          <option value="sidepanel_action">Action</option>
-          <option value="sidepanel_political_action">Political Action</option>
-          <option value="sidepanel_event">Event</option>
-          <option value="sidepanel_master">Master</option>
-          <option value="sidepanel_reaction">Reaction</option>
-          <option value="sidepanel_combat">Combat</option>
-          <option value="sidepanel_equipment">Equipment</option>
-          <option value="sidepanel_ally">Ally</option>
-        </optgroup>
-
-        <!-- Clan-Specific Side Panels -->
-        <optgroup label="Vampire Clans">
-          <option value="sidepanel_assamite">Assamite</option>
-          <option value="sidepanel_brujah">Brujah</option>
-          <option value="sidepanel_brujah_antitribu">Brujah Antitribu</option>
-          <option value="sidepanel_cappadocian">Cappadocian</option>
-          <option value="sidepanel_gangrel">Gangrel</option>
-          <option value="sidepanel_gangrel_antitribu">Gangrel Antitribu</option>
-          <option value="sidepanel_giovanni">Giovanni</option>
-          <option value="sidepanel_lamia">Lamia</option>
-          <option value="sidepanel_lasombra">Lasombra</option>
-          <option value="sidepanel_malkavian">Malkavian</option>
-          <option value="sidepanel_malkavian_antitribu">Malkavian Antitribu</option>
-          <option value="sidepanel_nosferatu">Nosferatu</option>
-          <option value="sidepanel_nosferatu_antitribu">Nosferatu Antitribu</option>
-          <option value="sidepanel_ravnos">Ravnos</option>
-          <option value="sidepanel_salubri">Salubri</option>
-          <option value="sidepanel_salubri_antitribu">Salubri Antitribu</option>
-          <option value="sidepanel_toreador">Toreador</option>
-          <option value="sidepanel_toreador_antitribu">Toreador Antitribu</option>
-          <option value="sidepanel_tremere">Tremere</option>
-          <option value="sidepanel_tremere_antitribu">Tremere Antitribu</option>
-          <option value="sidepanel_tzimisce">Tzimisce</option>
-          <option value="sidepanel_ventrue">Ventrue</option>
-          <option value="sidepanel_ventrue_antitribu">Ventrue Antitribu</option>
-        </optgroup>
-      </select>
-    </div>
-
-      <div class="input-group">
-        <label for="artFile">Upload Main Art Image:</label>
-        <input type="file" id="artFile" accept="image/*">
       </div>
-      <div class="input-group">
-        <label for="artUrl">Main Art Image URL:</label>
-        <input type="text" id="artUrl" placeholder="Enter image URL">
-        <button id="loadArtUrl">Load Image</button>
-      </div>
-      <div class="input-group">
-        <label for="frameFile">Upload Frame Image:</label>
-        <input type="file" id="frameFile" accept="image/*">
-      </div>      
-      <div class="input-group">
-        <label for="offsetX">Offset X (px):</label>
-        <input type="number" id="offsetX" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="offsetY">Offset Y (px):</label>
-        <input type="number" id="offsetY" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="cropTop">Crop Top (px):</label>
-        <input type="number" id="cropTop" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="cropRight">Crop Right (px):</label>
-        <input type="number" id="cropRight" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="cropBottom">Crop Bottom (px):</label>
-        <input type="number" id="cropBottom" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="cropLeft">Crop Left (px):</label>
-        <input type="number" id="cropLeft" value="0" class="art-panel-number-input">
-      </div>
-      <div class="input-group">
-        <label for="scalePercent">Scale (%):</label>
-        <input type="number" id="scalePercent" value="100">
-      </div>
-      <div class="input-group">
-        <label for="borderRadius">Border:</label>
-        <input type="number" id="borderRadius" value="6" class="art-panel-number-input">
-      </div>      
+      
+      <!-- Art Panel: Image import & adjustments -->    
+      <div class="art-panel">
+        <h2 class="panel-title-h2">Art and Frame</h2>
 
-          <!-- Premade Template Dropdown -->
+
+        
+        <!-- Type and Subtype -->
+
+      <!-- Main Frame Dropdown -->
       <div class="input-group">
-        <label for="templateSelector">Load Premade Template:</label>
-        <select id="templateSelector">
-          <option value="" selected disabled>Select a Template...</option>
-          <!-- Options will be populated by JavaScript from 02_datatables.js -->
+        <label for="mainFrame">Main Frame:</label>
+        <select id="mainFrame">
+          
+          <optgroup label="No image, custom image"></optgroup>   
+            <option value="none" selected>None</option> 
+            <option value="custom_uploaded_frame">Uploaded Custom Frame</option>  
+        </optgroup>     
+          <!-- Library Card Types -->            
+          <optgroup label="Library Card Types (Quality currently off)"></optgroup>                                  
+            <option value="modifier_card">Modifier</option>
+            <option value="action_card">Action</option>
+            <option value="political_action_card">Political Action</option>
+            <option value="event_card">Event</option>
+            <option value="master_card">Master</option>
+            <option value="reaction_card">Reaction</option>
+            <option value="combat_card">Combat</option>
+            <option value="equipment_card">Equipment</option>
+            <option value="ally_card">Ally</option>
+          </optgroup>        
+
+          <!-- Generic Vampire Frames -->
+          <optgroup label="Generic Custom Vampire Frames"> 
+            <option value="vampire_generic_01">Generic 1</option>
+            <option value="vampire_generic_02">Generic 2</option>
+            <option value="vampire_generic_03">Generic 3</option>
+            <option value="vampire_generic_04">Generic 4</option>
+            <option value="vampire_generic_05">Generic 5</option>          
+            <option value="vampire_cut_01">Cut 1</option>                    
+            <option value="vampire_cut_02">Cut 2</option>             
+            <option value="vampire_cut_03">Cut 3</option>              
+            <option value="vampire_cut_04">Cut 4</option>                        
+          </optgroup>
+
+          <!-- Custom library frames -->
+          <optgroup label="Library (Custom)">
+            <option value="library_generic_01">Generic Library Frame 1</option>
+            <option value="library_generic_02">Generic Library Frame 2</option>   
+            <option value="library_generic_03">Generic Library Frame 3</option>
+            <option value="library_generic_04">Generic Library Frame 4</option>      
+            <option value="library_generic_05">Generic Library Frame 5</option>
+            <option value="library_generic_06">Generic Library Frame 6</option>                 
+            <option value="frame_black_marble_01">Black Marble 1</option>          
+            <option value="frame_green_marble_01">Green Marble 1</option>
+          </optgroup>
+
+          <!-- Clan-Specific Frames -->
+          <optgroup label="Imbued (custom)">
+            <option value="imbued_generic_01">Generic Imbued Frame 1</option>          
+          </optgroup>          
+
+          <!-- Clan-Specific Frames -->
+          <optgroup label="Vampire Clans (currently missing)">
+            <option value="clan_assamite">Assamite</option>
+            <option value="clan_brujah">Brujah</option>
+            <option value="clan_brujah_antitribu">Brujah Antitribu</option>
+            <option value="clan_cappadocian">Cappadocian</option>
+            <option value="clan_gangrel">Gangrel</option>
+            <option value="clan_gangrel_antitribu">Gangrel Antitribu</option>
+            <option value="clan_giovanni">Giovanni</option>
+            <option value="clan_lamia">Lamia</option>
+            <option value="clan_lasombra">Lasombra</option>
+            <option value="clan_malkavian">Malkavian</option>
+            <option value="clan_malkavian_antitribu">Malkavian Antitribu</option>
+            <option value="clan_nosferatu">Nosferatu</option>
+            <option value="clan_nosferatu_antitribu">Nosferatu Antitribu</option>
+            <option value="clan_ravnos">Ravnos</option>
+            <option value="clan_salubri">Salubri</option>
+            <option value="clan_salubri_antitribu">Salubri Antitribu</option>
+            <option value="clan_toreador">Toreador</option>
+            <option value="clan_toreador_antitribu">Toreador Antitribu</option>
+            <option value="clan_tremere">Tremere</option>
+            <option value="clan_tremere_antitribu">Tremere Antitribu</option>
+            <option value="clan_tzimisce">Tzimisce</option>
+            <option value="clan_ventrue">Ventrue</option>
+            <option value="clan_ventrue_antitribu">Ventrue Antitribu</option>
+          </optgroup>        
         </select>
       </div>
 
-    </div>
+      <!-- Side Panel Dropdown -->
+      <div class="input-group">
+        <label for="sidePanel">Side Panel Overlay:</label>
+        <select id="sidePanel">
+          <!-- Generic Side Panels -->
+          <optgroup label="Generic Side Panels">
+            <option value="none" selected>None</option>
+            <option value="generic_green_marble">Generic (Green Marble)</option>
+            <option value="generic_black_marble">Generic (Black Marble)</option>
+            <option value="generic_narrow_01">Generic Narrow 1</option>
+            <option value="generic_narrow_02">Generic Narrow 2</option>          
+            <option value="generic_narrow_03">Generic Narrow 3</option>           
+          </optgroup>
 
-    <!-- Right Panel: Card preview and action buttons -->
-    <div class="right-panel">
-      <h2 class="panel-title-h2">Card Preview</h2>
-      <div class="vtm-logo-container">
-        <img id="vtm-logo" src="vtm_logo.png">
+          <!-- Library Card Types -->
+          <optgroup label="Library Card Types">
+            <option value="sidepanel_action">Action</option>
+            <option value="sidepanel_political_action">Political Action</option>
+            <option value="sidepanel_event">Event</option>
+            <option value="sidepanel_master">Master</option>
+            <option value="sidepanel_reaction">Reaction</option>
+            <option value="sidepanel_combat">Combat</option>
+            <option value="sidepanel_equipment">Equipment</option>
+            <option value="sidepanel_ally">Ally</option>
+          </optgroup>
+
+          <!-- Clan-Specific Side Panels -->
+          <optgroup label="Vampire Clans">
+            <option value="sidepanel_assamite">Assamite</option>
+            <option value="sidepanel_brujah">Brujah</option>
+            <option value="sidepanel_brujah_antitribu">Brujah Antitribu</option>
+            <option value="sidepanel_cappadocian">Cappadocian</option>
+            <option value="sidepanel_gangrel">Gangrel</option>
+            <option value="sidepanel_gangrel_antitribu">Gangrel Antitribu</option>
+            <option value="sidepanel_giovanni">Giovanni</option>
+            <option value="sidepanel_lamia">Lamia</option>
+            <option value="sidepanel_lasombra">Lasombra</option>
+            <option value="sidepanel_malkavian">Malkavian</option>
+            <option value="sidepanel_malkavian_antitribu">Malkavian Antitribu</option>
+            <option value="sidepanel_nosferatu">Nosferatu</option>
+            <option value="sidepanel_nosferatu_antitribu">Nosferatu Antitribu</option>
+            <option value="sidepanel_ravnos">Ravnos</option>
+            <option value="sidepanel_salubri">Salubri</option>
+            <option value="sidepanel_salubri_antitribu">Salubri Antitribu</option>
+            <option value="sidepanel_toreador">Toreador</option>
+            <option value="sidepanel_toreador_antitribu">Toreador Antitribu</option>
+            <option value="sidepanel_tremere">Tremere</option>
+            <option value="sidepanel_tremere_antitribu">Tremere Antitribu</option>
+            <option value="sidepanel_tzimisce">Tzimisce</option>
+            <option value="sidepanel_ventrue">Ventrue</option>
+            <option value="sidepanel_ventrue_antitribu">Ventrue Antitribu</option>
+          </optgroup>
+        </select>
       </div>
-      <canvas id="cardCanvas" width="358" height="500"></canvas>
-      <div class="button-container">
-        <button id="updateCardButton">Update card</button>        
-        <button id="exportButton">Export as PNG</button>
-        <button id="saveJsonButton">Save as JSON</button>
-        <button id="importJsonButton">Import JSON</button>
+
+        <div class="input-group">
+          <label for="artFile">Upload Main Art Image:</label>
+          <input type="file" id="artFile" accept="image/*">
+        </div>
+        <div class="input-group">
+          <label for="artUrl">Main Art Image URL:</label>
+          <input type="text" id="artUrl" placeholder="Enter image URL">
+          <button id="loadArtUrl">Load Image</button>
+        </div>
+        <div class="input-group">
+          <label for="frameFile">Upload Frame Image:</label>
+          <input type="file" id="frameFile" accept="image/*">
+        </div>      
+        <div class="input-group">
+          <label for="offsetX">Offset X (px):</label>
+          <input type="number" id="offsetX" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="offsetY">Offset Y (px):</label>
+          <input type="number" id="offsetY" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="cropTop">Crop Top (px):</label>
+          <input type="number" id="cropTop" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="cropRight">Crop Right (px):</label>
+          <input type="number" id="cropRight" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="cropBottom">Crop Bottom (px):</label>
+          <input type="number" id="cropBottom" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="cropLeft">Crop Left (px):</label>
+          <input type="number" id="cropLeft" value="0" class="art-panel-number-input">
+        </div>
+        <div class="input-group">
+          <label for="scalePercent">Scale (%):</label>
+          <input type="number" id="scalePercent" value="100">
+        </div>
+        <div class="input-group">
+          <label for="borderRadius">Border:</label>
+          <input type="number" id="borderRadius" value="6" class="art-panel-number-input">
+        </div>      
+
+            <!-- Premade Template Dropdown -->
+        <div class="input-group">
+          <label for="templateSelector">Load Premade Template:</label>
+          <select id="templateSelector">
+            <option value="" selected disabled>Select a Template...</option>
+            <!-- Options will be populated by JavaScript from 02_datatables.js -->
+          </select>
+        </div>
+
       </div>
-      <input type="file" id="jsonImport" accept="application/json" style="display:none;">
-      <div id="darkPackSection">  
-        Dark Pack Logo
-      </div>                
-      <div id="errorLog" class="error-log"></div>
-      <div id="onloadErrorLog" class="onload-error-log"></div>   
-    </div>
+    </div>  
+   
+    <div class="inner-right-container">
+      <!-- Right Panel: Card preview and action buttons -->
+      <div class="right-panel">
+        <h2 class="panel-title-h2">Card Preview</h2>
+        <div class="vtm-logo-container">
+          <img id="vtm-logo" src="vtm_logo.png">
+        </div>
+        <canvas id="cardCanvas" width="358" height="500"></canvas>
+        <div class="button-container">
+          <button id="updateCardButton">Update card</button>        
+          <button id="exportButton">Export as PNG</button>
+          <button id="saveJsonButton">Save as JSON</button>
+          <button id="importJsonButton">Import JSON</button>
+        </div>
+        <input type="file" id="jsonImport" accept="application/json" style="display:none;">
+        <div id="darkPackSection">  
+          Dark Pack Logo
+        </div>                
+        <div id="errorLog" class="error-log"></div>
+        <div id="onloadErrorLog" class="onload-error-log"></div>   
+      </div>
+    </div>  
   </div>
   
   <script src="01_global_variables.js">       </script>

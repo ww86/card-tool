@@ -15,7 +15,9 @@ input[type="file"]::file-selector-button              { background-color: var(--
 input[type="file"]::file-selector-button:hover        { background-color: var(--color-00); }
 
 .container                                            { background-color: var(--color-03); }
-.left-panel, .middle-panel, .art-panel, .right-panel  { background-color: var(--color-01); }
+.inner-left-container                                 { background-color: var(--color-03); }
+.inner-right-container                                { background-color: var(--color-01); }
+.left-panel, .middle-panel, .art-panel                { background-color: var(--color-01); }
 .panel-title-h2                                       { background-color: var(--color-04); }
 .settings-group                                       { background-color: var(--color-02); }
 .symbol-inline                                        { background-color: var(--color-02); }
@@ -33,7 +35,7 @@ body                                                  { color: var(--color-05); 
 .panel-title-h2                                       { color: var(--color-00); } 
 
 /* border colors */
-.left-panel, .middle-panel, .art-panel, .right-panel  { border: 2px solid var(--color-03); }
+.left-panel, .middle-panel, .art-panel, .inner-right-container { border: 2px solid var(--color-03); }
 .cost-symbol-section h2                               { border-bottom:  1px solid var(--color-05); }
 fieldset .control-fieldset                            { border: 1px solid var(--color-03); }
 .control-input                                        { border: 1px solid var(--color-03); }
@@ -72,6 +74,11 @@ fieldset .control-fieldset                            { border: 1px solid var(--
    GLOBAL STYLES & BODY
    ======================================== */
 
+html, body {
+  height: 100%;
+  overflow: hidden; /* Prevent the body from scrolling */
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-size:   12px;
@@ -85,10 +92,38 @@ body {
   flex-wrap:   nowrap;
   gap:         8px;
   padding:     8px;
+  box-sizing:  border-box;
+  overflow-x:  auto;
+  height:      100%; /* Make the container fill the viewport height */
+  overflow-y:  hidden; /* Prevent the main container from scrolling vertically */
+}
+
+.inner-left-container {
+  display:      grid;
+  /* Define columns using the panels' explicit widths */
+  grid-template-columns: 320px 540px 220px;
+  gap:          8px; /* Add a gap for consistent spacing */
+  overflow-x:   hidden;
+  overflow-y:   auto;
+  height:       100%;
+  flex-shrink:  0; /* Prevent this container from shrinking */
+}
+
+.inner-right-container {
+  display:      flex;
+  flex-wrap:    nowrap;
+  flex:         auto;
+  overflow-x:   hidden;
+  overflow-y:   auto;
+  height:       100%;
+  min-width:    400px;
+  max-width:    100%;
+  /* Padding and box-sizing moved here from .right-panel to fix scroll glitch */
+  padding:      4px 12px 2px 12px;
   box-sizing:   border-box;
 }
 
-.left-panel, .middle-panel, .art-panel, .right-panel {
+.left-panel, .middle-panel, .art-panel {
   padding-right:  12px;
   padding-left:   12px;
   padding-top:    4px;
@@ -115,8 +150,7 @@ h2            {
 }
 
 .right-panel {
-  flex:      1;
-  min-width: 400px; /* Ensure right panel has a minimum width */
+  width: 100%;
 }
 
 #darkPackSection { width: 100%; flex-wrap: nowrap; overflow:hidden; }
@@ -545,8 +579,8 @@ canvas {
 /* Styles for the container of a single label and its input/select */
 .symbol-setting-item-container {
   display: flex;
-  flex-direction: column; /* Stack label above input */
-  align-items: flex-start; /* Align children (label, input) to the left */
+  flex-direction: column; 
+  align-items: flex-start; 
 }
 
 .symbol-setting-label {

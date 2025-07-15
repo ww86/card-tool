@@ -1235,7 +1235,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Determine text color based on symbol type (could be added to config later)
                 let textColor = "white";
-                if (prefix === "pool") { textColor = "black"; }
+                if (prefix === "pool" || prefix === "humanity") { textColor = "black"; }
 
                 let imageToRender = null;
                 let imageKeyForError = selectedIconValue;

@@ -236,6 +236,31 @@
                 ]
             },
             {
+                id_prefix: "humanity",
+                displayName: "Humanity",
+                settings: [
+                    // --- Row 1 ---
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 12,  min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 300, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 60,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
+                    { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
+                    { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
+                    // --- Row 2 ---
+                    {
+                        id_suffix: "IconSelect", label: "Icon:", type: "select", uiRow: 2,
+                        options: [
+                            { value: "symbol_humanity",         text: "Humanity (Default)" },
+                            { value: "symbol_humanity_alt_01",  text: "Alternative Icon" },
+                            { value: "custom_upload",           text: "Custom (Upload)" }
+                        ], defaultValue: "symbol_humanity"
+                    },
+                    { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                ]
+            },            
+            {
                 id_prefix: "path",
                 displayName: "Path",
                 settings: [
@@ -479,11 +504,13 @@
             "symbol_blood"             : "symbol_blood.png",
             "symbol_capacity"          : "symbol_capacity.png",
             "symbol_life"              : "symbol_life.png",
+            "symbol_humanity"          : "symbol_humanity.png",            
 
             "symbol_pool_alt_01"       : "symbol_pool_alt_01.png",
             "symbol_blood_alt_01"      : "symbol_blood_alt_01.png",
             "symbol_capacity_alt_01"   : "symbol_capacity_alt_01.png",
             "symbol_life_alt_01"       : "symbol_life_alt_01.png",
+            "symbol_humanity_alt_01"   : "symbol_humanity_alt_01.png",           
 
             "symbol_path_01"           : "symbol_path_of_caine.png",
             "symbol_path_02"           : "symbol_path_of_power_and_the_inner_voice.png",

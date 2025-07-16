@@ -539,15 +539,15 @@ document.addEventListener("DOMContentLoaded", function () {
       sliderDiv.className = `discipline-slider tier-${currentTier}`;
     });
 
-    // Toggle for Additional Feature
-    const featureToggleDiv = document.createElement("div");
-    featureToggleDiv.className = "discipline-toggle";
-    const featureLabel = document.createElement("label");
-    featureLabel.htmlFor = `${item.id}Feature`;
-    featureLabel.innerText = "I:";
-    const featureCheckbox = document.createElement("input");
-    featureCheckbox.type = "checkbox";
-    featureCheckbox.id = `${item.id}Feature`;
+    // Toggle for Additional Innate Feature
+    const featureToggleDiv      = document.createElement("div");
+    featureToggleDiv.className  = "discipline-toggle";
+    const featureLabel          = document.createElement("label");
+    featureLabel.htmlFor        = `${item.id}Innate`;
+    featureLabel.innerText      = "I:";
+    const featureCheckbox       = document.createElement("input");
+    featureCheckbox.type        = "checkbox";
+    featureCheckbox.id          = `${item.id}Innate`;
     featureToggleDiv.appendChild(featureLabel);
     featureToggleDiv.appendChild(featureCheckbox);
 
@@ -1037,15 +1037,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const diff = displayToggled
             ? (parseFloat(document.getElementById("disciplineToggleDiff").value) || 0)
-            : (parseFloat(document.getElementById("disciplineDiff").value) || 0);            
+            : (parseFloat(document.getElementById("disciplineDiff").value) || 0);       
 
+        // const innate = innate 
 
 
         // Collect active disciplines with their tier and other properties
         disciplineData.forEach(symbol => {
             const slider = document.querySelector(`.discipline-slider[id="${symbol.id}"]`);
             const displayCheckbox = document.getElementById(`${symbol.id}Display`);
-            const innateCheckbox = document.getElementById(`${symbol.id}Feature`);
+            const innateCheckbox = document.getElementById(`${symbol.id}Innate`);
 
             if (slider) {
                 const tier = parseInt(slider.dataset.currentTier, 10);
@@ -1085,6 +1086,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
+            let innate    = symbol.inn;
             let current   = parseInt(symbol.tier);
             let previous  = index == 0 ? current : activeDisciplines[index - 1].tier;
             let step      = (current == 1 && previous == 2);
@@ -1096,10 +1098,47 @@ document.addEventListener("DOMContentLoaded", function () {
             img.src = symbol.imgSrc;
             img.onload = () => {
 
-              if (symbol.inn) { return; }
+              if (innate) { 
+                // Create a temporary canvas to manipulate the image
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = img.naturalWidth;
+                tempCanvas.height = img.naturalHeight;
+                const tempCtx = tempCanvas.getContext('2d');
+
+                // Draw the original image onto the temporary canvas
+                tempCtx.drawImage(img, 0, 0);
+
+                // Get image data
+                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const data = imageData.data;
+
+                // Iterate through pixels and adjust colors
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i];
+                    let g = data[i + 1];
+                    let b = data[i + 2];
+
+                    // Check if the pixel is mostly white (adjust threshold as needed)
+                    if (r + g + b > 350) {
+                        // Simple method: Reduce green and blue to shift towards red
+                        g *= 0.6; // Reduce green
+                        b *= 0.6; // Reduce blue
+                        // Ensure values are within bounds
+                        data[i + 1] = Math.max(0, Math.min(255, g));
+                        data[i + 2] = Math.max(0, Math.min(255, b));
+                    }
+                    // Alpha (transparency) remains unchanged: data[i+3]
+                }
+
+                // Put the modified image data back onto the temporary canvas
+                tempCtx.putImageData(imageData, 0, 0);
+                // Replace the original image with the modified one for rendering
+                ctx.drawImage(tempCanvas, x + x2, y + y2, iconSize, iconSize); 
+                return;                
+
+              }
 
               ctx.save();
-
               ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
               ctx.shadowBlur = 3;
               ctx.shadowOffsetX = 0;

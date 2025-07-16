@@ -1132,12 +1132,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Put the modified image data back onto the temporary canvas
                 tempCtx.putImageData(imageData, 0, 0);
-                // Replace the original image with the modified one for rendering
-                ctx.drawImage(tempCanvas, x + x2, y + y2, iconSize, iconSize); 
-                return;                
+
+                // Create a new Image object and assign the temporary canvas as its source
+                const modifiedImg = new Image();
+                modifiedImg.src = tempCanvas.toDataURL(); // Use data URL from the temp canvas
+
+                // Replace the original image with the modified one
+                img.onload = () => {
+                    ctx.save();
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+                    ctx.shadowBlur = 3;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;  
+
+                    if        (step     &&  (isHorizontal))  { x2 -= a; }
+                    if        (step     && (!isHorizontal))  { y2 += a; }
+
+                    if        (step3    &&  (isHorizontal))  { x2 -= a; }
+                    if        (step3    && (!isHorizontal))  { y2 += a; }                
+
+                    if         (symbol.tier == 1)                      { ctx.drawImage(modifiedImg, x + x2                 , y + y2                 , iconSize, iconSize);   }
+                    if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(modifiedImg, (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }                
+                    if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(modifiedImg, (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }                        
+
+                    ctx.restore();
+                };
+                modifiedImg.src = tempCanvas.toDataURL();  // Trigger image load after setting onload
+                return;
 
               }
-
               ctx.save();
               ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
               ctx.shadowBlur = 3;

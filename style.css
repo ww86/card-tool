@@ -24,6 +24,7 @@ input[type="file"]::file-selector-button:hover        { background-color: var(--
 .symbol-settings-row                                  { background-color: var(--color-01); }
 .art-panel button                                     { background-color: var(--color-01); }
 .art-panel button:hover                               { background-color: var(--color-00); }
+.h-selector                                           { background-color: var(--color-01); }
 
 .discipline-slider.tier-0 .tier-block:nth-child(1)    { background-color: #9e939c; }
 .discipline-slider.tier-1 .tier-block:nth-child(2)    { background-color: #00ff7f; }
@@ -171,9 +172,9 @@ h2            {
   padding:   2px 0 2px 0;
 }
 
-.input-group { margin-bottom: 5px; }
+.input-group { margin-bottom: 10px; }
 .h-selector {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   font-size:     12px;
 }
 

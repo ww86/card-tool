@@ -1064,6 +1064,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         imgInnSrc:    global.util.wrapImgPath(imgInnSrc),
                         // temporary code for enabling tier 3 placeholder images
                         img_obf_src: "./img/icon_discipline_obfuscate_inferior.png",
+                        // temporary code for enablign innate icons
+                        img_inn_inf: "./img/misc_innate_border_inferior.png",
+                        img_inn_sup: "./img/misc_innate_border_superior.png",
                         img_t2_src: global.util.wrapImgPath(symbol[`img_2_src`]),
                         // above should be removed once tier3 images have icons
                     });
@@ -1092,80 +1095,26 @@ document.addEventListener("DOMContentLoaded", function () {
             let step      = (current == 1 && previous == 2);
             let step3     = (current == 3 && previous !== 3);
             let a         = diff * 0.5;            
-      
+  
+            const inn_border1   = new Image();
+            const inn_border2   = new Image();
+
+            inn_border1.src     = symbol.img_inn_inf;
+            inn_border2.src     = symbol.img_inn_sup;                
+
             // Load and render the icon
             const img = new Image();
             img.src = symbol.imgSrc;
             img.onload = () => {
 
-              if (innate) { 
-                // Create a temporary canvas to manipulate the image
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = img.naturalWidth;
-                tempCanvas.height = img.naturalHeight;
-                const tempCtx = tempCanvas.getContext('2d');
 
-                // Draw the original image onto the temporary canvas
-                tempCtx.drawImage(img, 0, 0);
-
-                // Get image data
-                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-                const data = imageData.data;
-
-                // Iterate through pixels and adjust colors
-                for (let i = 0; i < data.length; i += 4) {
-                    let r = data[i];
-                    let g = data[i + 1];
-                    let b = data[i + 2];
-
-                    // Check if the pixel is mostly white (adjust threshold as needed)
-                    if (r + g + b > 350) {
-                        // Simple method: Reduce green and blue to shift towards red
-                        g *= 0.6; // Reduce green
-                        b *= 0.6; // Reduce blue
-                        // Ensure values are within bounds
-                        data[i + 1] = Math.max(0, Math.min(255, g));
-                        data[i + 2] = Math.max(0, Math.min(255, b));
-                    }
-                    // Alpha (transparency) remains unchanged: data[i+3]
-                }
-
-                // Put the modified image data back onto the temporary canvas
-                tempCtx.putImageData(imageData, 0, 0);
-
-                // Create a new Image object and assign the temporary canvas as its source
-                const modifiedImg = new Image();
-                modifiedImg.src = tempCanvas.toDataURL(); // Use data URL from the temp canvas
-
-                // Replace the original image with the modified one
-                img.onload = () => {
-                    ctx.save();
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-                    ctx.shadowBlur = 3;
-                    ctx.shadowOffsetX = 0;
-                    ctx.shadowOffsetY = 0;  
-
-                    if        (step     &&  (isHorizontal))  { x2 -= a; }
-                    if        (step     && (!isHorizontal))  { y2 += a; }
-
-                    if        (step3    &&  (isHorizontal))  { x2 -= a; }
-                    if        (step3    && (!isHorizontal))  { y2 += a; }                
-
-                    if         (symbol.tier == 1)                      { ctx.drawImage(modifiedImg, x + x2                 , y + y2                 , iconSize, iconSize);   }
-                    if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(modifiedImg, (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }                
-                    if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(modifiedImg, (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }                        
-
-                    ctx.restore();
-                };
-                modifiedImg.src = tempCanvas.toDataURL();  // Trigger image load after setting onload
-                return;
-
-              }
               ctx.save();
               ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
               ctx.shadowBlur = 3;
               ctx.shadowOffsetX = 0;
               ctx.shadowOffsetY = 0;  
+
+          
 
                 // Currently doesn't support other tiers than 1 & 2 (Note step3 part of placeholder code)
                 if        (step     &&  (isHorizontal))  { x2 -= a; }
@@ -1174,15 +1123,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 if        (step3    &&  (isHorizontal))  { x2 -= a; }
                 if        (step3    && (!isHorizontal))  { y2 += a; }                
 
-                if         (symbol.tier == 1)                      { ctx.drawImage(img, x + x2                 , y + y2                 , iconSize, iconSize);   }
-                if        ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img, (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }                
-                if        ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(img, (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }                        
+                if            (symbol.tier == 1)                      { ctx.drawImage(img         , x + x2                 , y + y2                 , iconSize, iconSize);   }
+                if (innate &&  symbol.tier == 1)                      { ctx.drawImage(inn_border1 , x + x2                 , y + y2                 , iconSize, iconSize);   }
+                if           ((symbol.tier == 2) && (isHorizontal))   { ctx.drawImage(img         , (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }
+                if (innate &&  symbol.tier == 2  && (isHorizontal))   { ctx.drawImage(inn_border2 , (x + x2) - a           , (y + y2) - a - adjust  , iconSize2, iconSize2); }
+                if           ((symbol.tier == 2) && (!isHorizontal))  { ctx.drawImage(img         , (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }
+                if (innate &&  symbol.tier == 2  && (!isHorizontal))  { ctx.drawImage(inn_border2 , (x + x2) - a - adjust  , (y + y2) - a           , iconSize2, iconSize2); }                
 
-                if        ((symbol.tier == 2) && (isHorizontal))   { x2 += iconSize2 + spacing;     } 
-                if        ((symbol.tier == 2) && (!isHorizontal))  { y2 -= iconSize2 + spacing;     }
+                if           ((symbol.tier == 2) && (isHorizontal))   { x2 += iconSize2 + spacing;     } 
+                if           ((symbol.tier == 2) && (!isHorizontal))  { y2 -= iconSize2 + spacing;     }
 
-                if        ((symbol.tier == 1) && (isHorizontal))   { x2 += iconSize + spacing;      } 
-                if        ((symbol.tier == 1) && (!isHorizontal))  { y2 -= iconSize + spacing;      }
+                if           ((symbol.tier == 1) && (isHorizontal))   { x2 += iconSize + spacing;      } 
+                if           ((symbol.tier == 1) && (!isHorizontal))  { y2 -= iconSize + spacing;      }
 
 
 
@@ -1193,12 +1145,11 @@ document.addEventListener("DOMContentLoaded", function () {
               // Temporary code to display tier 3 as a composite of tier 2 and tier 1 obfuscate
               if (symbol.tier == 3) {
 
-                const placeholder1 = new Image();
-                const placeholder2 = new Image();
+                const placeholder1  = new Image();
+                const placeholder2  = new Image();
 
-
-                placeholder1.src = symbol.img_obf_src;
-                placeholder2.src = symbol.img_t2_src;
+                placeholder1.src    = symbol.img_obf_src;
+                placeholder2.src    = symbol.img_t2_src;
 
                 placeholder2.onload = () => {
 
@@ -1211,9 +1162,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                   if         (isHorizontal)     { ctx.drawImage(placeholder1, x + x2              , y + y2 - adjust      , iconSize, iconSize); }                
                   if        (!isHorizontal)     { ctx.drawImage(placeholder1, x + x2 - adjust     , y + y2               , iconSize, iconSize); }
-                  
+
+                  if (innate && isHorizontal)   { ctx.drawImage(inn_border1, x + x2              , y + y2 - adjust      , iconSize, iconSize); }
+                  if (innate && !isHorizontal)  { ctx.drawImage(inn_border1, x + x2 - adjust     , y + y2               , iconSize, iconSize); }
+
                   if         (isHorizontal)     { ctx.drawImage(placeholder2, x + x2 - a          , y + y2 - a - adjust  , iconSize2, iconSize2); }                
-                  if        (!isHorizontal)     { ctx.drawImage(placeholder2, x + x2 - a - adjust , y + y2 - a           , iconSize2, iconSize2); }                  
+                  if        (!isHorizontal)     { ctx.drawImage(placeholder2, x + x2 - a - adjust , y + y2 - a           , iconSize2, iconSize2); }  
+                  
+                  if (innate && isHorizontal)   { ctx.drawImage(inn_border2, x + x2 - a          , y + y2 - a - adjust  , iconSize2, iconSize2); } 
+                  if (innate && !isHorizontal)  { ctx.drawImage(inn_border2, x + x2 - a - adjust , y + y2 - a           , iconSize2, iconSize2); }                  
 
                   if         (isHorizontal)     { x2 += iconSize2 + spacing;     } 
                   if        (!isHorizontal)     { y2 -= iconSize2 + spacing;     }                  

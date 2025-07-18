@@ -43,6 +43,7 @@
             hexToRgba               : function(){},
             drawRoundedRect         : function(){},
             drawBorders             : function(){},
+            split_arr               : function(){},
             createLabel             : function(){},
             createNumberInput       : function(){},
             createToggle            : function(){},

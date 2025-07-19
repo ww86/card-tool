@@ -63,9 +63,6 @@
               
               textFields: {}, // Will be populated dynamically
 
-              // Costs and Symbols (Pool, Blood, Capacity, Life)
-              poolSettings: {}, bloodSettings: {}, capacitySettings: {}, lifeSettings: {},
-
               // Disciplines
               disciplines: global.data.disciplineData.reduce((acc, item) => {
                   acc[item.id] = {
@@ -154,18 +151,22 @@
               });
           }
           // Populate cost/capacity settings
-          ["pool", "blood", "capacity", "life"].forEach(type => {
-              template[`${type}Settings`] = {
-                  amount:     document.getElementById(`${type}Amount`).value,
-                  x:          document.getElementById(`${type}X`).value,
-                  y:          document.getElementById(`${type}Y`).value,
-                  size:       document.getElementById(`${type}Size`).value,
-                  textOffset: document.getElementById(`${type}TextOffset`).value,
-                  enable:     document.getElementById(`${type}Enable`).checked,
-                  iconSelect: document.getElementById(`${type}IconSelect`)?.value || `symbol_${type}`,
-                  valueFontSize: document.getElementById(`${type}ValueFontSize`)?.value || "18",
-              };
-          });
+          if (global.data.symbolIconConfigs) {
+              global.data.symbolIconConfigs.forEach(config => {
+                  const type = config.id_prefix;
+                  template[`${type}Settings`] = {
+                      amount:     document.getElementById(`${type}Amount`)?.value,
+                      x:          document.getElementById(`${type}X`)?.value,
+                      y:          document.getElementById(`${type}Y`)?.value,
+                      size:       document.getElementById(`${type}Size`)?.value,
+                      textOffset: document.getElementById(`${type}TextOffset`)?.value,
+                      enable:     document.getElementById(`${type}Enable`)?.checked,
+                      shadow:     document.getElementById(`${type}Shadow`)?.checked,
+                      iconSelect: document.getElementById(`${type}IconSelect`)?.value || `symbol_${type}`,
+                      valueFontSize: document.getElementById(`${type}ValueFontSize`)?.value || "18",
+                  };
+              });
+          }
           // Populate loaded symbol images base64
           if (global.art.loadedSymbolImages) {
             Object.keys(global.art.loadedSymbolImages).forEach(key => {
@@ -276,19 +277,23 @@
               }
 
               // Costs and Symbols
-              ["pool", "blood", "capacity", "life"].forEach(type => {
-                  if (template[`${type}Settings`]) {
-                      const settings = template[`${type}Settings`];
-                      setValue(`${type}Amount`,     settings.amount);
-                      setValue(`${type}X`,          settings.x);
-                      setValue(`${type}Y`,          settings.y);
-                      setValue(`${type}Size`,       settings.size);
-                      setValue(`${type}TextOffset`, settings.textOffset);
-                      setChecked(`${type}Enable`,   settings.enable);
-                      setValue(`${type}IconSelect`, settings.iconSelect);
-                      setValue(`${type}ValueFontSize`, settings.valueFontSize);
-                  }
-              });
+              if (global.data.symbolIconConfigs) {
+                  global.data.symbolIconConfigs.forEach(config => {
+                      const type = config.id_prefix;
+                      if (template[`${type}Settings`]) {
+                          const settings = template[`${type}Settings`];
+                          setValue(`${type}Amount`,     settings.amount);
+                          setValue(`${type}X`,          settings.x);
+                          setValue(`${type}Y`,          settings.y);
+                          setValue(`${type}Size`,       settings.size);
+                          setValue(`${type}TextOffset`, settings.textOffset);
+                          setChecked(`${type}Enable`,   settings.enable);
+                          setChecked(`${type}Shadow`,   settings.shadow);
+                          setValue(`${type}IconSelect`, settings.iconSelect);
+                          setValue(`${type}ValueFontSize`, settings.valueFontSize);
+                      }
+                  });
+              }
 
               // Load pre-defined symbol images from Base64
               if (template.loadedSymbolImagesBase64) {

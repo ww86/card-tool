@@ -66,53 +66,73 @@
 
         textFieldHeaderDefaults: [
             // id_prefix | label        | type     | placeholder      | value
-            { id_prefix: "title", label: "Name:",        type: "textarea",      placeholder: "Card Name",      value: "" },
-            { id_prefix: "specs", label: "Card Text:",   type: "textarea",      placeholder: "Card Text",      value: "" },
-            { id_prefix: "story", label: "Flavour:",     type: "textarea",      placeholder: "Card Flavour",   value: "" },
-            { id_prefix: "illus", label: "Artist:",      type: "textarea",      placeholder: "Card Artist",    value: "" },
-            { id_prefix: "small", label: "Mini:",        type: "textarea",      placeholder: "Mini type text", value: "" },
-            { id_prefix: "subhd", label: "Subheader:",   type: "textarea",      placeholder: "Subheader text", value: "" },
-            { id_prefix: "misc1", label: "Misc 1:",      type: "textarea",      placeholder: "Misc text",      value: "" },
-            { id_prefix: "misc2", label: "Misc 2:",      type: "textarea",      placeholder: "Misc text",      value: "" }
+            { id_prefix: "title", label: "Name:",           type: "textarea",      placeholder: "Card Name",      value: "" },
+            { id_prefix: "subhd", label: "Subheader:",      type: "textarea",      placeholder: "Subheader text", value: "" },
+            { id_prefix: "clans", label: "Clan:",           type: "textarea",      placeholder: "Clan text",      value: "" },
+            { id_prefix: "human", label: "Humanity:",       type: "textarea",      placeholder: "Humanity",       value: "" },
+            { id_prefix: "specs", label: "Card Text:",      type: "textarea",      placeholder: "Card Text",      value: "" },
+            { id_prefix: "trait", label: "Traits:",         type: "textarea",      placeholder: "Traits",         value: "" },    
+            { id_prefix: "story", label: "Flavour:",        type: "textarea",      placeholder: "Card Flavour",   value: "" },
+            { id_prefix: "crypt", label: "Crypt:",          type: "textarea",      placeholder: "Crypt Details",  value: "" },
+            { id_prefix: "illus", label: "Artist:",         type: "textarea",      placeholder: "Card Artist",    value: "" },
+            { id_prefix: "gener", label: "Generation:",     type: "textarea",      placeholder: "Generation",     value: "" },
+            { id_prefix: "type1", label: "Type 1:",         type: "textarea",      placeholder: "Type 1",         value: "" },
+            { id_prefix: "type2", label: "Type 2:",         type: "textarea",      placeholder: "Type 2",         value: "" },
+            { id_prefix: "misc1", label: "Misc 1:",         type: "textarea",      placeholder: "Misc text",      value: "" }
         ],
 
         // textFieldFontDefaults: Default values for font, size, color, opacity, and effect for each text field panel.
         textFieldFontDefaults: [
             // id_prefix        | family                  | size      | color           | hex           | opacity     | effect
-            { id_prefix: "title", family: "Vollkorn SC",    size: "20", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
-            { id_prefix: "specs", family: "Gill Sans MT",   size: "14", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
-            { id_prefix: "story", family: "Tangerine",      size: "18", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
-            { id_prefix: "illus", family: "Vollkorn SC",    size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
-            { id_prefix: "small", family: "Verdana",        size: "8",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
-            { id_prefix: "subhd", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
-            { id_prefix: "misc1", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
-            { id_prefix: "misc2", family: "Verdana",        size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" }
+            { id_prefix: "title", family: "Vollkorn SC",            size: "20", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "subhd", family: "Verdana",                size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },            
+            { id_prefix: "clans", family: "Verdana",                size: "7",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "human", family: "Verdana",                size: "7",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "specs", family: "Cormorant Garamond",     size: "14", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "trait", family: "Cormorant Garamond",     size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },            
+            { id_prefix: "story", family: "Tangerine",              size: "18", color: "#000000", hex: "#000000", opacity: 100, effect: "2" },
+            { id_prefix: "crypt", family: "Verdana",                size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "illus", family: "Vollkorn SC",            size: "10", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "gener", family: "Vollkorn SC",            size: "12", color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "5" },
+            { id_prefix: "type1", family: "Verdana",                size: "7",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "type2", family: "Verdana",                size: "7",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" },
+            { id_prefix: "misc1", family: "Verdana",                size: "7",  color: "#FFFFFF", hex: "#FFFFFF", opacity: 100, effect: "2" }
         ],
 
         // textFieldBackgroundDefaults: Default values for position, dimensions, color, opacity, and border for each text field panel.
         textFieldBgDefaults: [
             // id_prefix | x   | y   | width | height | color     | hex       | opacity | border | border_max
-            { id_prefix: "title", x: 22,  y: 15,  width: 296, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "specs", x: 74,  y: 315, width: 264, height: 160, color: "#FFFFFF", hex: "#FFFFFF", opacity: 50,  border: 0, border_max: 4 },
-            { id_prefix: "story", x: 185, y: 432, width: 150, height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "illus", x: 53,  y: 474, width: 296, height: 17,  color: "#000000", hex: "#000000", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "small", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "subhd", x: 22,  y: 40,  width: 296, height: 28,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },
-            { id_prefix: "misc1", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 },            
-            { id_prefix: "misc2", x: 13,  y: 108, width: 44,  height: 40,  color: "#FFFFFF", hex: "#FFFFFF", opacity: 0,   border: 0, border_max: 4 }
+            { id_prefix: "title", x: 60,  y: 15,  width: 260, height: 28,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "subhd", x: 64,  y: 44,  width: 256, height: 26,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "clans", x: 290, y: 160, width: 50,  height: 10,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "human", x: 294, y: 210, width: 46,  height: 10,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "specs", x: 60,  y: 290, width: 216, height: 150, color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "trait", x: 280, y: 290, width: 58,  height: 136, color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "story", x: 110, y: 413, width: 160, height: 26,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "crypt", x: 64,  y: 446, width: 209, height: 24,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "illus", x: 60,  y: 476, width: 140, height: 12,  color: "#000000", hex: "#000000", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "gener", x: 282, y: 464, width: 58,  height: 16,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "type1", x: 14,  y: 105, width: 44,  height: 10,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "type2", x: 14,  y: 154, width: 44,  height: 10,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 },
+            { id_prefix: "misc1", x: 14,  y: 203, width: 44,  height: 10,  color: "#C0C0C0", hex: "#C0C0C0", opacity: 0,  border: 0, border_max: 4 }
         ],
 
         // textFieldConfigs is now just a list of the prefixes, used to iterate through panels.
         // The actual structure and defaults are in the separate tables above.
         textFieldConfigs: [
             { id_prefix: "title" },
+            { id_prefix: "subhd" },            
+            { id_prefix: "clans" },            
+            { id_prefix: "human" },               
             { id_prefix: "specs" },
+            { id_prefix: "trait" },            
             { id_prefix: "story" },
+            { id_prefix: "crypt" },
             { id_prefix: "illus" },
-            { id_prefix: "small" },
-            { id_prefix: "subhd" },
-            { id_prefix: "misc1" },
-            { id_prefix: "misc2" }
+            { id_prefix: "gener" },
+            { id_prefix: "type1" },
+            { id_prefix: "type2" },
+            { id_prefix: "misc1" }
         ],
 
 
@@ -190,9 +210,9 @@
                 displayName: "Capacity",
                 settings: [
                     // --- Row 1 ---
-                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 300, min: 0,   max: 358, uiRow: 1 },
-                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 420, min: 0,   max: 500, uiRow: 1 },
-                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 33,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 296, min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 430, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 36,  min: 10,  max: 100, uiRow: 1 },
                     { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 2,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
                     { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
@@ -207,7 +227,7 @@
                         ], defaultValue: "symbol_capacity"
                     },
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
-                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 16, min: 8, max: 48, uiRow: 2 }
                 ]
             },
             {
@@ -240,10 +260,10 @@
                 displayName: "Humanity",
                 settings: [
                     // --- Row 1 ---
-                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 12,  min: 0,   max: 358, uiRow: 1 },
-                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 300, min: 0,   max: 500, uiRow: 1 },
-                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 60,  min: 10,  max: 100, uiRow: 1 },
-                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 8,   min: -10, max: 40,  uiRow: 1 },
+                    { id_suffix: "X",          type: "number",   label: "X:",      defaultValue: 300, min: 0,   max: 358, uiRow: 1 },
+                    { id_suffix: "Y",          type: "number",   label: "Y:",      defaultValue: 172, min: 0,   max: 500, uiRow: 1 },
+                    { id_suffix: "Size",       type: "number",   label: "Size:",   defaultValue: 36,  min: 10,  max: 100, uiRow: 1 },
+                    { id_suffix: "TextOffset", type: "number",   label: "Offset:", defaultValue: 6,   min: -10, max: 40,  uiRow: 1 },
                     { id_suffix: "Amount",     type: "number",   label: "Amount:", defaultValue: 0,   min: 0,   max: 20,  uiRow: 1 },
                     { id_suffix: "Shadow",     type: "checkbox", label: "Sh:",     defaultValue: false,                   uiRow: 1 },
                     { id_suffix: "Enable",     type: "checkbox", label: "I/O:",    defaultValue: false,                   uiRow: 1 },                    
@@ -257,7 +277,7 @@
                         ], defaultValue: "symbol_humanity"
                     },
                     { id_suffix: "IconUpload", label: "Upload:", type: "file", uiRow: 2 },
-                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 18, min: 8, max: 48, uiRow: 2 }
+                    { id_suffix: "ValueFontSize", label: "Font:", type: "number", defaultValue: 12, min: 8, max: 48, uiRow: 2 }
                 ]
             },            
             {

@@ -155,7 +155,7 @@
     darkPackXLabel.innerText        = "X:";  
     darkPackXInput.type             = "number";
     darkPackXInput.id               = "darkPackX";
-    darkPackXInput.value            = 314; // Default value
+    darkPackXInput.value            = 328; // Default value
     darkPackXInput.min              = 0;
 
     // Y Position
@@ -163,7 +163,7 @@
     darkPackYLabel.innerText        = "Y:";
     darkPackYInput.type             = "number";
     darkPackYInput.id               = "darkPackY";
-    darkPackYInput.value            = 12; // Default value
+    darkPackYInput.value            = 13; // Default value
     darkPackYInput.min              = 0;
 
     // Size Height
@@ -171,7 +171,7 @@
     darkPackHLabel.innerText        = "H:";
     darkPackHInput.type             = "number";
     darkPackHInput.id               = "darkPackH";
-    darkPackHInput.value            = 32; // Default value
+    darkPackHInput.value            = 18; // Default value
     darkPackHInput.min              = 1;
 
     // Size Width
